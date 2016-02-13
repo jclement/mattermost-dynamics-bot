@@ -14,24 +14,33 @@ namespace server
     {
     }
 
-    [Route("/incident/{id}")]
+    [Route("/incident/{CaseNum}")]
     public class Incident
     {
-        public Guid Id { get; set; }
+        public string CaseNum { get; set; }
     }
 
     public class IncidentResponse
     {
+        public IncidentResponse(IncidentWrapper wrapper)
+        {
+            Title = wrapper.Title;
+            Description = wrapper.Description;
+            Owner = wrapper.Owner;
+            Company = wrapper.Company;
+        }
+
         public string Title { get; set; }
         public string Description { get; set; }
         public string Owner { get; set; }
+        public string Company { get; set; }
     }
 
     public class CRMService : Service
     {
         public object Any(Incident request)
         {
-            return new IncidentResponse { Title = request.Id.ToString() };
+            return new IncidentResponse(CrmWrapper.Instance.GetIncident(request.CaseNum));
         }
 
         public object Get(Version request)

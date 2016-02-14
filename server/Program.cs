@@ -106,7 +106,7 @@ namespace server
             }
             if (cases.Count > 0)
             {
-                return new MatterMostResponse { text = string.Join(Environment.NewLine, cases), username = "CRM-Bot", icon_url = "static/reaper.png" };
+                return new MatterMostResponse { text = string.Join(Environment.NewLine, cases), username = "CRM-Bot", icon_url = Config.MergedConfig.WebRoot + "/static/reaper.png" };
             }
             return null;
         }

@@ -92,7 +92,8 @@ namespace server
 
             if (entityCollection.Count == 0)
             {
-                throw new ApplicationException("Not found");
+                //throw new ApplicationException("Not found");
+                return null;
             }
 
             EntityReference userRef = entityCollection[0].Attributes["owninguser"] as EntityReference;

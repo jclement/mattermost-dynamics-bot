@@ -4,7 +4,11 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 using ServiceStack;
 using System;
+using System.Collections.Generic;
 using System.ServiceModel.Description;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace server
 {
@@ -18,6 +22,20 @@ namespace server
     public class Incident
     {
         public string CaseNum { get; set; }
+    }
+
+    [Route("/receivemessage")]
+    public class MatterMostMessage
+    {
+        public string text { get; set; }
+        public string user_name { get; set; }
+    }
+
+    public class MatterMostResponse
+    {
+        public string text { get; set; }
+        public string username { get; set; }
+        public string icon_url { get; set; }
     }
 
     public class IncidentResponse
@@ -36,8 +54,30 @@ namespace server
         public string Company { get; set; }
     }
 
+    public class IncidentMarkdowner
+    {
+        public static string ConvertToMarkdown(IncidentWrapper incident, string caseNumber)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine($"__Case__ : {caseNumber}");
+            if (incident != null)
+            {
+                sb.AppendLine($"__Title__ : {incident.Title}");
+                sb.AppendLine($"__Company__ : {incident.Company}");
+                sb.AppendLine($"__Owner__ : {incident.Owner}");
+                sb.AppendLine($"__Description__ : {incident.Description}");
+            } else
+            {
+                sb.AppendLine("__NOT FOUND__");
+            }
+            return sb.ToString();
+        }
+    }
+
     public class CRMService : Service
     {
+        private static Regex CASRegex = new Regex("\\b(CAS-[0-9]{5}-[A-Z][0-9][A-Z][0-9][A-Z][0-9])\\b");
+
         public object Any(Incident request)
         {
             return new IncidentResponse(CrmWrapper.Instance.GetIncident(request.CaseNum));
@@ -46,6 +86,26 @@ namespace server
         public object Get(Version request)
         {
             return CrmWrapper.Instance.Version;
+        }
+
+        public object Post(MatterMostMessage request)
+        {
+            List<string> cases = new List<string>();
+            HashSet<string> visitedCases = new HashSet<string>();
+            foreach (Match match in CASRegex.Matches(request.text))
+            {
+                if (!visitedCases.Contains(match.Value))
+                {
+                    visitedCases.Add(match.Value);
+                    IncidentWrapper result = CrmWrapper.Instance.GetIncident(match.Value);
+                    cases.Add(IncidentMarkdowner.ConvertToMarkdown(result, match.Value));
+                }
+            }
+            if (cases.Count > 0)
+            {
+                return new MatterMostResponse { text = string.Join(Environment.NewLine, cases), username = "CRM-Bot", icon_url = "https://bot.githole.com:8080/bot.jpg" };
+            }
+            return null;
         }
     }
 

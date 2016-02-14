@@ -1,0 +1,27 @@
+<div ng-show="loaded">
+<table class="table table-condensed table-striped">
+  <tr>
+    <th>Incident Number:</th>
+    <td>{{incidentNumber}}</td>
+  </tr>
+  <tr>
+    <th>Title:</th>
+    <td>{{title}}</td>
+  </tr>
+  <tr>
+    <th>Description:</th>
+    <td>{{description}}</td>
+  </tr>
+  <tr>
+    <th>Company:</th>
+    <td>{{company}}</td>
+  </tr>
+  <tr>
+    <th>Owner:</th>
+    <td>{{owner}}</td>
+  </tr>
+</table>
+<a class="btn btn-danger" href="{{url}}">Open in Dynamics CRM</a>
+</div>
+
+<p class="alert alert-info" ng-hide="loaded">Loading!</p>

@@ -42,12 +42,14 @@ namespace server
     {
         public IncidentResponse(IncidentWrapper wrapper)
         {
+            Url = wrapper.Url;
             Title = wrapper.Title;
             Description = wrapper.Description;
             Owner = wrapper.Owner;
             Company = wrapper.Company;
         }
 
+        public string Url { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string Owner { get; set; }
@@ -59,15 +61,16 @@ namespace server
         public static string ConvertToMarkdown(IncidentWrapper incident, string caseNumber)
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"__Case__ : {caseNumber}");
             if (incident != null)
             {
+                sb.AppendLine($"__Case__ : [{caseNumber}]({Config.MergedConfig.WebRoot}/static/#/incident/{caseNumber})");
                 sb.AppendLine($"__Title__ : {incident.Title}");
                 sb.AppendLine($"__Company__ : {incident.Company}");
                 sb.AppendLine($"__Owner__ : {incident.Owner}");
                 sb.AppendLine($"__Description__ : {incident.Description}");
             } else
             {
+                sb.AppendLine($"__Case__ : {caseNumber}");
                 sb.AppendLine("__NOT FOUND__");
             }
             return sb.ToString();
@@ -103,7 +106,7 @@ namespace server
             }
             if (cases.Count > 0)
             {
-                return new MatterMostResponse { text = string.Join(Environment.NewLine, cases), username = "CRM-Bot", icon_url = "https://bot.githole.com:8080/bot.jpg" };
+                return new MatterMostResponse { text = string.Join(Environment.NewLine, cases), username = "CRM-Bot", icon_url = "static/reaper.png" };
             }
             return null;
         }
@@ -115,7 +118,16 @@ namespace server
         {
         }
 
-        public override void Configure(Funq.Container container) { }
+        public override void Configure(Funq.Container container)
+        {
+            SetConfig(new HostConfig
+            {
+#if DEBUG
+                DebugMode = true,
+                WebHostPhysicalPath = "~/../..".MapServerPath(),
+#endif
+            });
+        }
     }
 
     class Program

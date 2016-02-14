@@ -13,6 +13,7 @@ namespace server
 {
     public class IncidentWrapper
     {
+        public string Url { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string Owner { get; set; }
@@ -103,6 +104,7 @@ namespace server
 
             return new IncidentWrapper()
             {
+                Url = "https://energynavigator.crm.dynamics.com/main.aspx?etc=112&id=" + entityCollection[0].Id + "&histKey=1&newWindow=true&pagetype=entityrecord#392649339",
                 Title = entityCollection[0].Attributes["title"] as String,
                 Company = ((accountCollection.Count == 0) ? "Not Found" : accountCollection[0].Attributes["name"]) as String,
                 Owner = ((userCollection.Count == 0) ? "Not Found" : userCollection[0].Attributes["fullname"]) as String,

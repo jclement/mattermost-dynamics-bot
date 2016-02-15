@@ -8,6 +8,7 @@ using System.Linq;
 using System.ServiceModel.Description;
 using System.Text;
 using System.Threading.Tasks;
+using ServiceStack.Text;
 
 namespace server
 {
@@ -18,8 +19,22 @@ namespace server
         public string Description { get; set; }
         public string Owner { get; set; }
         public string Company { get; set; }
+        public NoteWrapper[] Notes { get; set; }
         
     }
+
+    public class NoteWrapper
+    {
+        public string Title { get; set; }
+        public string Body { get; set; }
+        public string Owner { get; set; }
+        public string Filename { get; set; }
+        public Int32? Filesize { get; set; }
+        public string Mimetype { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime? Modified { get; set; }
+    }
+
     public class CrmWrapper
     {
         private static CrmWrapper m_instance;
@@ -64,7 +79,6 @@ namespace server
             {
                 EntityName = entityName,
                 ColumnSet = new ColumnSet(columns),
-                TopCount = 1,
                 Criteria = {
                         Conditions = {
                             new ConditionExpression (conditionFieldName, ConditionOperator.In, conditionValues)
@@ -85,6 +99,28 @@ namespace server
                     Console.WriteLine(attribute.Key + ": " + attribute.Value);
                 }
             }
+        }
+
+        private IEnumerable<NoteWrapper> GetNotes(Guid incidentId)
+        {
+            var notes = new List<NoteWrapper>();
+            DataCollection<Entity>  annotations = RunQuery("annotation", new string[] {"notetext","filename","mimetype","filesize","subject","owninguser", "createdon", "modifiedon"}, "objectid", new string[] {incidentId.ToString()});
+            foreach (var annotation in annotations)
+            {
+                var note = new NoteWrapper();
+                note.Body = annotation.Attributes.ContainsKey("notetext")? annotation.Attributes["notetext"] as String : "";
+                note.Filename = annotation.Attributes.ContainsKey("filename")? annotation.Attributes["filename"] as String : "";
+                note.Filesize = annotation.Attributes.ContainsKey("filesize")? (Int32?) annotation.Attributes["filesize"] : (Int32?) null;
+                note.Mimetype = annotation.Attributes.ContainsKey("mimetype")? annotation.Attributes["mimetype"] as String: "";
+                note.Title = annotation.Attributes.ContainsKey("subject")? annotation.Attributes["subject"] as String: "Mysterious Untitled Note";
+                EntityReference userRef = annotation.Attributes["owninguser"] as EntityReference;
+                DataCollection<Entity> userCollection = RunQuery("systemuser", new string[] { "fullname" }, "systemuserid", new string[] { userRef.Id.ToString("d") });
+                note.Owner = ((userCollection.Count == 0) ? "Not Found" : userCollection[0].Attributes["fullname"]) as String;
+                note.Created = Convert.ToDateTime(annotation.Attributes["createdon"]);
+                note.Modified = annotation.Attributes["modifiedon"] == null ? (DateTime?) null : Convert.ToDateTime(annotation.Attributes["modifiedon"]);
+                notes.Add(note);
+            }
+            return notes;
         }
 
         public IncidentWrapper GetIncident(string caseNum)
@@ -108,7 +144,8 @@ namespace server
                 Title = entityCollection[0].Attributes["title"] as String,
                 Company = ((accountCollection.Count == 0) ? "Not Found" : accountCollection[0].Attributes["name"]) as String,
                 Owner = ((userCollection.Count == 0) ? "Not Found" : userCollection[0].Attributes["fullname"]) as String,
-                Description = entityCollection[0].Attributes["description"] as String
+                Description = entityCollection[0].Attributes["description"] as String,
+                Notes = GetNotes(entityCollection[0].Id).ToArray()
             };
         }
     }

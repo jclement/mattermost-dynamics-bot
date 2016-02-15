@@ -32,7 +32,13 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http) {
       $scope.owner = response.Owner;
       $scope.company = response.Company;
       $scope.url = response.Url;
+      $scope.notes = response.Notes;
+      _.each(response.Notes, function(note) {
+        note.Created = new Date(parseInt(note.Created.substr(6)));
+        note.Modified = new Date(parseInt(note.Modified.substr(6)));
+      });
       $scope.loaded = true;
+      console.log(response);
   }).error(function(error){
       $scope.error = error;
   });

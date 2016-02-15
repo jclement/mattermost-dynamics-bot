@@ -38,24 +38,6 @@ namespace server
         public string icon_url { get; set; }
     }
 
-    public class IncidentResponse
-    {
-        public IncidentResponse(IncidentWrapper wrapper)
-        {
-            Url = wrapper.Url;
-            Title = wrapper.Title;
-            Description = wrapper.Description;
-            Owner = wrapper.Owner;
-            Company = wrapper.Company;
-        }
-
-        public string Url { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public string Owner { get; set; }
-        public string Company { get; set; }
-    }
-
     public class IncidentMarkdowner
     {
         public static string ConvertToMarkdown(IncidentWrapper incident, string caseNumber)
@@ -83,7 +65,7 @@ namespace server
 
         public object Any(Incident request)
         {
-            return new IncidentResponse(CrmWrapper.Instance.GetIncident(request.CaseNum));
+            return CrmWrapper.Instance.GetIncident(request.CaseNum);
         }
 
         public object Get(Version request)
@@ -134,7 +116,14 @@ namespace server
     {
         static void Main(string[] args)
         {
-            CrmWrapper.Init(Config.MergedConfig.CrmUser, Config.MergedConfig.CrmPassword, Config.MergedConfig.CrmUrl);
+            string password = null;
+            if (string.IsNullOrEmpty(Config.MergedConfig.CrmPassword))
+            {
+                Console.Write($"Password for {Config.MergedConfig.CrmUser}:");
+                password = Console.ReadLine().Trim();
+            }
+
+            CrmWrapper.Init(Config.MergedConfig.CrmUser, password != null ? password : Config.MergedConfig.CrmPassword, Config.MergedConfig.CrmUrl);
 
             var listeningOn = Config.MergedConfig.Listen;
             var appHost = new AppHost()

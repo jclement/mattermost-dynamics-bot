@@ -166,11 +166,13 @@ namespace server
         {
             // test code.  doesn't work!  Well it works but the note goes missing.  That's probably bad!
             Entity entity = new Entity("annotation");
-            entity.Attributes.Add("objectid", incidentId.ToString());
+            entity.Attributes.Add("objectid", new EntityReference("incident", incidentId));
             entity.Attributes.Add("subject", title);
             entity.Attributes.Add("notetext", body);
+            entity.Attributes.Add("objecttypecode", 112);
             var id = m_service.Create(entity);
             var newEntity = m_service.Retrieve("annotation", id, new ColumnSet(true));
+
             return new NoteWrapper(newEntity, this);
         }
 

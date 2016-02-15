@@ -125,6 +125,8 @@ namespace server
 
             CrmWrapper.Init(Config.MergedConfig.CrmUser, password != null ? password : Config.MergedConfig.CrmPassword, Config.MergedConfig.CrmUrl);
 
+            //var newNote = CrmWrapper.Instance.AddNote(Guid.Parse("5bd8cb2f-c0bf-e511-80f5-3863bb367d10"), "JSC TEST API", "World");
+
             var listeningOn = Config.MergedConfig.Listen;
             var appHost = new AppHost()
                 .Init()

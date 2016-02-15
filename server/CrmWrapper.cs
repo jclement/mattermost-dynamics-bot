@@ -8,23 +8,57 @@ using System.Linq;
 using System.ServiceModel.Description;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xrm.Sdk.Messages;
 using ServiceStack.Text;
 
 namespace server
 {
     public class IncidentWrapper
     {
+        public IncidentWrapper(Entity incident, CrmWrapper wrapper)
+        {
+            EntityReference userRef = incident.Attributes["owninguser"] as EntityReference;
+            DataCollection<Entity> userCollection = wrapper.RunQuery("systemuser", new string[] { "fullname" }, "systemuserid", new string[] { userRef.Id.ToString("d") });
+            EntityReference customerRef = incident.Attributes["customerid"] as EntityReference;
+            DataCollection<Entity> accountCollection = wrapper.RunQuery("account", new string[] { "name" }, "accountid", new string[] { customerRef.Id.ToString("d") });
+
+            Id = incident.Id.ToString();
+            Url = "https://energynavigator.crm.dynamics.com/main.aspx?etc=112&id=" + incident.Id +
+                  "&histKey=1&newWindow=true&pagetype=entityrecord#392649339";
+            Title = incident.Attributes["title"] as String;
+            Company = ((accountCollection.Count == 0) ? "Not Found" : accountCollection[0].Attributes["name"]) as String;
+            Owner = ((userCollection.Count == 0) ? "Not Found" : userCollection[0].Attributes["fullname"]) as String;
+            Description = incident.Attributes["description"] as String;
+            Notes = wrapper.GetNotes(incident.Id).ToArray();
+            CaseAttachments = incident.Attributes.ContainsKey("eni_caseattachments") ? incident.Attributes["eni_caseattachments"] as string : "";
+        }
+
+        public string Id { get; set; }
         public string Url { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string Owner { get; set; }
         public string Company { get; set; }
+        public string CaseAttachments { get; set; }
         public NoteWrapper[] Notes { get; set; }
         
     }
 
     public class NoteWrapper
     {
+        public NoteWrapper(Entity annotation, CrmWrapper wrapper)
+        {
+            Body = annotation.Attributes.ContainsKey("notetext")? annotation.Attributes["notetext"] as String : "";
+            Filename = annotation.Attributes.ContainsKey("filename")? annotation.Attributes["filename"] as String : "";
+            Filesize = annotation.Attributes.ContainsKey("filesize")? (Int32?) annotation.Attributes["filesize"] : (Int32?) null;
+            Mimetype = annotation.Attributes.ContainsKey("mimetype")? annotation.Attributes["mimetype"] as String: "";
+            Title = annotation.Attributes.ContainsKey("subject")? annotation.Attributes["subject"] as String: "Mysterious Untitled Note";
+            EntityReference userRef = annotation.Attributes["owninguser"] as EntityReference;
+            DataCollection<Entity> userCollection = wrapper.RunQuery("systemuser", new string[] { "fullname" }, "systemuserid", new string[] { userRef.Id.ToString("d") });
+            Owner = ((userCollection.Count == 0) ? "Not Found" : userCollection[0].Attributes["fullname"]) as String;
+            Created = Convert.ToDateTime(annotation.Attributes["createdon"]);
+            Modified = annotation.Attributes["modifiedon"] == null ? (DateTime?) null : Convert.ToDateTime(annotation.Attributes["modifiedon"]);
+        }
         public string Title { get; set; }
         public string Body { get; set; }
         public string Owner { get; set; }
@@ -73,7 +107,23 @@ namespace server
             }
         }
 
-        private DataCollection<Entity> RunQuery(string entityName, string[] columns, string conditionFieldName, string[] conditionValues)
+        public DataCollection<Entity> RunQuery(string entityName, string conditionFieldName, string[] conditionValues)
+        {
+            QueryExpression query = new QueryExpression()
+            {
+                EntityName = entityName,
+                ColumnSet = new ColumnSet(true),
+                Criteria = {
+                        Conditions = {
+                            new ConditionExpression (conditionFieldName, ConditionOperator.In, conditionValues)
+                        }
+                    }
+            };
+
+            return m_service.RetrieveMultiple(query).Entities;
+        }
+
+        public DataCollection<Entity> RunQuery(string entityName, string[] columns, string conditionFieldName, string[] conditionValues)
         {
             QueryExpression query = new QueryExpression()
             {
@@ -101,31 +151,34 @@ namespace server
             }
         }
 
-        private IEnumerable<NoteWrapper> GetNotes(Guid incidentId)
+        public IEnumerable<NoteWrapper> GetNotes(Guid incidentId)
         {
             var notes = new List<NoteWrapper>();
-            DataCollection<Entity>  annotations = RunQuery("annotation", new string[] {"notetext","filename","mimetype","filesize","subject","owninguser", "createdon", "modifiedon"}, "objectid", new string[] {incidentId.ToString()});
+            DataCollection<Entity>  annotations = RunQuery("annotation", "objectid", new string[] {incidentId.ToString()});
             foreach (var annotation in annotations)
             {
-                var note = new NoteWrapper();
-                note.Body = annotation.Attributes.ContainsKey("notetext")? annotation.Attributes["notetext"] as String : "";
-                note.Filename = annotation.Attributes.ContainsKey("filename")? annotation.Attributes["filename"] as String : "";
-                note.Filesize = annotation.Attributes.ContainsKey("filesize")? (Int32?) annotation.Attributes["filesize"] : (Int32?) null;
-                note.Mimetype = annotation.Attributes.ContainsKey("mimetype")? annotation.Attributes["mimetype"] as String: "";
-                note.Title = annotation.Attributes.ContainsKey("subject")? annotation.Attributes["subject"] as String: "Mysterious Untitled Note";
-                EntityReference userRef = annotation.Attributes["owninguser"] as EntityReference;
-                DataCollection<Entity> userCollection = RunQuery("systemuser", new string[] { "fullname" }, "systemuserid", new string[] { userRef.Id.ToString("d") });
-                note.Owner = ((userCollection.Count == 0) ? "Not Found" : userCollection[0].Attributes["fullname"]) as String;
-                note.Created = Convert.ToDateTime(annotation.Attributes["createdon"]);
-                note.Modified = annotation.Attributes["modifiedon"] == null ? (DateTime?) null : Convert.ToDateTime(annotation.Attributes["modifiedon"]);
-                notes.Add(note);
+                notes.Add(new NoteWrapper(annotation, this));
             }
             return notes;
         }
 
+        public NoteWrapper AddNote(Guid incidentId, string title, string body)
+        {
+            // test code.  doesn't work!  Well it works but the note goes missing.  That's probably bad!
+            Entity entity = new Entity("annotation");
+            entity.Attributes.Add("objectid", incidentId.ToString());
+            entity.Attributes.Add("subject", title);
+            entity.Attributes.Add("notetext", body);
+            var id = m_service.Create(entity);
+            var newEntity = m_service.Retrieve("annotation", id, new ColumnSet(true));
+            return new NoteWrapper(newEntity, this);
+        }
+
         public IncidentWrapper GetIncident(string caseNum)
         {
-            DataCollection<Entity> entityCollection = RunQuery("incident", new string[] { "incidentid", "description", "title", "ticketnumber", "customerid", "owninguser" }, "ticketnumber", new string[] { caseNum });
+            DataCollection<Entity> entityCollection = RunQuery("incident", "ticketnumber", new string[] { caseNum });
+
+            DumpCollection(entityCollection);
 
             if (entityCollection.Count == 0)
             {
@@ -133,20 +186,7 @@ namespace server
                 return null;
             }
 
-            EntityReference userRef = entityCollection[0].Attributes["owninguser"] as EntityReference;
-            DataCollection<Entity> userCollection = RunQuery("systemuser", new string[] { "fullname" }, "systemuserid", new string[] { userRef.Id.ToString("d") });
-            EntityReference customerRef = entityCollection[0].Attributes["customerid"] as EntityReference;
-            DataCollection<Entity> accountCollection = RunQuery("account", new string[] { "name" }, "accountid", new string[] { customerRef.Id.ToString("d") });
-
-            return new IncidentWrapper()
-            {
-                Url = "https://energynavigator.crm.dynamics.com/main.aspx?etc=112&id=" + entityCollection[0].Id + "&histKey=1&newWindow=true&pagetype=entityrecord#392649339",
-                Title = entityCollection[0].Attributes["title"] as String,
-                Company = ((accountCollection.Count == 0) ? "Not Found" : accountCollection[0].Attributes["name"]) as String,
-                Owner = ((userCollection.Count == 0) ? "Not Found" : userCollection[0].Attributes["fullname"]) as String,
-                Description = entityCollection[0].Attributes["description"] as String,
-                Notes = GetNotes(entityCollection[0].Id).ToArray()
-            };
+            return new IncidentWrapper(entityCollection[0], this);
         }
     }
 }

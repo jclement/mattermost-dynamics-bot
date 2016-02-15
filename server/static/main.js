@@ -27,7 +27,9 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http) {
         "Content-Type": "application/json; charset=utf-8"
     }
   }).success(function(response){
+      $scope.id = response.Id;
       $scope.title = response.Title;
+      $scope.caseAttachments = response.CaseAttachments;
       $scope.description = response.Description;
       $scope.owner = response.Owner;
       $scope.company = response.Company;

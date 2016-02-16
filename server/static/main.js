@@ -60,20 +60,9 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http) {
         attachment.Modified = new Date(parseInt(attachment.Modified.substr(6)));
         return attachment;
       };
-      $scope.id = response.Id;
-      $scope.title = response.Title;
-      $scope.version = response.Version;
-      $scope.networkAttachmentsFolder = response.NetworkAttachmentsFolder;
-      $scope.description = response.Description;
-      $scope.owner = response.Owner;
-      $scope.creator = response.Creator;
-      $scope.status = response.Status;
-      $scope.company = response.Company;
-      $scope.url = response.Url;
-      $scope.notes = response.Notes;
-      $scope.attachments = response.NetworkAttachments;
       _.each(response.Notes, processNote);
       _.each(response.NetworkAttachments, processAttachment);
+      $scope.incident = response;
       $scope.loaded = true;
       $scope.commentPosting = false;
       $scope.downloadNoteAttachment = function(attachmentId, filename) {

@@ -2,7 +2,7 @@
 <table class="table table-condensed table-striped">
   <tr>
     <th>ID:</th>
-    <td>{{id}}</td>
+    <td>{{incident.Id}}</td>
   </tr>
   <tr>
     <th>Number:</th>
@@ -13,37 +13,37 @@
   </tr>
   <tr>
     <th>Title:</th>
-    <td>{{title}}</td>
+    <td>{{incident.Title}}</td>
   </tr>
   <tr>
     <th>Status:</th>
-    <td>{{status}}</td>
+    <td>{{incident.Status}}</td>
   </tr>
   <tr>
     <th>Description:</th>
-    <td>{{description}}</td>
+    <td>{{incident.Description}}</td>
   </tr>
   <tr>
     <th>Version:</th>
-    <td>{{version}}</td>
+    <td>{{incident.Version}}</td>
   </tr>
   <tr>
     <th>Company:</th>
-    <td>{{company}}</td>
+    <td>{{incident.Company}}</td>
   </tr>
   <tr>
     <th>Creator:</th>
-    <td>{{creator}}</td>
+    <td>{{incident.Creator}}</td>
   </tr>
   <tr>
     <th>Owner:</th>
-    <td>{{owner}}</td>
+    <td>{{incident.Owner}}</td>
   </tr>
   <tr>
     <th>Attachments Folder:</th>
-    <td>{{networkAttachmentsFolder}}</td>
+    <td>{{incident.NetworkAttachmentsFolder}}</td>
   </tr>
-  <tr ng-show="attachments">
+  <tr ng-show="incident.NetworkAttachments">
     <th>Attachments:</th>
     <td>
       <table class="table table-condensed">
@@ -54,7 +54,7 @@
         <th>Modified</th>
         <th>Created</th>
       </tr>
-      <tr ng-repeat="attachment in attachments | orderBy: '-ModifiedDate'">
+      <tr ng-repeat="attachment in incident.NetworkAttachments | orderBy: '-ModifiedDate'">
         <td><a href="../incident/{{incidentNumber}}/attachments/{{attachment.Filename}}">{{attachment.Filename}}</a></td>
         <td>{{attachment.SizeKB}}</td>
         <td>{{attachment.Owner}}</td>
@@ -77,7 +77,7 @@
   Posting...
 </div>
 
-<div class="well well-sm" ng-repeat="note in notes | orderBy: '-Modified'">
+<div class="well well-sm" ng-repeat="note in incident.Notes | orderBy: '-Modified'">
   <div style="border-bottom: 1px solid #aaa;"><b>{{note.Title}}</b> by <i>{{note.Owner}}</i> on {{note.Modified | date : "medium"}}</div>
   <div ng-bind-html="note.Body | marked"></div>
   <div ng-show="note.Filename">Download attachment (new tab): {{note.Filename}} ({{note.Filesize}} Bytes) <a class="btn btn-default" href={{"../attachment/getfile/"+note.Id+"/"+note.Filename}} target="_blank"><span class="glyphicon glyphicon-download-alt"></span></a></div>

@@ -143,7 +143,10 @@ namespace server
             if (string.IsNullOrEmpty(Config.MergedConfig.CrmPassword))
             {
                 Console.Write($"Password for {Config.MergedConfig.CrmUser}:");
+                Console.ForegroundColor = ConsoleColor.Black;
                 password = Console.ReadLine().Trim();
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Clear();
             }
 
             CrmWrapper.Init(Config.MergedConfig.CrmUser, password != null ? password : Config.MergedConfig.CrmPassword, Config.MergedConfig.CrmUrl);

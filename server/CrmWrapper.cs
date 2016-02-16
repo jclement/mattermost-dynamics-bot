@@ -8,12 +8,16 @@ using System.Linq;
 using System.ServiceModel.Description;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Security.AccessControl;
+using ServiceStack.DataAnnotations;
+using System.Security.Principal;
 
 namespace server
 {
     public class NetworkAttachmentWrapper
     {
         public string Filename { get; set; }
+        public string Owner { get; set; }
         public string Path { get; set; }
         public DateTime Modified { get; set; }
         public DateTime Created { get; set; }
@@ -36,8 +40,22 @@ namespace server
             Company = ((accountCollection.Count == 0) ? "Not Found" : accountCollection[0].Attributes["name"]) as String;
             Owner = ((userCollection.Count == 0) ? "Not Found" : userCollection[0].Attributes["fullname"]) as String;
             Description = incident.Attributes["description"] as String;
+            Version = incident.Attributes.ContainsKey("eni_version")? incident.Attributes["eni_version"] as String: "";
             Notes = wrapper.GetNotes(incident.Id).ToArray();
             NetworkAttachmentsFolder = incident.Attributes.ContainsKey("eni_caseattachments") ? incident.Attributes["eni_caseattachments"] as string : "";
+            Status = (incident.Attributes["statuscode"] as OptionSetValue).Value.ToString();
+
+            switch ((incident.Attributes["statuscode"] as OptionSetValue).Value)
+            {
+                case 1:
+                    Status = "In-progress";
+                    break;
+                default:
+                    Status = "Unknown Status - " + (incident.Attributes["statuscode"] as OptionSetValue).Value;
+                    break;
+            }
+
+            Creator = (incident.Attributes["createdby"] as EntityReference).Name;
 
             var attachments = new List<NetworkAttachmentWrapper>();
             if (!string.IsNullOrEmpty(NetworkAttachmentsFolder) && Directory.Exists(NetworkAttachmentsFolder))
@@ -46,13 +64,15 @@ namespace server
                 {
                     var filename = Path.GetFileName(path);
                     var info = new FileInfo(path);
+                    var sec = System.IO.File.GetAccessControl(path);
                     attachments.Add(new NetworkAttachmentWrapper()
                     {
                         Filename = filename,
                         Path = path,
                         Created = info.CreationTime,
                         Modified = info.LastWriteTime,
-                        SizeKB = info.Length / 1024
+                        SizeKB = info.Length / 1024,
+                        Owner = sec.GetOwner(typeof(SecurityIdentifier)).Translate(typeof(NTAccount)).Value
                     });
                 }
             }
@@ -63,8 +83,11 @@ namespace server
         public string Url { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
+        public string Creator { get; set; }
+        public string Status { get; set; }
         public string Owner { get; set; }
         public string Company { get; set; }
+        public string Version { get; set; }
         public NoteWrapper[] Notes { get; set; }
         public string NetworkAttachmentsFolder { get; set; }
         public NetworkAttachmentWrapper[] NetworkAttachments { get; set; }
@@ -79,9 +102,9 @@ namespace server
             Filesize = annotation.Attributes.ContainsKey("filesize")? (Int32?) annotation.Attributes["filesize"] : (Int32?) null;
             Mimetype = annotation.Attributes.ContainsKey("mimetype")? annotation.Attributes["mimetype"] as String: "";
             Title = annotation.Attributes.ContainsKey("subject")? annotation.Attributes["subject"] as String: "Mysterious Untitled Note";
-            EntityReference userRef = annotation.Attributes["owninguser"] as EntityReference;
-            DataCollection<Entity> userCollection = wrapper.RunQuery("systemuser", new string[] { "fullname" }, "systemuserid", new string[] { userRef.Id.ToString("d") });
-            Owner = ((userCollection.Count == 0) ? "Not Found" : userCollection[0].Attributes["fullname"]) as String;
+            EntityReference ownerRef = annotation.Attributes["owninguser"] as EntityReference;
+            DataCollection<Entity> ownerCollection = wrapper.RunQuery("systemuser", new string[] { "fullname" }, "systemuserid", new string[] { ownerRef.Id.ToString("d") });
+            Owner = ((ownerCollection.Count == 0) ? "Not Found" : ownerCollection[0].Attributes["fullname"]) as String;
             Created = Convert.ToDateTime(annotation.Attributes["createdon"]);
             Modified = annotation.Attributes["modifiedon"] == null ? (DateTime?) null : Convert.ToDateTime(annotation.Attributes["modifiedon"]);
             Id = annotation.Id.ToString("d");
@@ -219,7 +242,7 @@ namespace server
             Entity entity = new Entity("annotation");
             entity.Attributes.Add("objectid", new EntityReference("incident", incidentId));
             entity.Attributes.Add("subject", title);
-            entity.Attributes.Add("notetext", body);
+            entity.Attributes.Add("notetext", body + "\n\n(Comment posted by the unCRM and not necessarily by Jeff)");
             entity.Attributes.Add("objecttypecode", 112);
             var id = m_service.Create(entity);
             var newEntity = m_service.Retrieve("annotation", id, new ColumnSet(true));

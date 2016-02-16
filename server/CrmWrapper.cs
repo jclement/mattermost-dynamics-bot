@@ -74,25 +74,42 @@ namespace server
         private static CrmWrapper m_instance;
         private IOrganizationService m_service;
 
-        public static void ConnectToMSCRM(string UserName, string Password, string SoapOrgServiceUri)
-        {
-        }
-
+        private string m_user;
+        private string m_password;
+        private string m_url;
 
         private CrmWrapper(string username, string password, string url)
         {
+            m_user = username;
+            m_password = password;
+            m_url = url;
+            Connect();
+        }
+
+        private void Connect()
+        {
             ClientCredentials credentials = new ClientCredentials();
-            credentials.UserName.UserName = username;
-            credentials.UserName.Password = password;
-            Uri serviceUri = new Uri(url);
+            credentials.UserName.UserName = m_user;
+            credentials.UserName.Password = m_password;
+            Uri serviceUri = new Uri(m_url);
             OrganizationServiceProxy proxy = new OrganizationServiceProxy(serviceUri, null, credentials, null);
             proxy.EnableProxyTypes();
             m_service = (IOrganizationService)proxy;
+            Guid userid = ((WhoAmIResponse)m_service.Execute(new WhoAmIRequest())).UserId;
+            if (userid != Guid.Empty)
+            {
+                Console.WriteLine(userid);
+            }
         }
 
         public static void Init(string username, string password, string url)
         {
             m_instance = new CrmWrapper(username, password, url);
+        }
+
+        public void Reconnect()
+        {
+            Connect();
         }
 
         public static CrmWrapper Instance { get { return m_instance; } }

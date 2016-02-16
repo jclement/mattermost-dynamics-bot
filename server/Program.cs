@@ -9,6 +9,7 @@ using System.ServiceModel.Description;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Linq;
+using System.Timers;
 
 namespace server
 {
@@ -116,6 +117,10 @@ namespace server
     {
         static void Main(string[] args)
         {
+            Timer timer = new Timer(1000 * 60 * 60 * 5);
+            timer.Elapsed += Timer_Elapsed;
+            timer.Start();
+
             string password = null;
             if (string.IsNullOrEmpty(Config.MergedConfig.CrmPassword))
             {
@@ -135,6 +140,12 @@ namespace server
             Console.WriteLine("AppHost Created at {0}, listening on {1}", DateTime.Now, listeningOn);
 
             Console.ReadKey();
+        }
+
+        private static void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            Console.WriteLine("Reconnect");
+            CrmWrapper.Instance.Reconnect();
         }
     }
 }

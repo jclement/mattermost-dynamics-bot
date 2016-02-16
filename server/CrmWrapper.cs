@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xrm.Sdk.Messages;
 using ServiceStack.Text;
+using System.IO;
 
 namespace server
 {
@@ -58,6 +59,7 @@ namespace server
             Owner = ((userCollection.Count == 0) ? "Not Found" : userCollection[0].Attributes["fullname"]) as String;
             Created = Convert.ToDateTime(annotation.Attributes["createdon"]);
             Modified = annotation.Attributes["modifiedon"] == null ? (DateTime?) null : Convert.ToDateTime(annotation.Attributes["modifiedon"]);
+            Id = annotation.Id.ToString("d");
         }
         public string Title { get; set; }
         public string Body { get; set; }
@@ -67,6 +69,13 @@ namespace server
         public string Mimetype { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Modified { get; set; }
+        public string Id { get; set; }
+    }
+
+    public class AttachmentFileWrapper
+    {
+        public Stream FileData { get; set; }
+        public string MimeType { get; set; }
     }
 
     public class CrmWrapper
@@ -174,6 +183,18 @@ namespace server
             var newEntity = m_service.Retrieve("annotation", id, new ColumnSet(true));
 
             return new NoteWrapper(newEntity, this);
+        }
+
+        public AttachmentFileWrapper GetAttachmentFile(Guid attachmentId)
+        {
+            DataCollection<Entity> attachmentEntities = RunQuery("annotation", new string[] { "mimetype", "documentbody" }, "annotationid", new string[] { attachmentId.ToString("d") });
+            
+            if (attachmentEntities.Count == 0)
+            {
+                return null;
+            }
+            byte[] fileData = Convert.FromBase64String(attachmentEntities[0].Attributes["documentbody"].ToString());
+            return new AttachmentFileWrapper { FileData = new MemoryStream(fileData), MimeType = attachmentEntities[0].Attributes["mimetype"] as string};
         }
 
         public IncidentWrapper GetIncident(string caseNum)

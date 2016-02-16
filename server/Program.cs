@@ -9,6 +9,7 @@ using System.ServiceModel.Description;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Linq;
+using System.IO;
 
 namespace server
 {
@@ -22,6 +23,13 @@ namespace server
     public class Incident
     {
         public string CaseNum { get; set; }
+    }
+
+    [Route("/attachment/getfile/{AttachmentId}/{FileName}")]
+    public class AttachmentFileRequest
+    {
+        public string AttachmentId { get; set; }
+        public string FileName { get; set; }
     }
 
     [Route("/receivemessage")]
@@ -71,6 +79,21 @@ namespace server
         public object Get(Version request)
         {
             return CrmWrapper.Instance.Version;
+        }
+        
+        public object Get(AttachmentFileRequest request)
+        {
+            Guid attachmentId;
+            if (Guid.TryParse(request.AttachmentId, out attachmentId))
+            {
+                AttachmentFileWrapper result = CrmWrapper.Instance.GetAttachmentFile(attachmentId);
+                if (result != null)
+                {
+                    base.Response.AddHeader("Content-Disposition", "attachment");
+                    return new HttpResult(result.FileData, result.MimeType);
+                }
+            }
+            return null;
         }
 
         public object Post(MatterMostMessage request)
@@ -124,8 +147,6 @@ namespace server
             }
 
             CrmWrapper.Init(Config.MergedConfig.CrmUser, password != null ? password : Config.MergedConfig.CrmPassword, Config.MergedConfig.CrmUrl);
-
-            //var newNote = CrmWrapper.Instance.AddNote(Guid.Parse("5bd8cb2f-c0bf-e511-80f5-3863bb367d10"), "JSC TEST API", "World");
 
             var listeningOn = Config.MergedConfig.Listen;
             var appHost = new AppHost()

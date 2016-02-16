@@ -40,6 +40,9 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http) {
         note.Modified = new Date(parseInt(note.Modified.substr(6)));
       });
       $scope.loaded = true;
+      $scope.downloadAttachment = function(attachmentId, filename) {
+        document.getElementById('download_iframe').src = "../attachment/getfile/"+attachmentId+"/" + filename;
+      };
       console.log(response);
   }).error(function(error){
       $scope.error = error;

@@ -37,11 +37,16 @@ uncrm.config(function($routeProvider) {
 
 });
 
-uncrm.controller('mainCtrl', function($scope) {
-  $scope.message = "Hello World";
+uncrm.controller('mainCtrl', function($scope, $location) {
+  $scope.go = function() {
+    if ($scope.incidentNumber) {
+      $location.url("/incident/" + $scope.incidentNumber);
+    }
+  }
 });
 
 uncrm.controller('incidentCtrl', function($scope, $routeParams, $http) {
+  $scope.loaded = false;
   $http({
     url: "../incident/" + $routeParams.num,
     dataType: "json",
@@ -50,6 +55,11 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http) {
         "Content-Type": "application/json; charset=utf-8"
     }
   }).success(function(response){
+      if (!response) {
+        $scope.error = "Incident Not Found";
+        $scope.loaded = true;
+        return;
+      }
       var processNote = function(note) {
         note.Created = new Date(parseInt(note.Created.substr(6)));
         note.Modified = new Date(parseInt(note.Modified.substr(6)));

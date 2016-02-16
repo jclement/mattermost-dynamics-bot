@@ -1,4 +1,4 @@
-<div ng-show="loaded">
+<div ng-show="loaded && !error">
 <table class="table table-condensed table-striped">
   <tr>
     <th>ID:</th>
@@ -6,10 +6,7 @@
   </tr>
   <tr>
     <th>Number:</th>
-    <td>{{incidentNumber}}
-<a class="pull-right btn btn-default btn-xs" href="{{url}}">Open in Dynamics CRM</a>
-</div>
-    </td>
+    <td>{{incidentNumber}} <a class="pull-right btn btn-default btn-xs" href="{{url}}">Open in Dynamics CRM</a> </td>
   </tr>
   <tr>
     <th>Title:</th>
@@ -84,7 +81,9 @@
   <div ng-show="note.Filename">Download attachment (iframe): {{note.Filename}} ({{note.Filesize}} Bytes) <button class="btn btn-default" ng-click="downloadNoteAttachment(note.Id, note.Filename)"><span class="glyphicon glyphicon-download-alt"></span></button></div>
 </div>
 
+</div>
 
-<p class="alert alert-info" ng-hide="loaded">Loading!</p>
+<p ng-hide="loaded">Loading...</p>
 
+<p ng-show="error" class="alert alert-danger">{{error}}</p>
 <iframe id="download_iframe" style="display:none;"></iframe>

@@ -3,13 +3,11 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Query;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel.Description;
 using System.IO;
-using System.Runtime.Serialization;
-using System.Security.AccessControl;
-using ServiceStack.DataAnnotations;
 using System.Security.Principal;
 
 namespace server
@@ -28,17 +26,13 @@ namespace server
     {
         public IncidentWrapper(Entity incident, CrmWrapper wrapper)
         {
-            EntityReference userRef = incident.Attributes["owninguser"] as EntityReference;
-            DataCollection<Entity> userCollection = wrapper.RunQuery("systemuser", new string[] { "fullname" }, "systemuserid", new string[] { userRef.Id.ToString("d") });
-            EntityReference customerRef = incident.Attributes["customerid"] as EntityReference;
-            DataCollection<Entity> accountCollection = wrapper.RunQuery("account", new string[] { "name" }, "accountid", new string[] { customerRef.Id.ToString("d") });
 
             Id = incident.Id;
-            Url = "https://energynavigator.crm.dynamics.com/main.aspx?etc=112&id=" + incident.Id +
-                  "&histKey=1&newWindow=true&pagetype=entityrecord#392649339";
+            Url = "https://energynavigator.crm.dynamics.com/main.aspx?etc=112&id=" + incident.Id + "&histKey=1&newWindow=true&pagetype=entityrecord#392649339";
             Title = incident.Attributes["title"] as String;
-            Company = ((accountCollection.Count == 0) ? "Not Found" : accountCollection[0].Attributes["name"]) as String;
-            Owner = ((userCollection.Count == 0) ? "Not Found" : userCollection[0].Attributes["fullname"]) as String;
+            Company = wrapper.LookupAccount(incident.Attributes["customerid"] as EntityReference);
+            Owner = wrapper.LookupUser(incident.Attributes["owninguser"] as EntityReference);
+            Creator = (incident.Attributes["createdby"] as EntityReference).Name;
             Description = incident.Attributes["description"] as String;
             Version = incident.Attributes.ContainsKey("eni_version")? incident.Attributes["eni_version"] as String: "";
             Notes = wrapper.GetNotes(incident.Id).ToArray();
@@ -54,8 +48,6 @@ namespace server
                     Status = "Unknown Status - " + (incident.Attributes["statuscode"] as OptionSetValue).Value;
                     break;
             }
-
-            Creator = (incident.Attributes["createdby"] as EntityReference).Name;
 
             var attachments = new List<NetworkAttachmentWrapper>();
             if (!string.IsNullOrEmpty(NetworkAttachmentsFolder) && Directory.Exists(NetworkAttachmentsFolder))
@@ -102,9 +94,7 @@ namespace server
             Filesize = annotation.Attributes.ContainsKey("filesize")? (Int32?) annotation.Attributes["filesize"] : (Int32?) null;
             Mimetype = annotation.Attributes.ContainsKey("mimetype")? annotation.Attributes["mimetype"] as String: "";
             Title = annotation.Attributes.ContainsKey("subject")? annotation.Attributes["subject"] as String: "Mysterious Untitled Note";
-            EntityReference ownerRef = annotation.Attributes["owninguser"] as EntityReference;
-            DataCollection<Entity> ownerCollection = wrapper.RunQuery("systemuser", new string[] { "fullname" }, "systemuserid", new string[] { ownerRef.Id.ToString("d") });
-            Owner = ((ownerCollection.Count == 0) ? "Not Found" : ownerCollection[0].Attributes["fullname"]) as String;
+            Owner = wrapper.LookupUser(annotation.Attributes["owninguser"] as EntityReference);
             Created = Convert.ToDateTime(annotation.Attributes["createdon"]);
             Modified = annotation.Attributes["modifiedon"] == null ? (DateTime?) null : Convert.ToDateTime(annotation.Attributes["modifiedon"]);
             Id = annotation.Id.ToString("d");
@@ -129,6 +119,8 @@ namespace server
     public class CrmWrapper
     {
         private static CrmWrapper m_instance;
+        private static IDictionary<Guid, string> m_users = new ConcurrentDictionary<Guid, string>(); 
+        private static IDictionary<Guid, string> m_accounts = new ConcurrentDictionary<Guid, string>(); 
         private IOrganizationService m_service;
 
         private string m_user;
@@ -141,6 +133,58 @@ namespace server
             m_password = password;
             m_url = url;
             Connect();
+        }
+
+        public string LookupAccount(EntityReference user)
+        {
+            return LookupAccount(user.Id);
+        }
+
+        public string LookupAccount(Guid id)
+        {
+            string fullname;
+            if (m_accounts.TryGetValue(id, out fullname))
+            {
+                return fullname;
+            }
+
+            DataCollection<Entity> collection = RunQuery("account", new string[] { "name" }, "accountid", new string[] { id.ToString("d") });
+
+            if (collection.Count == 0)
+            {
+                m_accounts.Add(id, "NOT FOUND");
+            }
+            else
+            {
+                m_accounts.Add(id, collection[0].Attributes["name"] as String);
+            }
+            return m_accounts[id];
+        }
+
+        public string LookupUser(EntityReference user)
+        {
+            return LookupUser(user.Id);
+        }
+
+        public string LookupUser(Guid id)
+        {
+            string fullname;
+            if (m_users.TryGetValue(id, out fullname))
+            {
+                return fullname;
+            }
+
+            DataCollection<Entity> userCollection = RunQuery("systemuser", new string[] { "fullname" }, "systemuserid", new string[] { id.ToString("d") });
+
+            if (userCollection.Count == 0)
+            {
+                m_users.Add(id, "NOT FOUND");
+            }
+            else
+            {
+                m_users.Add(id, userCollection[0].Attributes["fullname"] as String);
+            }
+            return m_users[id];
         }
 
         private void Connect()

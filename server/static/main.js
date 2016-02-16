@@ -27,6 +27,12 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http) {
         "Content-Type": "application/json; charset=utf-8"
     }
   }).success(function(response){
+      var processNote = function(note) {
+        note.Created = new Date(parseInt(note.Created.substr(6)));
+        note.Modified = new Date(parseInt(note.Modified.substr(6)));
+        return note;
+      };
+
       $scope.id = response.Id;
       $scope.title = response.Title;
       $scope.caseAttachments = response.CaseAttachments;
@@ -35,12 +41,35 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http) {
       $scope.company = response.Company;
       $scope.url = response.Url;
       $scope.notes = response.Notes;
-      _.each(response.Notes, function(note) {
-        note.Created = new Date(parseInt(note.Created.substr(6)));
-        note.Modified = new Date(parseInt(note.Modified.substr(6)));
-      });
+      _.each(response.Notes, processNote);
       $scope.loaded = true;
-      console.log(response);
+      $scope.commentPosting = false;
+      $scope.downloadAttachment = function(attachmentId, filename) {
+        document.getElementById('download_iframe').src = "../attachment/getfile/"+attachmentId+"/" + filename;
+      };
+      $scope.addComment = function() {
+        if (!$scope.newCommentBody && !$scope.newCommentTitle)
+          return;
+
+        $scope.commentPosting = true;
+        $http({
+          url: "../incident/" + $routeParams.num + '/notes/add',
+          dataType: "json",
+          data: {
+            'body': $scope.newCommentBody,
+            'title': $scope.newCommentTitle
+          },
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json; charset=utf-8"
+          }
+        }).success(function(response) {
+          $scope.notes.push(processNote(response));
+          $scope.newCommentBody = "";
+          $scope.newCommentTitle = "";
+          $scope.commentPosting = false;
+        });
+      }
   }).error(function(error){
       $scope.error = error;
   });

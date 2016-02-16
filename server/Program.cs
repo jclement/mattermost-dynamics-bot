@@ -34,6 +34,13 @@ namespace server
         public string Body { get; set; }
     }
 
+    [Route("/incident/{CaseNum}/attachments/{Filename}")]
+    public class AttachmentRequest
+    {
+        public string CaseNum { get; set; }
+        public string Filename { get; set; }
+    }
+
     [Route("/attachment/getfile/{AttachmentId}/{FileName}")]
     public class AttachmentFileRequest
     {
@@ -88,6 +95,14 @@ namespace server
         public object Get(Version request)
         {
             return CrmWrapper.Instance.Version;
+        }
+
+        public object Get(AttachmentRequest request)
+        {
+            var incident = CrmWrapper.Instance.GetIncident(request.CaseNum);
+            var file = incident.NetworkAttachments.First(x => x.Filename.Equals(request.Filename));
+            base.Response.AddHeader("Content-Disposition", "attachment");
+            return new HttpResult(File.OpenRead(file.Path), "application/octet-steam");
         }
 
         public object Post(AddNote request)

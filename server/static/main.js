@@ -32,19 +32,26 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http) {
         note.Modified = new Date(parseInt(note.Modified.substr(6)));
         return note;
       };
-
+      var processAttachment = function(attachment) {
+        attachment.Created = new Date(parseInt(attachment.Created.substr(6)));
+        attachment.Modified = new Date(parseInt(attachment.Modified.substr(6)));
+        return attachment;
+      };
+      console.log(response);
       $scope.id = response.Id;
       $scope.title = response.Title;
-      $scope.caseAttachments = response.CaseAttachments;
+      $scope.networkAttachmentsFolder = response.NetworkAttachmentsFolder;
       $scope.description = response.Description;
       $scope.owner = response.Owner;
       $scope.company = response.Company;
       $scope.url = response.Url;
       $scope.notes = response.Notes;
+      $scope.attachments = response.NetworkAttachments;
       _.each(response.Notes, processNote);
+      _.each(response.NetworkAttachments, processAttachment);
       $scope.loaded = true;
       $scope.commentPosting = false;
-      $scope.downloadAttachment = function(attachmentId, filename) {
+      $scope.downloadNoteAttachment = function(attachmentId, filename) {
         document.getElementById('download_iframe').src = "../attachment/getfile/"+attachmentId+"/" + filename;
       };
       $scope.addComment = function() {

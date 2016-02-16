@@ -6,14 +6,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel.Description;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xrm.Sdk.Messages;
-using ServiceStack.Text;
 using System.IO;
+using System.Runtime.Serialization;
 
 namespace server
 {
+    public class NetworkAttachmentWrapper
+    {
+        public string Filename { get; set; }
+        public string Path { get; set; }
+        public DateTime Modified { get; set; }
+        public DateTime Created { get; set; }
+        public long SizeKB { get; set; }
+    }
+
     public class IncidentWrapper
     {
         public IncidentWrapper(Entity incident, CrmWrapper wrapper)
@@ -31,7 +37,26 @@ namespace server
             Owner = ((userCollection.Count == 0) ? "Not Found" : userCollection[0].Attributes["fullname"]) as String;
             Description = incident.Attributes["description"] as String;
             Notes = wrapper.GetNotes(incident.Id).ToArray();
-            CaseAttachments = incident.Attributes.ContainsKey("eni_caseattachments") ? incident.Attributes["eni_caseattachments"] as string : "";
+            NetworkAttachmentsFolder = incident.Attributes.ContainsKey("eni_caseattachments") ? incident.Attributes["eni_caseattachments"] as string : "";
+
+            var attachments = new List<NetworkAttachmentWrapper>();
+            if (!string.IsNullOrEmpty(NetworkAttachmentsFolder) && Directory.Exists(NetworkAttachmentsFolder))
+            {
+                foreach (var path in Directory.GetFiles(NetworkAttachmentsFolder))
+                {
+                    var filename = Path.GetFileName(path);
+                    var info = new FileInfo(path);
+                    attachments.Add(new NetworkAttachmentWrapper()
+                    {
+                        Filename = filename,
+                        Path = path,
+                        Created = info.CreationTime,
+                        Modified = info.LastWriteTime,
+                        SizeKB = info.Length / 1024
+                    });
+                }
+            }
+            NetworkAttachments = attachments.ToArray();
         }
 
         public Guid Id { get; set; }
@@ -40,9 +65,9 @@ namespace server
         public string Description { get; set; }
         public string Owner { get; set; }
         public string Company { get; set; }
-        public string CaseAttachments { get; set; }
         public NoteWrapper[] Notes { get; set; }
-        
+        public string NetworkAttachmentsFolder { get; set; }
+        public NetworkAttachmentWrapper[] NetworkAttachments { get; set; }
     }
 
     public class NoteWrapper

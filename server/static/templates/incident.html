@@ -26,7 +26,26 @@
   </tr>
   <tr>
     <th>Attachments Folder:</th>
-    <td>{{caseAttachments}}</td>
+    <td>{{networkAttachmentsFolder}}</td>
+  </tr>
+  <tr ng-show="attachments">
+    <th>Attachments:</th>
+    <td>
+      <table class="table table-condensed">
+      <tr>
+        <th>Filename</th>
+        <th>Size (kb)</th>
+        <th>Modified</th>
+        <th>Created</th>
+      </tr>
+      <tr ng-repeat="attachment in attachments | orderBy: '-ModifiedDate'">
+        <td><a href="../incident/{{incidentNumber}}/attachments/{{attachment.Filename}}">{{attachment.Filename}}</a></td>
+        <td>{{attachment.SizeKB}}</td>
+        <td>{{attachment.Modified | date: "medium"}}</td>
+        <td>{{attachment.Created | date: "medium"}}</td>
+      </tr>
+      </table>
+    </td>
   </tr>
 </table>
 
@@ -45,7 +64,7 @@
   <div><b>{{note.Title}}</b> by <i>{{note.Owner}}</i> on {{note.Modified | date : "medium"}}</div>
   <div>{{note.Body}}</div>
   <div ng-show="note.Filename">Download attachment (new tab): {{note.Filename}} ({{note.Filesize}} Bytes) <a class="btn btn-default" href={{"../attachment/getfile/"+note.Id+"/"+note.Filename}} target="_blank"><span class="glyphicon glyphicon-download-alt"></span></a></div>
-  <div ng-show="note.Filename">Download attachment (iframe): {{note.Filename}} ({{note.Filesize}} Bytes) <button class="btn btn-default" ng-click="downloadAttachment(note.Id, note.Filename)"><span class="glyphicon glyphicon-download-alt"></span></button></div>
+  <div ng-show="note.Filename">Download attachment (iframe): {{note.Filename}} ({{note.Filesize}} Bytes) <button class="btn btn-default" ng-click="downloadNoteAttachment(note.Id, note.Filename)"><span class="glyphicon glyphicon-download-alt"></span></button></div>
 </div>
 
 <a class="btn btn-danger" href="{{url}}">Open in Dynamics CRM</a>

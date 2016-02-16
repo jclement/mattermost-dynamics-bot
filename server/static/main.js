@@ -85,7 +85,7 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http) {
               "Content-Type": "application/json; charset=utf-8"
           }
         }).success(function(response) {
-          $scope.notes.push(processNote(response));
+          $scope.incident.Notes.push(processNote(response));
           $scope.newCommentBody = "";
           $scope.newCommentTitle = "";
           $scope.commentPosting = false;

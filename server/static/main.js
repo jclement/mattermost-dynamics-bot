@@ -1,5 +1,28 @@
 var uncrm = angular.module('uncrm', ['ngRoute']);
 
+marked.setOptions({
+  renderer: new marked.Renderer(),
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: true,
+  smartLists: true,
+  smartypants: false
+});
+
+uncrm.filter('comment', function ($sce) {
+  return function (input) {
+    return $sce.trustAsHtml(_.escape(input).replace(/\n/g, "<br/>"));
+  };
+});
+
+uncrm.filter('marked', function ($sce) {
+  return function (input) {
+    return $sce.trustAsHtml(marked(input));
+  };
+});
+
 uncrm.config(function($routeProvider) {
 
   $routeProvider.when('/', {

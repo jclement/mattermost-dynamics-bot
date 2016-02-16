@@ -23,7 +23,7 @@ namespace server
             EntityReference customerRef = incident.Attributes["customerid"] as EntityReference;
             DataCollection<Entity> accountCollection = wrapper.RunQuery("account", new string[] { "name" }, "accountid", new string[] { customerRef.Id.ToString("d") });
 
-            Id = incident.Id.ToString();
+            Id = incident.Id;
             Url = "https://energynavigator.crm.dynamics.com/main.aspx?etc=112&id=" + incident.Id +
                   "&histKey=1&newWindow=true&pagetype=entityrecord#392649339";
             Title = incident.Attributes["title"] as String;
@@ -34,7 +34,7 @@ namespace server
             CaseAttachments = incident.Attributes.ContainsKey("eni_caseattachments") ? incident.Attributes["eni_caseattachments"] as string : "";
         }
 
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         public string Url { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }

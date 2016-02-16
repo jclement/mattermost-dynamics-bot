@@ -30,6 +30,17 @@
   </tr>
 </table>
 
+<div class="well well-sm" ng-hide="commentPosting">
+  <input type="text" class="form-control" ng-model="newCommentTitle" placeholder="New Comment Title">
+  <textarea class="form-control" ng-model="newCommentBody" placeholder="New Comment Body">
+  </textarea>
+  <button class="btn btn-default" ng-click="addComment()">Add Note</button>
+</div>
+
+<div class="well well-sm" ng-show="commentPosting">
+  Posting...
+</div>
+
 <div class="well well-sm" ng-repeat="note in notes | orderBy: '-Modified'">
   <div><b>{{note.Title}}</b> by <i>{{note.Owner}}</i> on {{note.Modified | date : "medium"}}</div>
   <div>{{note.Body}}</div>

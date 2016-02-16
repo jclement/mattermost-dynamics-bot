@@ -25,6 +25,14 @@ namespace server
         public string CaseNum { get; set; }
     }
 
+    [Route("/incident/{CaseNum}/notes/add")]
+    public class AddNote
+    {
+        public string CaseNum { get; set; }
+        public string Title { get; set; }
+        public string Body { get; set; }
+    }
+
     [Route("/attachment/getfile/{AttachmentId}/{FileName}")]
     public class AttachmentFileRequest
     {
@@ -79,6 +87,12 @@ namespace server
         public object Get(Version request)
         {
             return CrmWrapper.Instance.Version;
+        }
+
+        public object Post(AddNote request)
+        {
+            var incident = CrmWrapper.Instance.GetIncident(request.CaseNum);
+            return CrmWrapper.Instance.AddNote(incident.Id, request.Title, request.Body);
         }
         
         public object Get(AttachmentFileRequest request)

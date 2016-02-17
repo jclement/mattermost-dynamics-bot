@@ -306,6 +306,18 @@ namespace server
             return new AttachmentFileWrapper { FileData = new MemoryStream(fileData), MimeType = attachmentEntities[0].Attributes["mimetype"] as string};
         }
 
+        public void ChangeOwner(string caseNum, string username)
+        {
+            // grab user by fullname (wouldn't really do this IRL)
+            var userEntity = RunQuery("systemuser", new string[] { "systemuserid" }, "fullname", new string[] { username })[0];
+            // grab incident by ticket number
+            var incidentEntity = RunQuery("incident", "ticketnumber", new string[] { caseNum })[0];
+            // set owninguser to new target user
+            incidentEntity.Attributes["owninguser"] = new EntityReference("systemuser", userEntity.Id);
+            // and update...
+            m_service.Update(incidentEntity);
+        }
+
         public IncidentWrapper GetIncident(string caseNum)
         {
             DataCollection<Entity> entityCollection = RunQuery("incident", "ticketnumber", new string[] { caseNum });

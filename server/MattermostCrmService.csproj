@@ -7,11 +7,12 @@
     <ProjectGuid>{11B7C38F-CE10-46F3-AAB0-739D290AACD5}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>server</RootNamespace>
-    <AssemblyName>server</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RootNamespace>MattermostCrmService</RootNamespace>
+    <AssemblyName>MattermostCrmService</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -78,9 +79,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Messages\AddNote.cs" />
+    <Compile Include="AppHost.cs" />
+    <Compile Include="Messages\AttachmentFileRequest.cs" />
+    <Compile Include="Messages\AttachmentRequest.cs" />
+    <Compile Include="CrmService.cs" />
     <Compile Include="CrmWrapper.cs" />
+    <Compile Include="Messages\AuthenticatedRequestBase.cs" />
+    <Compile Include="Messages\DeleteNote.cs" />
+    <Compile Include="Messages\Incident.cs" />
+    <Compile Include="IncidentMarkdowner.cs" />
+    <Compile Include="Messages\MatterMostMessage.cs" />
+    <Compile Include="Messages\MatterMostResponse.cs" />
+    <Compile Include="Messages\UpdateNote.cs" />
+    <Compile Include="Messages\VersionRequest.cs" />
+    <Compile Include="Wrappers\AttachmentFileWrapper.cs" />
+    <Compile Include="Wrappers\IncidentWrapper.cs" />
+    <Compile Include="Wrappers\NetworkAttachmentWrapper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Wrappers\NoteWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -105,6 +123,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -31,6 +31,7 @@ namespace MattermostCrmService
                 Console.Clear();
             }
 
+            LoginHelper.Init(Config.MergedConfig.CrmKey);
             CrmWrapper.Init(Config.MergedConfig.CrmUser, password != null ? password : Config.MergedConfig.CrmPassword, Config.MergedConfig.CrmUrl);
 
             var listeningOn = Config.MergedConfig.Listen;

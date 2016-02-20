@@ -22,7 +22,7 @@ namespace MattermostCrmService
         private string m_password;
         private string m_url;
 
-        private CrmWrapper(string username, string password, string url)
+        public CrmWrapper(string username, string password, string url)
         {
             m_user = username;
             m_password = password;

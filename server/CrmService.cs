@@ -14,9 +14,22 @@ namespace MattermostCrmService
     {
         private static Regex CASRegex = new Regex("\\b(CAS-[0-9]{5}-[A-Z][0-9][A-Z][0-9][A-Z][0-9])\\b");
 
-        public object Any(Incident request)
+        private CrmWrapper GetAuthenticatedCrmWrapper(AuthenticatedRequestBase request)
+        {
+            if (String.IsNullOrEmpty(request.AuthenticationToken))
+                throw new ApplicationException("No Auth Token");
+            var authInfo = LoginHelper.Instance.ParseToken(request.AuthenticationToken);
+            return new CrmWrapper(authInfo.Username, authInfo.Password, Config.MergedConfig.CrmUrl); 
+        }
+
+        public IncidentWrapper Any(Incident request)
         {
             return CrmWrapper.Instance.GetIncident(request.CaseNum);
+        }
+
+        public string Login(Login request)
+        {
+            return LoginHelper.Instance.GenerateToken(request.Username, request.Password);
         }
 
         public object Get(Version request)
@@ -24,23 +37,23 @@ namespace MattermostCrmService
             return CrmWrapper.Instance.Version;
         }
 
-        public object Post(UpdateNote request)
+        public NoteWrapper Post(UpdateNote request)
         {
-            // TODO: use separate CRM wrapper with different credentials
-            return CrmWrapper.Instance.UpdateNote(request.NoteId, request.Title, request.Body);
+            var crm = GetAuthenticatedCrmWrapper(request);
+            return crm.UpdateNote(request.NoteId, request.Title, request.Body);
         }
 
         public void Post(DeleteNote request)
         {
-            // TODO: use separate CRM wrapper with different credentials
-            CrmWrapper.Instance.DeleteNote(request.NoteId);
+            var crm = GetAuthenticatedCrmWrapper(request);
+            crm.DeleteNote(request.NoteId);
         }
 
-        public object Post(AddNote request)
+        public NoteWrapper Post(AddNote request)
         {
-            // TODO: use separate CRM wrapper with different credentials
-            var incident = CrmWrapper.Instance.GetIncident(request.CaseNum);
-            return CrmWrapper.Instance.AddNote(incident.Id, request.Title, request.Body);
+            var crm = GetAuthenticatedCrmWrapper(request);
+            var incident = crm.GetIncident(request.CaseNum);
+            return crm.AddNote(incident.Id, request.Title, request.Body);
         }
 
         public object Get(AttachmentRequest request)
@@ -66,7 +79,7 @@ namespace MattermostCrmService
             return null;
         }
 
-        public object Post(MatterMostMessage request)
+        public MatterMostResponse Post(MatterMostMessage request)
         {
             List<string> cases = new List<string>();
             HashSet<string> visitedCases = new HashSet<string>();

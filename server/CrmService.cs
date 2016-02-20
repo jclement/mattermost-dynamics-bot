@@ -27,7 +27,7 @@ namespace MattermostCrmService
             return CrmWrapper.Instance.GetIncident(request.CaseNum);
         }
 
-        public string Login(Login request)
+        public string Post(Login request)
         {
             return LoginHelper.Instance.GenerateToken(request.Username, request.Password);
         }

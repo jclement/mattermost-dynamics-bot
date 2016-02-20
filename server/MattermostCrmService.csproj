@@ -111,6 +111,9 @@
     <None Include="settings.sample.conf" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="static\incidentController.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="static\index.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

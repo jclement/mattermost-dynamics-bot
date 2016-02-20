@@ -1,3 +1,4 @@
+<p class="alert alert-warning" ng-hide="isLoggedIn()">Not Authenticated</p>
 <div ng-show="loaded && !error">
 <div class="panel panel-default">
 <table class="table table-condensed">
@@ -63,7 +64,7 @@
 </table>
 </div>
 
-<div class="well well-sm" ng-hide="commentPosting">
+<div class="well well-sm" ng-hide="commentPosting || !isLoggedIn()">
   <input type="text" class="form-control" ng-model="newCommentTitle" placeholder="Note Title">
   <textarea class="form-control" ng-model="newCommentBody" placeholder="Note Body">
   </textarea>

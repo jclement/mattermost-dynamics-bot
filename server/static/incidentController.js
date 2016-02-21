@@ -32,7 +32,26 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http, localStor
       $scope.downloadNoteAttachment = function(attachmentId, filename) {
         document.getElementById('download_iframe').src = "../attachment/getfile/"+attachmentId+"/" + filename;
       };
-      $scope.addComment = function() {
+      $scope.deleteNote = function(note) {
+        note.doomed = true;
+        $http({
+          url: '../notes/' + note.Id + '/delete',
+          dataType: "json",
+          data: {
+            'authenticationToken': Auth.getToken()
+          },
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json; charset=utf-8"
+          }
+        }).success(function(response) {
+          var i = $scope.incident.Notes.indexOf(note);
+          if(i != -1) {
+            $scope.incident.Notes.splice(i, 1);
+          }
+        });
+      };
+      $scope.addNote = function() {
         if (!$scope.newCommentBody && !$scope.newCommentTitle)
           return;
 
@@ -55,7 +74,7 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http, localStor
           $scope.newCommentTitle = "";
           $scope.commentPosting = false;
         });
-      }
+      };
   }).error(function(error){
       $scope.error = error;
   });

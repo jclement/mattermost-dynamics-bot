@@ -26,15 +26,26 @@ uncrm.factory('Auth', function($http, $rootScope, localStorageService) {
       return !!localStorageService.get('authenticationToken');
     },
 
+    getLoggedInName: function() {
+      return localStorageService.get('authenticationName');
+    },
+
     getToken: function() {
       return localStorageService.get('authenticationToken');
     },
 
     logout: function() {
       localStorageService.remove('authenticationToken');
+      localStorageService.remove('authenticationName');
     },
 
-    login: function(username, password, callback) {
+    isBusy: function() {
+      return !!this._busy;
+    },
+
+    login: function(username, password) {
+      var that = this;
+      that._busy = true;
       $http({
         url: "../login",
         dataType: "json",
@@ -47,11 +58,17 @@ uncrm.factory('Auth', function($http, $rootScope, localStorageService) {
             "Content-Type": "application/json; charset=utf-8"
         }
       }).success(function(response){
-        console.log("Logging in");
+        that._busy = false;
+        console.log("Logged in");
+        localStorageService.set('authenticationName', username);
         localStorageService.set('authenticationToken', response);
-        if (callback) {
-          callback();
-        }
+      }).error(function(response) {
+        that._busy = false;
+        noty({
+          text: response.ResponseStatus.Message,
+          timeout: 1000,
+          type: "error"
+        });
       });
     }
 
@@ -90,3 +107,16 @@ uncrm.controller('mainCtrl', function($scope, $location) {
   }
 });
 
+
+uncrm.controller('authCtrl', function($scope, $location, Auth) {
+  $scope.isLoggedIn = Auth.isLoggedIn;
+  $scope.getLoggedInName = Auth.getLoggedInName;
+  $scope.logout = Auth.logout;
+  $scope.isBusy = Auth.isBusy;
+  $scope.login = function() {
+    Auth.login($scope.username, $scope.password, function() {
+      $scope.username = '';
+      $scope.password='';
+    });
+  }
+});

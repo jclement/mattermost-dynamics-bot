@@ -37,6 +37,19 @@
     </nav>
 
     <div class="container">
+      <div ng-controller="authCtrl">
+        <div class="alert alert-warning" ng-hide="isLoggedIn()">
+          <form class="form-inline" ng-submit="login()">
+          <input class="form-control" type="text" ng-model="username" placeholder="Username" />
+          <input class="form-control" type="password" ng-model="password" placeholder="Password" />
+          <button type="submit" class="btn btn-default" ng-disabled="isBusy()" >Login</button>
+          </form>
+        </div>
+        <p class="alert alert-success" ng-show="isLoggedIn()">
+        Logged in as: <b>{{getLoggedInName()}}</b>
+        <button class="btn btn-default btn-xs pull-right" ng-click="logout()">Logout</button>
+      </div>
+
       <div ng-view></div>
     </div>
 
@@ -47,6 +60,7 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.3.8/packaged/jquery.noty.packaged.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>

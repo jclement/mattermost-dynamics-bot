@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MattermostCrmService.Messages
 {
-    [Route("/incident/{CaseNum}/notes/{NoteId}/update")]
+    [Route("/notes/{NoteId}/update")]
     public class UpdateNote : AuthenticatedRequestBase
     {
         public Guid NoteId { get; set; }

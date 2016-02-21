@@ -169,7 +169,8 @@ uncrm.controller('mainCtrl', function($scope, $location) {
   }
 });
 
-uncrm.controller('searchCtrl', function($scope, $location) {
+uncrm.controller('searchCtrl', function($scope, $location, Auth) {
+  $scope.isLoggedIn = Auth.isLoggedIn;
   $scope.go = function() {
     // TODO: An actual search by string implementation?
     if ($scope.incidentNumber) {

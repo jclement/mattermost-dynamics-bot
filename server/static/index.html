@@ -34,15 +34,15 @@
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="#">unCRM</a>
-          <ul class="nav navbar-nav">
+          <ul class="nav navbar-nav" ng-controller="searchCtrl">
             <li>
-              <form class="navbar-form navbar-right" ng-controller="searchCtrl" ng-submit="go()">
+              <form class="navbar-form navbar-right" ng-submit="go()">
                 <div class="form-group">
                   <input type="text" id="incident" placeholder="Search" ng-model="incidentNumber" class="form-control">
                 </div>
               </form>
             </li>
-            <li><a href="#" class="nav-bar-item">My Incidents</a></li>
+            <li ng-show="isLoggedIn()"><a href="#" class="nav-bar-item">My Incidents</a></li>
           </ul>
         </div>
         <div id="navbar" class="navbar-collapse collapse" ng-cloak>
@@ -54,9 +54,11 @@
                 <button type="submit" class="btn btn-success" ng-disabled="isBusy()" >Login</button>
               </form>
             </div>
-            <form class="navbar-form" ng-show"isLoggedIn()">
-              <button class="btn btn-default pull-right" ng-click="logout()" title="Logout of {{getLoggedInName()}}">Logout</button>
-            </form>
+            <div ng-show="isLoggedIn()">
+              <form class="navbar-form">
+                <button class="btn btn-default pull-right" ng-click="logout()" title="Logout of {{getLoggedInName()}}">Logout</button>
+              </form>
+            </div>
           </div>
         </div><!--/.navbar-collapse -->
       </div>

@@ -76,6 +76,7 @@
 
 <div class="well well-sm" ng-repeat="note in incident.Notes | orderBy: '-Modified'">
   <div style="border-bottom: 1px solid #aaa;"><b>{{note.Title}}</b> by <i>{{note.Owner}}</i> on {{note.Modified | date : "medium"}}
+  <button class="btn btn-default btn-xs pull-right" ng-show="!note.doomed && isLoggedIn()" ng-click="deleteNote(note)">Delete Note</button>
   </div>
   <div ng-bind-html="note.Body | marked"></div>
   <div ng-show="note.Filename">Download attachment (new tab): {{note.Filename}} ({{note.Filesize}} Bytes) <a class="btn btn-default" href={{"../attachment/getfile/"+note.Id+"/"+note.Filename}} target="_blank"><span class="glyphicon glyphicon-download-alt"></span></a></div>

@@ -74,13 +74,16 @@
   Posting...
 </div>
 
-<div class="well well-sm" ng-repeat="note in incident.Notes | orderBy: '-Modified'">
-  <div style="border-bottom: 1px solid #aaa;"><b>{{note.Title}}</b> by <i>{{note.Owner}}</i> on {{note.Modified | date : "medium"}}
-  <button class="btn btn-default btn-xs pull-right" ng-show="!note.doomed && isLoggedIn()" ng-click="deleteNote(note)">Delete Note</button>
+<div ng-repeat="note in incident.Notes | orderBy: '-Modified'">
+  <div class="well well-sm" ng-hide="note.doomed">
+    <div style="border-bottom: 1px solid #aaa;"><b>{{note.Title}}</b> by <i>{{note.Owner}}</i> on {{note.Modified | date : "medium"}}
+    <a class="pull-right" ng-show="isLoggedIn()" ng-click="deleteNote(note)"><i class="glyphicon glyphicon-trash"></i></a>
+    </div>
+    <div ng-bind-html="note.Body | marked"></div>
+    <div ng-show="note.Filename">Download attachment (new tab): {{note.Filename}} ({{note.Filesize}} Bytes) <a class="btn btn-default" href={{"../attachment/getfile/"+note.Id+"/"+note.Filename}} target="_blank"><span class="glyphicon glyphicon-download-alt"></span></a></div>
+    <div ng-show="note.Filename">Download attachment (iframe): {{note.Filename}} ({{note.Filesize}} Bytes) <button class="btn btn-default" ng-click="downloadNoteAttachment(note.Id, note.Filename)"><span class="glyphicon glyphicon-download-alt"></span></button></div>
   </div>
-  <div ng-bind-html="note.Body | marked"></div>
-  <div ng-show="note.Filename">Download attachment (new tab): {{note.Filename}} ({{note.Filesize}} Bytes) <a class="btn btn-default" href={{"../attachment/getfile/"+note.Id+"/"+note.Filename}} target="_blank"><span class="glyphicon glyphicon-download-alt"></span></a></div>
-  <div ng-show="note.Filename">Download attachment (iframe): {{note.Filename}} ({{note.Filesize}} Bytes) <button class="btn btn-default" ng-click="downloadNoteAttachment(note.Id, note.Filename)"><span class="glyphicon glyphicon-download-alt"></span></button></div>
+  <div class="alert alert-danger" ng-show="note.doomed">Note is being obliterated</div>
 </div>
 
 </div>

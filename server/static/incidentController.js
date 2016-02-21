@@ -49,6 +49,12 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http, localStor
           if(i != -1) {
             $scope.incident.Notes.splice(i, 1);
           }
+        }).error(function(response) {
+          note.doomed = false;
+          noty({
+            text: response.ResponseStatus.Message,
+            type: "error"
+          });
         });
       };
       $scope.addNote = function() {
@@ -73,6 +79,11 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http, localStor
           $scope.newCommentBody = "";
           $scope.newCommentTitle = "";
           $scope.commentPosting = false;
+        }).error(function(response) {
+          noty({
+            text: response.ResponseStatus.Message,
+            type: "error"
+          });
         });
       };
   }).error(function(error){

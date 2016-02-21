@@ -21,6 +21,8 @@ uncrm.config(function($routeProvider) {
 
 uncrm.factory('Auth', function($http, $rootScope, localStorageService) {
 
+  var authBusy = false;
+
   return {
     isLoggedIn: function() {
       return !!localStorageService.get('authenticationToken');
@@ -40,12 +42,11 @@ uncrm.factory('Auth', function($http, $rootScope, localStorageService) {
     },
 
     isBusy: function() {
-      return !!this._busy;
+      return authBusy;
     },
 
-    login: function(username, password) {
-      var that = this;
-      that._busy = true;
+    login: function(username, password, success, failure) {
+      authBusy = true;
       $http({
         url: "../login",
         dataType: "json",
@@ -58,17 +59,23 @@ uncrm.factory('Auth', function($http, $rootScope, localStorageService) {
             "Content-Type": "application/json; charset=utf-8"
         }
       }).success(function(response){
-        that._busy = false;
+        authBusy = false;
         console.log("Logged in");
         localStorageService.set('authenticationName', username);
         localStorageService.set('authenticationToken', response);
+        if (success) {
+          success();
+        }
       }).error(function(response) {
-        that._busy = false;
+        authBusy = false;
         noty({
           text: response.ResponseStatus.Message,
           timeout: 1000,
           type: "error"
         });
+        if (failure) {
+          failure();
+        }
       });
     }
 
@@ -101,8 +108,19 @@ uncrm.filter('marked', function ($sce) {
 
 uncrm.controller('mainCtrl', function($scope, $location) {
   $scope.go = function() {
+    // TODO: An actual search by string implementation?
     if ($scope.incidentNumber) {
       $location.url("/incident/" + $scope.incidentNumber);
+    }
+  }
+});
+
+uncrm.controller('searchCtrl', function($scope, $location) {
+  $scope.go = function() {
+    // TODO: An actual search by string implementation?
+    if ($scope.incidentNumber) {
+      $location.url("/incident/" + $scope.incidentNumber);
+      $scope.incidentNumber = '';
     }
   }
 });

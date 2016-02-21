@@ -11,6 +11,12 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
+    <style>
+      a[ng-click]{
+          cursor: pointer;
+      }
+    </style>
+
   </head>
 
   <body>
@@ -25,30 +31,30 @@
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="#">unCRM</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-<!--           <form class="navbar-form navbar-right">
+          <form class="navbar-form navbar-right" ng-controller="searchCtrl" ng-submit="go()">
             <div class="form-group">
-              <input type="text" id="incident" placeholder="Open Incident" class="form-control">
+              <input type="text" id="incident" placeholder="Open Incident" ng-model="incidentNumber" class="form-control">
             </div>
           </form>
- -->        </div><!--/.navbar-collapse -->
+        </div>
+        <div id="navbar" class="navbar-collapse collapse" ng-cloak>
+          <div ng-controller="authCtrl" class="pull-right">
+            <div ng-hide="isLoggedIn()">
+              <form class="navbar-form" ng-submit="login()">
+                <input class="form-control" type="text" ng-model="username" placeholder="Username" />
+                <input class="form-control" type="password" ng-model="password" placeholder="Password" />
+                <button type="submit" class="btn btn-success" ng-disabled="isBusy()" >Login</button>
+              </form>
+            </div>
+            <form class="navbar-form" ng-show"isLoggedIn()">
+              <button class="btn btn-default pull-right" ng-click="logout()" title="Logout of {{getLoggedInName()}}">Logout</button>
+            </form>
+          </div>
+        </div><!--/.navbar-collapse -->
       </div>
     </nav>
 
     <div class="container">
-      <div ng-controller="authCtrl">
-        <div class="alert alert-warning" ng-hide="isLoggedIn()">
-          <form class="form-inline" ng-submit="login()">
-          <input class="form-control" type="text" ng-model="username" placeholder="Username" />
-          <input class="form-control" type="password" ng-model="password" placeholder="Password" />
-          <button type="submit" class="btn btn-default" ng-disabled="isBusy()" >Login</button>
-          </form>
-        </div>
-        <p class="alert alert-success" ng-show="isLoggedIn()">
-        Logged in as: <b>{{getLoggedInName()}}</b>
-        <button class="btn btn-default btn-xs pull-right" ng-click="logout()">Logout</button>
-      </div>
 
       <div ng-view></div>
     </div>

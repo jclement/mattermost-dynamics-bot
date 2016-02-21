@@ -6,46 +6,46 @@
     <td>{{incident.Id}}</td>
   </tr>
  -->  <tr>
-    <th>Number:</th>
+    <th class="nowrap">Number:</th>
     <td>{{incidentNumber}} <a class="pull-right btn btn-default btn-xs" href="{{url}}">Open in Dynamics CRM</a> </td>
   </tr>
   <tr>
-    <th>Title:</th>
+    <th class="nowrap">Title:</th>
     <td>{{incident.Title}}</td>
   </tr>
   <tr>
-    <th>Status:</th>
+    <th class="nowrap">Status:</th>
     <td>{{incident.Status}}</td>
   </tr>
   <tr>
-    <th>Description:</th>
+    <th class="nowrap">Description:</th>
     <td>{{incident.Description}}</td>
   </tr>
   <tr>
-    <th>VersionRequest:</th>
+    <th class="nowrap">Version:</th>
     <td>{{incident.VersionRequest}}</td>
   </tr>
   <tr>
-    <th>Company:</th>
+    <th class="nowrap">Company:</th>
     <td>{{incident.Company}}</td>
   </tr>
   <tr>
-    <th>Creator:</th>
+    <th class="nowrap">Creator:</th>
     <td>{{incident.Creator}}</td>
   </tr>
   <tr>
-    <th>Owner:</th>
+    <th class="nowrap">Owner:</th>
     <td>{{incident.Owner}}</td>
   </tr>
   <tr>
-    <th>Attachments Folder:</th>
+    <th class="nowrap">Attachments Folder:</th>
     <td>{{incident.NetworkAttachmentsFolder}}</td>
   </tr>
 </table>
 </div>
 
-<div class="panel panel-default">
-<table class="table table-condensed table-striped" ng-show="incident.NetworkAttachments">
+<div class="panel panel-default" ng-show="incident.NetworkAttachments">
+<table class="table table-condensed table-striped">
 <tr>
   <th>Filename</th>
   <th>Size (kb)</th>

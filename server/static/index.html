@@ -15,6 +15,9 @@
       a[ng-click]{
           cursor: pointer;
       }
+      .nowrap {
+        white-space: nowrap;
+      }
     </style>
 
   </head>
@@ -31,11 +34,16 @@
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="#">unCRM</a>
-          <form class="navbar-form navbar-right" ng-controller="searchCtrl" ng-submit="go()">
-            <div class="form-group">
-              <input type="text" id="incident" placeholder="Open Incident" ng-model="incidentNumber" class="form-control">
-            </div>
-          </form>
+          <ul class="nav navbar-nav">
+            <li>
+              <form class="navbar-form navbar-right" ng-controller="searchCtrl" ng-submit="go()">
+                <div class="form-group">
+                  <input type="text" id="incident" placeholder="Search" ng-model="incidentNumber" class="form-control">
+                </div>
+              </form>
+            </li>
+            <li><a href="#" class="nav-bar-item">My Incidents</a></li>
+          </ul>
         </div>
         <div id="navbar" class="navbar-collapse collapse" ng-cloak>
           <div ng-controller="authCtrl" class="pull-right">

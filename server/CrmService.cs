@@ -29,7 +29,15 @@ namespace MattermostCrmService
 
         public string Post(Login request)
         {
-            return LoginHelper.Instance.GenerateToken(request.Username, request.Password);
+            try
+            {
+                new CrmWrapper(request.Username, request.Password, Config.MergedConfig.CrmUrl);
+                return LoginHelper.Instance.GenerateToken(request.Username, request.Password);
+            }
+            catch
+            {
+                throw new ApplicationException("Authentication Failure");
+            }
         }
 
         public object Get(Version request)

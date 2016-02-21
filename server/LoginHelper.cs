@@ -37,7 +37,7 @@ namespace MattermostCrmService
         public string GenerateToken(string username, string password)
         {
             var login = new LoginHelperCredential() {Username = username, Password = password};
-            return Encryption.AESThenHMAC.SimpleEncryptWithPassword(login.SerializeToString(), m_key);
+            return Encryption.AESThenHMAC.SimpleEncryptWithPassword(login.ToJson(), m_key);
         }
 
         public LoginHelperCredential ParseToken(string token)

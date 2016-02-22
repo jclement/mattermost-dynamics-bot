@@ -54,7 +54,7 @@ The logical name of an attribute.</param>
 The logical name of an attribute.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.AttributeMapping">
-			<summary>This type doesn’t have any extensibility scenarios in this release.</summary>
+			<summary>Internal_mrefFor the Web API the corresponding type is AttributeMapping ComplexType.</summary>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.AttributeMapping.AllowedSyncDirection">
 			<returns>Type: Returns_Int32. </returns>
@@ -99,13 +99,13 @@ The logical name of an attribute.</returns>
 			<summary>This type doesn’t have any extensibility scenarios in this release.</summary>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.AttributePrivilege">
-			<summary>Specifies the field level security privileges allowed for an attribute.</summary>
+			<summary>Specifies the field level security privileges allowed for an attribute.For the Web API the corresponding type is AttributePrivilege ComplexType.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.AttributePrivilege.#ctor">
 			<summary>constructor_initializes<see cref="T:Microsoft.Xrm.Sdk.AttributePrivilege"></see> class.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.AttributePrivilege.#ctor(System.Guid,System.Int32,System.Int32,System.Int32)">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.AttributePrivilege"></see> class setting the attribute Id, and whether it is valid to create, read and update the attribute value.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.AttributePrivilege"></see> class setting the attribute Id, and whether it is valid to create, read and update the attribute value.</summary>
 			<param name="canRead">Type: Returns_Int32. Whether the attribute value can be read.</param>
 			<param name="canCreate">Type: Returns_Int32. Whether the attribute value can be specified on create.</param>
 			<param name="attributeId">Type: Returns_Guid. The attribute ID.</param>
@@ -169,13 +169,13 @@ The extension data.</returns>
 			<returns>Type: Returns_DateTimeThe date and time when the fault occurred.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.BooleanManagedProperty">
-			<summary>Defines a managed property that stores a Boolean value.</summary>
+			<summary>Defines a managed property that stores a Boolean value.For the Web API the corresponding type is BooleanManagedProperty ComplexType.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.BooleanManagedProperty.#ctor">
 			<summary>constructor_initializes<see cref="T:Microsoft.Xrm.Sdk.BooleanManagedProperty"></see> class</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.BooleanManagedProperty.#ctor(System.Boolean)">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.BooleanManagedProperty"></see> class</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.BooleanManagedProperty"></see> class</summary>
 			<param name="value">Type: Returns_Boolean. 
 true if the value is true; otherwise, false.</param>
 		</member>
@@ -394,6 +394,9 @@ A collection containing the values in the <see cref="T:Microsoft.Xrm.Sdk.DataCol
 		<member name="T:Microsoft.Xrm.Sdk.DateTimeBehaviorConversionRule">
 			<summary>Represents a conversion rule for converting date and time value from UTC to DateOnly in the database.</summary>
 		</member>
+		<member name="M:Microsoft.Xrm.Sdk.DateTimeBehaviorConversionRule.#ctor">
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.DateTimeBehaviorConversionRule"></see> class.</summary>
+		</member>
 		<member name="F:Microsoft.Xrm.Sdk.DateTimeBehaviorConversionRule.CreatedByTimeZone">
 			<summary>Converts UTC value to a DateOnly value that the user who created the record would see in the UI.</summary>
 		</member>
@@ -407,19 +410,30 @@ A collection containing the values in the <see cref="T:Microsoft.Xrm.Sdk.DataCol
 			<summary>Converts UTC value to a DateOnly value as per the time zone code specified in the <see cref="T:Microsoft.Xrm.Sdk.Messages.ConvertDateAndTimeBehaviorRequest"></see>.<see cref="P:Microsoft.Xrm.Sdk.Messages.ConvertDateAndTimeBehaviorRequest.TimeZoneCode"></see> parameter.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.DateTimeBehaviorConversionRule.Equals(System.Object)">
-			<returns>Returns <see cref="T:System.Boolean"></see>.</returns>
+			<summary>Determines whether the specified instance of DateTimeBehaviorConversionRule is equal to the current instance.</summary>
+			<returns>Returns Returns_Booleantrue if the specified instance of DateTimeBehaviorConversionRule is equal to the current instance. Otherwise, false.</returns>
+			<param name="obj">The DateTimeBehaviorConversionRule instance to compare with the current instance.</param>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.DateTimeBehaviorConversionRule.GetHashCode">
-			<returns>Returns <see cref="T:System.Int32"></see>.</returns>
+			<summary>Returns a hash code for this instance.</summary>
+			<returns>Returns Returns_Int32The hash code for this instance.</returns>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.DateTimeBehaviorConversionRule.op_Equality(Microsoft.Xrm.Sdk.DateTimeBehaviorConversionRule,Microsoft.Xrm.Sdk.DateTimeBehaviorConversionRule)">
-			<returns>Returns <see cref="T:System.Boolean"></see>.</returns>
+			<summary>Indicates whether two DateTimeBehaviorConversionRule instances are equal.</summary>
+			<returns>Returns Returns_Booleantrue if the values of conversionRuleA and conversionRuleB are equal; otherwise, false.</returns>
+			<param name="conversionRuleA">Type: <see cref="T:Microsoft.Xrm.Sdk.DateTimeBehaviorConversionRule"></see>. Specifies a DateTimeBehaviorConversionRule.</param>
+			<param name="conversionRuleB">Type: <see cref="T:Microsoft.Xrm.Sdk.DateTimeBehaviorConversionRule"></see>. Specifies a DateTimeBehaviorConversionRule.</param>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.DateTimeBehaviorConversionRule.op_Implicit(System.String)~Microsoft.Xrm.Sdk.DateTimeBehaviorConversionRule">
-			<returns>Returns <see cref="T:Microsoft.Xrm.Sdk.DateTimeBehaviorConversionRule"></see>.</returns>
+			<summary>Converts a string into a <see cref="T:Microsoft.Xrm.Sdk.DateTimeBehaviorConversionRule"></see></summary>
+			<returns>Returns <see cref="T:Microsoft.Xrm.Sdk.DateTimeBehaviorConversionRule"></see>A <see cref="T:Microsoft.Xrm.Sdk.DateTimeBehaviorConversionRule"></see> that represents the converted Returns_String.</returns>
+			<param name="conversionRule">Type Returns_String. Specifies a DateTimeBehaviorConversionRule.</param>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.DateTimeBehaviorConversionRule.op_Inequality(Microsoft.Xrm.Sdk.DateTimeBehaviorConversionRule,Microsoft.Xrm.Sdk.DateTimeBehaviorConversionRule)">
-			<returns>Returns <see cref="T:System.Boolean"></see>.</returns>
+			<summary>Indicates whether two DateTimeBehaviorConversionRule instances are not equal.</summary>
+			<returns>Returns <see cref="T:System.Boolean"></see>true if the values of conversionRuleA and conversionRuleB are not equal; otherwise, false.</returns>
+			<param name="conversionRuleA">Type <see cref="T:Microsoft.Xrm.Sdk.DateTimeBehaviorConversionRule"></see>. Specifies a DateTimeBehaviorConversionRule.</param>
+			<param name="conversionRuleB">Type <see cref="T:Microsoft.Xrm.Sdk.DateTimeBehaviorConversionRule"></see>. Specifies a DateTimeBehaviorConversionRule.</param>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.DiscoveryServiceFault">
 			<summary>Represents a discovery service fault.</summary>
@@ -442,17 +456,17 @@ A collection containing the values in the <see cref="T:Microsoft.Xrm.Sdk.DataCol
 			<param name="entityName">Type: Returns_String. The name of the entity.</param>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Entity.#ctor(System.String,Microsoft.Xrm.Sdk.KeyAttributeCollection)">
-			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Entity"></see> class.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Entity"></see> class.This was introduced with pn_crm_online_2015_update_1 and cannot be used with earlier versions.</summary>
 			<param name="keyAttributes">Specifies the key attributes.</param>
 			<param name="entityName">Specifies the entity name.</param>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Entity.#ctor(System.String,System.Guid)">
-			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Entity"></see> class.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Entity"></see> class.This was introduced with pn_crm_online_2015_update_1 and cannot be used with earlier versions.</summary>
 			<param name="id">Specifies the ID of the record.</param>
 			<param name="entityName">Specifies the entity name.</param>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Entity.#ctor(System.String,System.String,System.Object)">
-			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Entity"></see> class.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Entity"></see> class.This was introduced with pn_crm_online_2015_update_1 and cannot be used with earlier versions.</summary>
 			<param name="keyName">Specifies the key name.</param>
 			<param name="keyValue">Specifies the key value.</param>
 			<param name="entityName">Specifies the entity name.</param>
@@ -618,7 +632,7 @@ The current paging information. This is used in conjunction with <see cref="P:Mi
 			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.EntityImageCollection"></see> class.</summary>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.EntityKeyIndexStatus">
-			<summary>Represents the enumerator for the entity key status when the index creation job is in progress.</summary>
+			<summary>Represents the enumerator for the entity key status when the index creation job is in progress.For the Web API use the EntityKeyIndexStatus EnumType.</summary>
 		</member>
 		<member name="F:Microsoft.Xrm.Sdk.EntityKeyIndexStatus.Active">
 			<summary>Specifies that the key index creation is active.</summary>
@@ -643,16 +657,17 @@ The current paging information. This is used in conjunction with <see cref="P:Mi
 			<param name="logicalName">Specifies the logical name.</param>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.EntityReference.#ctor(System.String,Microsoft.Xrm.Sdk.KeyAttributeCollection)">
-			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.EntityReference"></see> class.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.EntityReference"></see> class.This constructor was introduced with pn_crm_online_2015_update_1 and cannot be used with earlier versions.</summary>
 			<param name="keyAttributeCollection">Specifies the key attributes collection.</param>
 			<param name="logicalName">Specifies the entity logical name.</param>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.EntityReference.#ctor(System.String,System.Guid)">
-			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.EntityReference"></see> class setting the logical name and entity ID.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.EntityReference"></see> class setting the logical name and entity ID.This constructor was introduced with pn_crm_online_2015_update_1 and cannot be used with earlier versions.</summary>
 			<param name="logicalName">Type: Returns_String. The logical name of the entity.</param>
 			<param name="id">Type: Returns_Guid. The ID of the record.</param>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.EntityReference.#ctor(System.String,System.String,System.Object)">
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.EntityReference"></see> class.This constructor was introduced with pn_crm_online_2015_update_1 and cannot be used with earlier versions.</summary>
 			<param name="keyValue">Specifies the key value.</param>
 			<param name="keyName">Specifies the key name.</param>
 			<param name="logicalName">Specifies the entity logical name.</param>
@@ -1110,18 +1125,18 @@ The type the xsi:type name and namespace is mapped to.</returns>
 			<param name="typeName">System.Xml.XmlDictionaryStringhttp://msdn.microsoft.com/en-us/library/system.xml.xmldictionarystring.aspx. The xsi:type name.</param>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Label">
-			<summary>Contains a collection of translations for a label.</summary>
+			<summary>Contains a collection of translations for a label.For the Web API the corresponding type is Label ComplexType.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Label.#ctor">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Label"></see> class.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Label"></see> class.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Label.#ctor(Microsoft.Xrm.Sdk.LocalizedLabel,Microsoft.Xrm.Sdk.LocalizedLabel[])">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Label"></see> class.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Label"></see> class.</summary>
 			<param name="userLocalizedLabel">Type: <see cref="T:Microsoft.Xrm.Sdk.LocalizedLabel"></see>. The label for the language of the current user.</param>
 			<param name="labels">Type: <see cref="T:Microsoft.Xrm.Sdk.LocalizedLabel"></see>[]. An array of localized labels.</param>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Label.#ctor(System.String,System.Int32)">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Label"></see> class.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Label"></see> class.</summary>
 			<param name="label">Type: Returns_String. The string for the user localized label.</param>
 			<param name="languageCode">Type: Returns_Int32. The language code for the label. </param>
 		</member>
@@ -1138,13 +1153,13 @@ The type the xsi:type name and namespace is mapped to.</returns>
 			<returns>Type: <see cref="T:Microsoft.Xrm.Sdk.LocalizedLabel"></see>The label for the language of the current user.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.LocalizedLabel">
-			<summary>Contains a localized label, including the label string and the language code.</summary>
+			<summary>Contains a localized label, including the label string and the language code.For the Web API the corresponding type is LocalizedLabel ComplexType.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.LocalizedLabel.#ctor">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.LocalizedLabel"></see> class.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.LocalizedLabel"></see> class.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.LocalizedLabel.#ctor(System.String,System.Int32)">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.LocalizedLabel"></see> class setting the label string and the language code.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.LocalizedLabel"></see> class setting the label string and the language code.</summary>
 			<param name="label">Type: Returns_String
 The localized label string..</param>
 			<param name="languageCode">Type: Returns_Int32
@@ -1173,6 +1188,59 @@ The language code for the label..</returns>
 		<member name="M:Microsoft.Xrm.Sdk.LocalizedLabelCollection.#ctor(System.Collections.Generic.IList{Microsoft.Xrm.Sdk.LocalizedLabel})">
 			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.LocalizedLabelCollection"></see> class</summary>
 			<param name="list">Type: Returns_IList&lt;<see cref="T:Microsoft.Xrm.Sdk.LocalizedLabel"></see>&gt;. Sets a list of localized labels.</param>
+		</member>
+		<member name="T:Microsoft.Xrm.Sdk.MailboxTrackingFolderMapping">
+			<summary>Represents an individual folder-level tracking rule item in the collection (<see cref="T:Microsoft.Xrm.Sdk.MailboxTrackingFolderMappingCollection"></see>).For the Web API the corresponding type is MailboxTrackingFolderMapping ComplexType.</summary>
+		</member>
+		<member name="M:Microsoft.Xrm.Sdk.MailboxTrackingFolderMapping.#ctor">
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.MailboxTrackingFolderMapping"></see> class.</summary>
+		</member>
+		<member name="M:Microsoft.Xrm.Sdk.MailboxTrackingFolderMapping.#ctor(System.String,System.String,System.Guid,System.String,System.Int32,System.Boolean)">
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.MailboxTrackingFolderMapping"></see> class setting the values in the folder-level tracking rule with the values specified in the parameter list.</summary>
+			<param name="regardingObjectTypeCode">Entity type code of the entity represented by the regardingObjectId property.</param>
+			<param name="regardingObjectName">Name of the entity represented by the regardingObjectId property.</param>
+			<param name="regardingObjectId">ID of the entity record with which the Exchange folder is mapped.</param>
+			<param name="exchangeFolderName">Name of the Exchange folder in the folder-level tracking rule.</param>
+			<param name="isFolderOnboarded">Indicates whether the tracking rule for the folder has run. true or false.</param>
+			<param name="exchangeFolderId">ID of the Exchange folder in the folder-level tracking rule.</param>
+		</member>
+		<member name="P:Microsoft.Xrm.Sdk.MailboxTrackingFolderMapping.ExchangeFolderId">
+			<summary>Gets the ID of the Exchange folder in the folder-level tracking rule.</summary>
+			<returns>Returns Returns_StringThe ID of the Exchange folder in the folder-level tracking rule.</returns>
+		</member>
+		<member name="P:Microsoft.Xrm.Sdk.MailboxTrackingFolderMapping.ExchangeFolderName">
+			<summary>Gets the name of the Exchange folder in the folder-level tracking rule.</summary>
+			<returns>Returns Returns_StringThe name of the Exchange folder in the folder-level tracking rule.</returns>
+		</member>
+		<member name="P:Microsoft.Xrm.Sdk.MailboxTrackingFolderMapping.IsFolderOnboarded">
+			<summary>Gets whether the tracking rule for the folder has run.</summary>
+			<returns>Returns Returns_Booleantrue if the tracking rule for the folder has run; false otherwise.</returns>
+		</member>
+		<member name="P:Microsoft.Xrm.Sdk.MailboxTrackingFolderMapping.RegardingObjectId">
+			<summary>Gets the ID of the entity record with which the Exchange folder is mapped.</summary>
+			<returns>Returns Returns_GuidThe ID of the entity record with which the Exchange folder is mapped.</returns>
+		</member>
+		<member name="P:Microsoft.Xrm.Sdk.MailboxTrackingFolderMapping.RegardingObjectName">
+			<summary>Gets the name of the entity represented by the RegardingObjectId property.</summary>
+			<returns>Returns Returns_StringThe name of the entity represented by the RegardingObjectId property.</returns>
+		</member>
+		<member name="P:Microsoft.Xrm.Sdk.MailboxTrackingFolderMapping.RegardingObjectTypeCode">
+			<summary>Gets the entity type code of the entity represented by the RegardingObjectId property.</summary>
+			<returns>Returns Returns_Int32The entity type code of the entity represented by the RegardingObjectId property.</returns>
+		</member>
+		<member name="P:Microsoft.Xrm.Sdk.MailboxTrackingFolderMapping.System#Runtime#Serialization#IExtensibleDataObject#ExtensionData">
+			<summary>Internal</summary>
+			<returns>Returns <see cref="T:System.Runtime.Serialization.ExtensionDataObject"></see>.</returns>
+		</member>
+		<member name="T:Microsoft.Xrm.Sdk.MailboxTrackingFolderMappingCollection">
+			<summary>Represents a collection of folder-level tracking rules.</summary>
+		</member>
+		<member name="M:Microsoft.Xrm.Sdk.MailboxTrackingFolderMappingCollection.#ctor">
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.MailboxTrackingFolderMappingCollection"></see> class.</summary>
+		</member>
+		<member name="M:Microsoft.Xrm.Sdk.MailboxTrackingFolderMappingCollection.#ctor(System.Collections.Generic.IList{Microsoft.Xrm.Sdk.MailboxTrackingFolderMapping})">
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.MailboxTrackingFolderMappingCollection"></see> class setting a folder-level tracking rule.</summary>
+			<param name="list">List of folder-level tracking rules.</param>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.ManagedProperty`1">
 			<summary>Represents a strongly typed managed property.</summary>
@@ -3086,6 +3154,15 @@ The security token response.</returns>
 		<member name="F:Microsoft.Xrm.Sdk.Client.TokenServiceCredentialType.Windows">
 			<summary>An integrated Windows authentication credential. Value = 6.</summary>
 		</member>
+		<member name="T:Microsoft.Xrm.Sdk.Client.UserType">
+			<summary>The type of user that a message request executes for.</summary>
+		</member>
+		<member name="F:Microsoft.Xrm.Sdk.Client.UserType.CrmUser">
+			<summary>A CRM system user.</summary>
+		</member>
+		<member name="F:Microsoft.Xrm.Sdk.Client.UserType.ExternalPartyUser">
+			<summary>An external party user.</summary>
+		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Client.WindowsPolicyConfiguration">
 			<summary>Contains a policy configuration that identifies an Active Directory provider.</summary>
 		</member>
@@ -3193,7 +3270,7 @@ The security token response.</returns>
 			<returns>Type: Returns_ExtensionDataObjectThe extension data.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Discovery.EndpointAccessType">
-			<summary>Indicates the type of network access an endpoint has.</summary>
+			<summary>Indicates the type of network access an endpoint has.For the Web API use the EndpointAccessType EnumType.</summary>
 		</member>
 		<member name="F:Microsoft.Xrm.Sdk.Discovery.EndpointAccessType.Default">
 			<summary>Default access. The actual access is determined by the endpoint URL. Value = 0.</summary>
@@ -3208,10 +3285,10 @@ The security token response.</returns>
 			<summary>A collection of service endpoints.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Discovery.EndpointCollection.#ctor">
-			<summary> Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Discovery.EndpointCollection"></see> class.</summary>
+			<summary> Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Discovery.EndpointCollection"></see> class.</summary>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Discovery.EndpointType">
-			<summary>Identifies the type of service available at an endpoint.</summary>
+			<summary>Identifies the type of service available at an endpoint.For the Web API use the EndpointType EnumType.</summary>
 		</member>
 		<member name="F:Microsoft.Xrm.Sdk.Discovery.EndpointType.OrganizationDataService">
 			<summary>The organization data service. Value = 1.</summary>
@@ -3425,10 +3502,10 @@ The target that is the record to which the related records are associated.</retu
 			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Messages.AssociateResponse"></see> class.</summary>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.CanBeReferencedRequest">
-			<summary>Contains the data that is needed to  check whether the specified entity can be the primary entity (one) in a one-to-many relationship.</summary>
+			<summary>Contains the data that is needed to check whether the specified entity can be the primary entity (one) in a one-to-many relationship.For the Web API use the CanBeReferenced Action.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.CanBeReferencedRequest.#ctor">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Messages.CanBeReferencedRequest"></see> class.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Messages.CanBeReferencedRequest"></see> class.</summary>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Messages.CanBeReferencedRequest.EntityName">
 			<summary>Gets or sets the logical entity name to check whether it can be the primary entity in a one-to-many relationship. Required.</summary>
@@ -3436,20 +3513,20 @@ The target that is the record to which the related records are associated.</retu
 The logical entity name to check whether it can be the primary entity in a one-to-many relationship. Required.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.CanBeReferencedResponse">
-			<summary>Contains the response from the <see cref="T:Microsoft.Xrm.Sdk.Messages.CanBeReferencedRequest"></see> class.</summary>
+			<summary>Contains the response from the <see cref="T:Microsoft.Xrm.Sdk.Messages.CanBeReferencedRequest"></see> class.For the Web API the CanBeReferencedResponse ComplexType is the response value from the CanBeReferenced Action.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.CanBeReferencedResponse.#ctor">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Messages.CanBeReferencedResponse"></see> class.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Messages.CanBeReferencedResponse"></see> class.</summary>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Messages.CanBeReferencedResponse.CanBeReferenced">
 			<summary>Gets the result of the request to see whether the entity can be the primary entity (one) in a one-to-many relationship.</summary>
 			<returns>Type: Returns_Booleantrue if the entity can be the primary entity (one) in a one-to-many relationship; otherwise, false.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.CanBeReferencingRequest">
-			<summary>Contains the data that is needed to  check whether an entity can be the referencing entity in a one-to-many relationship. </summary>
+			<summary>Contains the data that is needed to check whether an entity can be the referencing entity in a one-to-many relationship. For the Web API use the CanBeReferencing Action.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.CanBeReferencingRequest.#ctor">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Messages.CanBeReferencingRequest"></see> class.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Messages.CanBeReferencingRequest"></see> class.</summary>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Messages.CanBeReferencingRequest.EntityName">
 			<summary>Gets or sets the logical entity name. Required.</summary>
@@ -3457,20 +3534,20 @@ The logical entity name to check whether it can be the primary entity in a one-t
 The the logical entity name. Required..</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.CanBeReferencingResponse">
-			<summary>Contains the response from the <see cref="T:Microsoft.Xrm.Sdk.Messages.CanBeReferencingRequest"></see> class.</summary>
+			<summary>Contains the response from the <see cref="T:Microsoft.Xrm.Sdk.Messages.CanBeReferencingRequest"></see> class.For the Web API the CanBeReferencingResponse ComplexType is the response value from the CanBeReferencing Action.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.CanBeReferencingResponse.#ctor">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Messages.CanBeReferencingResponse"></see> class.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Messages.CanBeReferencingResponse"></see> class.</summary>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Messages.CanBeReferencingResponse.CanBeReferencing">
 			<summary>Gets the result of the request to see whether the entity can be the referencing entity (many) in a one-to-many relationship.</summary>
 			<returns>Type: Returns_Booleantrue if the entity can be the referencing entity (many) in a one-to-many relationship.; otherwise, false.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.CanManyToManyRequest">
-			<summary>Contains the data that is needed to  check whether an entity can participate in a many-to-many relationship.</summary>
+			<summary>Contains the data that is needed to check whether an entity can participate in a many-to-many relationship.For the Web API use the CanManyToMany Action.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.CanManyToManyRequest.#ctor">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Messages.CanManyToManyRequest"></see> class.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Messages.CanManyToManyRequest"></see> class.</summary>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Messages.CanManyToManyRequest.EntityName">
 			<summary>Gets or sets the logical entity name. Required</summary>
@@ -3478,17 +3555,17 @@ The the logical entity name. Required..</returns>
 The logical entity name. Required.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.CanManyToManyResponse">
-			<summary>Contains the response from the <see cref="T:Microsoft.Xrm.Sdk.Messages.CanManyToManyRequest"></see> class.</summary>
+			<summary>Contains the response from the <see cref="T:Microsoft.Xrm.Sdk.Messages.CanManyToManyRequest"></see> class.For the Web API the CanManyToManyResponse ComplexType is the response value from the CanManyToMany Action.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.CanManyToManyResponse.#ctor">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Messages.CanManyToManyResponse"></see> class.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Messages.CanManyToManyResponse"></see> class.</summary>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Messages.CanManyToManyResponse.CanManyToMany">
 			<summary>Gets the result of the request to see whether the entity can participate in a many-to-many relationship.</summary>
-			<returns>Type: Returns_Booleantrue if the the entity can participate in a many-to-many relationship.; otherwise, false.</returns>
+			<returns>Type: Returns_Booleantrue if the entity can participate in a many-to-many relationship.; otherwise, false.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.ConvertDateAndTimeBehaviorRequest">
-			<summary>Contains data to convert existing UTC date and time values in the database to DateOnly values.</summary>
+			<summary>Contains the data to convert existing UTC date and time values in the database to DateOnly values.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.ConvertDateAndTimeBehaviorRequest.#ctor">
 			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Messages.ConvertDateAndTimeBehaviorRequest"></see> class.</summary>
@@ -3799,7 +3876,7 @@ The entity instance.</returns>
 			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Messages.DeleteOptionSetResponse"></see> class.</summary>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.DeleteOptionValueRequest">
-			<summary>Contains the data that is needed to  delete an option value in a global or local option set.</summary>
+			<summary>Contains the data that is needed to delete an option value in a global or local option set.For the Web API use the DeleteOptionValue Action.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.DeleteOptionValueRequest.#ctor">
 			<summary>constructor_initializes<see cref="T:Microsoft.Xrm.Sdk.Messages.DeleteOptionValueRequest"></see> class</summary>
@@ -3967,23 +4044,23 @@ The target, which is the record from which the related records will be disassoci
 			<returns>Type: <see cref="T:Microsoft.Xrm.Sdk.OrganizationResponseCollection"></see>The collection of responses.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.GetValidManyToManyRequest">
-			<summary>Contains the data that is needed to  retrieve a list of all the entities that can participate in a Many-to-Many entity relationship. </summary>
+			<summary>Contains the data that is needed to retrieve a list of all the entities that can participate in a Many-to-Many entity relationship. For the Web API use the GetValidManyToMany Function.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.GetValidManyToManyRequest.#ctor">
-			<summary>Initializes a new instance of the  GetValidManyToManyRequest class</summary>
+			<summary>Initializes a new instance of the GetValidManyToManyRequest class</summary>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.GetValidManyToManyResponse">
-			<summary>Contains the response from the <see cref="T:Microsoft.Xrm.Sdk.Messages.GetValidManyToManyRequest"></see> class.</summary>
+			<summary>Contains the response from the <see cref="T:Microsoft.Xrm.Sdk.Messages.GetValidManyToManyRequest"></see> class.For the Web API the GetValidManyToManyResponse ComplexType is the response value from the GetValidManyToMany Function.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.GetValidManyToManyResponse.#ctor">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Messages.GetValidManyToManyResponse"></see> class.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Messages.GetValidManyToManyResponse"></see> class.</summary>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Messages.GetValidManyToManyResponse.EntityNames">
 			<summary>Gets an array of logical entity names that can have many-to-many entity relationships.</summary>
 			<returns>Type: Returns_String[]An array of logical entity names that can have many-to-many entity relationships.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.GetValidReferencedEntitiesRequest">
-			<summary>Contains the data that is needed to  retrieve a list of entity logical names that are valid as the primary entity (one) from the specified entity in a one-to-many relationship.</summary>
+			<summary>Contains the data that is needed to retrieve a list of entity logical names that are valid as the primary entity (one) from the specified entity in a one-to-many relationship.For the Web API use GetValidReferencedEntities Function.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.GetValidReferencedEntitiesRequest.#ctor">
 			<summary>constructor_initializes<see cref="T:Microsoft.Xrm.Sdk.Messages.GetValidReferencedEntitiesRequest"></see> class</summary>
@@ -3993,40 +4070,40 @@ The target, which is the record from which the related records will be disassoci
 			<returns>Type: Returns_StringThe logical name of the entity to get valid referenced entities. Optional.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.GetValidReferencedEntitiesResponse">
-			<summary>Contains the response from the <see cref="T:Microsoft.Xrm.Sdk.Messages.GetValidReferencedEntitiesRequest"></see> class.</summary>
+			<summary>Contains the response from the <see cref="T:Microsoft.Xrm.Sdk.Messages.GetValidReferencedEntitiesRequest"></see> class.For the Web API the GetValidReferencedEntitiesResponse ComplexType is the response value from the GetValidReferencingEntities Function.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.GetValidReferencedEntitiesResponse.#ctor">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Messages.GetValidReferencedEntitiesResponse"></see> class.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Messages.GetValidReferencedEntitiesResponse"></see> class.</summary>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Messages.GetValidReferencedEntitiesResponse.EntityNames">
 			<summary>Gets the array of valid entity names that can be the primary entity in a many-to-many relationship.</summary>
 			<returns>Type: Returns_String[]The array of valid entity names that can be the primary entity in a many-to-many relationship.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.GetValidReferencingEntitiesRequest">
-			<summary>Contains the data that is needed to  retrieve the set of entities that are valid as the related entity (many) to the specified entity in a one-to-many relationship.</summary>
+			<summary>Contains the data that is needed to retrieve the set of entities that are valid as the related entity (many) to the specified entity in a one-to-many relationship.For the Web API use the GetValidReferencingEntities Function.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.GetValidReferencingEntitiesRequest.#ctor">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Messages.GetValidReferencingEntitiesRequest"></see> class</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Messages.GetValidReferencingEntitiesRequest"></see> class</summary>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Messages.GetValidReferencingEntitiesRequest.ReferencedEntityName">
 			<summary>Gets or sets the name of the entity that would be the primary entity in the relationship. Optional.</summary>
 			<returns>Type: Returns_StringThe name of the entity that would be the primary entity in the relationship. Optional.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.GetValidReferencingEntitiesResponse">
-			<summary>Contains the response from the <see cref="T:Microsoft.Xrm.Sdk.Messages.GetValidReferencingEntitiesRequest"></see> class.</summary>
+			<summary>Contains the response from the <see cref="T:Microsoft.Xrm.Sdk.Messages.GetValidReferencingEntitiesRequest"></see> class.For the Web API the GetValidReferencingEntitiesResponse ComplexType is the response value from the GetValidReferencingEntities Function.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.GetValidReferencingEntitiesResponse.#ctor">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Messages.GetValidReferencingEntitiesResponse"></see> class.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Messages.GetValidReferencingEntitiesResponse"></see> class.</summary>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Messages.GetValidReferencingEntitiesResponse.EntityNames">
 			<summary>Gets the array of valid entity names that can be the related entity in a many-to-many relationship.</summary>
 			<returns>Type: Returns_String[]The array of valid entity names that can be the related entity in a many-to-many relationship.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.InsertOptionValueRequest">
-			<summary>Contains the data that is needed to  insert a new option value for a global or local option set. </summary>
+			<summary>Contains the data that is needed to insert a new option value for a global or local option set. For the Web API use the InsertOptionValue Action.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.InsertOptionValueRequest.#ctor">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Messages.InsertOptionValueRequest"></see> class</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Messages.InsertOptionValueRequest"></see> class</summary>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Messages.InsertOptionValueRequest.AttributeLogicalName">
 			<summary>Gets or sets the name of the attribute when updating a local option set in a picklist attribute. Optional.</summary>
@@ -4057,20 +4134,20 @@ The target, which is the record from which the related records will be disassoci
 			<returns>Type: Returns_Nullable&lt;Returns_Int32&gt;The value for the option. Optional.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.InsertOptionValueResponse">
-			<summary>Contains the response from the <see cref="T:Microsoft.Xrm.Sdk.Messages.InsertOptionValueRequest"></see> class.</summary>
+			<summary>Contains the response from the <see cref="T:Microsoft.Xrm.Sdk.Messages.InsertOptionValueRequest"></see> class.For the Web API the InsertOptionValueResponse ComplexType is the response value from the InsertOptionValue Action.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.InsertOptionValueResponse.#ctor">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Messages.InsertOptionValueResponse"></see> class.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Messages.InsertOptionValueResponse"></see> class.</summary>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Messages.InsertOptionValueResponse.NewOptionValue">
 			<summary>Gets the option value for the new option.</summary>
 			<returns>Type: Returns_Int32The option value for the new option.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.InsertStatusValueRequest">
-			<summary>Contains the data that is needed to  insert a new option into a <see cref="T:Microsoft.Xrm.Sdk.Metadata.StatusAttributeMetadata"></see> attribute. </summary>
+			<summary>Contains the data that is needed to insert a new option into a <see cref="T:Microsoft.Xrm.Sdk.Metadata.StatusAttributeMetadata"></see> attribute. For the Web API use the InsertStatusValue Action.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.InsertStatusValueRequest.#ctor">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Messages.InsertStatusValueRequest"></see> class</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Messages.InsertStatusValueRequest"></see> class</summary>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Messages.InsertStatusValueRequest.AttributeLogicalName">
 			<summary>Gets or sets the logical name of the status attribute. Optional.</summary>
@@ -4105,23 +4182,23 @@ The target, which is the record from which the related records will be disassoci
 			<returns>Type: Returns_Nullable&lt;Returns_Int32&gt;the value for the new status. Optional.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.InsertStatusValueResponse">
-			<summary>Contains the response from the <see cref="T:Microsoft.Xrm.Sdk.Messages.InsertStatusValueRequest"></see> class.</summary>
+			<summary>Contains the response from the <see cref="T:Microsoft.Xrm.Sdk.Messages.InsertStatusValueRequest"></see> class.For the Web API the InsertStatusValueResponse ComplexType is the response value from the InsertStatusValue Action.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.InsertStatusValueResponse.#ctor">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Messages.InsertStatusValueResponse"></see> class.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Messages.InsertStatusValueResponse"></see> class.</summary>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Messages.InsertStatusValueResponse.NewOptionValue">
 			<summary>Gets the option value for the new option.</summary>
 			<returns>Type: Returns_Int32The option value for the new option.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.IsDataEncryptionActiveRequest">
-			<summary>Contains the data that is needed to check if data encryption is currently running (active or inactive).</summary>
+			<summary>Contains the data that is needed to check if data encryption is currently running (active or inactive).For the Web API use the IsDataEncryptionActive Function.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.IsDataEncryptionActiveRequest.#ctor">
 			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Messages.RetrieveTimestampResponse"></see> class.</summary>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.IsDataEncryptionActiveResponse">
-			<summary>Contains the response from the <see cref="T:Microsoft.Xrm.Sdk.Messages.IsDataEncryptionActiveRequest"></see> class.</summary>
+			<summary>Contains the response from the <see cref="T:Microsoft.Xrm.Sdk.Messages.IsDataEncryptionActiveRequest"></see> class.For the Web API the IsDataEncryptionActiveResponse ComplexType is the response value from the IsDataEncryptionActive Function.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.IsDataEncryptionActiveResponse.#ctor">
 			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Messages.IsDataEncryptionActiveResponse"></see> class.</summary>
@@ -4131,10 +4208,10 @@ The target, which is the record from which the related records will be disassoci
 			<returns>Type: Returns_Stringtrue if data encryption is active; otherwise, false.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.OrderOptionRequest">
-			<summary>Contains the data that is needed to  set the order for an option set. </summary>
+			<summary>Contains the data that is needed to set the order for an option set. For the Web API use the OrderOption Action.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.OrderOptionRequest.#ctor">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Messages.OrderOptionRequest"></see> class</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Messages.OrderOptionRequest"></see> class</summary>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Messages.OrderOptionRequest.AttributeLogicalName">
 			<summary>Gets or sets the logical name of the <see cref="T:Microsoft.Xrm.Sdk.Metadata.PicklistAttributeMetadata"></see> attribute. Optional.</summary>
@@ -4163,7 +4240,7 @@ The target, which is the record from which the related records will be disassoci
 			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Messages.OrderOptionResponse"></see> class.</summary>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.ReactivateEntityKeyRequest">
-			<summary>Contains data that is needed to submit a new asynchronous system job to create the index for the key. </summary>
+			<summary>Contains data that is needed to submit a new asynchronous system job to create the index for the key. This message does not have a corresponding Web API action or function in pn_crm_2016_and_online_full. proc_more_informationMissing functions and actions for some SDK messages.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.ReactivateEntityKeyRequest.#ctor">
 			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Messages.ReactivateEntityKeyRequest"></see> class.</summary>
@@ -4283,13 +4360,13 @@ The target, which is the record from which the related records will be disassoci
 			<returns>Type: <see cref="T:Microsoft.Xrm.Sdk.Metadata.AttributeMetadata"></see>The metadata for the requested attribute.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.RetrieveDataEncryptionKeyRequest">
-			<summary>Contains the data that is needed to retrieve the data encryption key value.</summary>
+			<summary>Contains the data that is needed to retrieve the data encryption key value.For the Web API use the RetrieveDataEncryptionKey Function.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.RetrieveDataEncryptionKeyRequest.#ctor">
 			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Messages.RetrieveDataEncryptionKeyRequest"></see> class.</summary>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.RetrieveDataEncryptionKeyResponse">
-			<summary>Contains the response from the <see cref="T:Microsoft.Xrm.Sdk.Messages.RetrieveDataEncryptionKeyResponse"></see> class.</summary>
+			<summary>Contains the response from the <see cref="T:Microsoft.Xrm.Sdk.Messages.RetrieveDataEncryptionKeyResponse"></see> class.For the Web API the RetrieveDataEncryptionKeyResponse ComplexType is the response value from the RetrieveDataEncryptionKey Function.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.RetrieveDataEncryptionKeyResponse.#ctor">
 			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Messages.RetrieveDataEncryptionKeyResponse"></see> class.</summary>
@@ -4569,23 +4646,23 @@ A timestamp identifier for the metadata retrieved..</returns>
 			<returns>Type: Returns_Object</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.RetrieveTimestampRequest">
-			<summary>Contains the data that is needed to  retrieves a time stamp for the metadata.</summary>
+			<summary>Contains the data that is needed to retrieves a time stamp for the metadata.For the Web API use the RetrieveTimestamp Function.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.RetrieveTimestampRequest.#ctor">
-			<summary>Initializes a new instance of the  RetrieveTimestampRequest class</summary>
+			<summary>Initializes a new instance of the RetrieveTimestampRequest class</summary>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.RetrieveTimestampResponse">
-			<summary>Contains the response from the <see cref="T:Microsoft.Xrm.Sdk.Messages.RetrieveTimestampRequest"></see> class.</summary>
+			<summary>Contains the response from the <see cref="T:Microsoft.Xrm.Sdk.Messages.RetrieveTimestampRequest"></see> class.For the Web API the RetrieveTimestampResponse ComplexType is the response value from the RetrieveTimestamp Function.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.RetrieveTimestampResponse.#ctor">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Messages.RetrieveTimestampResponse"></see> class.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Messages.RetrieveTimestampResponse"></see> class.</summary>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Messages.RetrieveTimestampResponse.Timestamp">
 			<summary>Gets the time stamp of the metadata.</summary>
 			<returns>Type: Returns_StringThe time stamp of the metadata.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.SetDataEncryptionKeyRequest">
-			<summary>Contains the data that is needed to set or restore the data encryption key.</summary>
+			<summary>Contains the data that is needed to set or restore the data encryption key.For the Web API use the SetDataEncryptionKey Action.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.SetDataEncryptionKeyRequest.#ctor">
 			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Messages.SetDataEncryptionKeyRequest"></see> class.</summary>
@@ -4777,10 +4854,10 @@ A timestamp identifier for the metadata retrieved..</returns>
 			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Messages.UpdateResponse"></see> class.</summary>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Messages.UpdateStateValueRequest">
-			<summary>Contains the data that is needed to  update an option set value in for a <see cref="T:Microsoft.Xrm.Sdk.Metadata.StateAttributeMetadata"></see> attribute.</summary>
+			<summary>Contains the data that is needed to update an option set value in for a <see cref="T:Microsoft.Xrm.Sdk.Metadata.StateAttributeMetadata"></see> attribute.For the Web API use the UpdateStateValue Action.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Messages.UpdateStateValueRequest.#ctor">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Messages.UpdateStateValueRequest"></see> class.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Messages.UpdateStateValueRequest"></see> class.</summary>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Messages.UpdateStateValueRequest.AttributeLogicalName">
 			<summary>Gets or sets the logical name of the attribute. Optional.</summary>
@@ -4844,7 +4921,7 @@ A timestamp identifier for the metadata retrieved..</returns>
 			<returns>Gets the target entity.<see cref="T:Microsoft.Xrm.Sdk.EntityReference"></see>.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Metadata.AssociatedMenuBehavior">
-			<summary>Describes the behavior of the associated menu for a one-to-many relationship.</summary>
+			<summary>Describes the behavior of the associated menu for a one-to-many relationship.For the Web API use the AssociatedMenuBehavior EnumType.</summary>
 		</member>
 		<member name="F:Microsoft.Xrm.Sdk.Metadata.AssociatedMenuBehavior.DoNotDisplay">
 			<summary>Do not show the associated menu. Value = 2.</summary>
@@ -4856,7 +4933,7 @@ A timestamp identifier for the metadata retrieved..</returns>
 			<summary>Use the label for the associated menu. Value = 1.</summary>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Metadata.AssociatedMenuConfiguration">
-			<summary>Defines how the associated records are displayed for an entity relationship.</summary>
+			<summary>Defines how the associated records are displayed for an entity relationship.For the Web API the corresponding type is AssociatedMenuConfiguration ComplexType.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Metadata.AssociatedMenuConfiguration.#ctor">
 			<summary>constructor_initializes<see cref="T:Microsoft.Xrm.Sdk.Metadata.AssociatedMenuConfiguration"></see> class.</summary>
@@ -4886,7 +4963,7 @@ A string that contains the menu label.</returns>
 An integer that controls the relative position of navigation items in the group.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Metadata.AssociatedMenuGroup">
-			<summary>Describes the group in which to display the associated menu for an entity relationship</summary>
+			<summary>Describes the group in which to display the associated menu for an entity relationshipFor the Web API use the AssociatedMenuGroup EnumType.</summary>
 		</member>
 		<member name="F:Microsoft.Xrm.Sdk.Metadata.AssociatedMenuGroup.Details">
 			<summary>Show the associated menu in the details group. Value = 0.</summary>
@@ -5051,7 +5128,7 @@ The schema name for the attribute.</returns>
 			<returns>Type: Returns_Nullable&lt;Returns_Int32&gt; The value that indicates the source type for a calculated or rollup attribute.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Metadata.AttributeRequiredLevel">
-			<summary>Describes the requirement level for an attribute.</summary>
+			<summary>Describes the requirement level for an attribute.For the Web API use the AttributeRequiredLevel EnumType.</summary>
 		</member>
 		<member name="F:Microsoft.Xrm.Sdk.Metadata.AttributeRequiredLevel.ApplicationRequired">
 			<summary>The attribute is required to have a value. Value = 2.</summary>
@@ -5066,14 +5143,14 @@ The schema name for the attribute.</returns>
 			<summary>The attribute is required to have a value. Value = 1.</summary>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Metadata.AttributeRequiredLevelManagedProperty">
-			<summary>Represents the data to define a <see cref="P:Microsoft.Xrm.Sdk.Metadata.AttributeMetadata.RequiredLevel"></see> property for an attribute.</summary>
+			<summary>Represents the data to define a <see cref="P:Microsoft.Xrm.Sdk.Metadata.AttributeMetadata.RequiredLevel"></see> property for an attribute.For the Web API the corresponding type is AttributeRequiredLevelManagedProperty ComplexType.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Metadata.AttributeRequiredLevelManagedProperty.#ctor(Microsoft.Xrm.Sdk.Metadata.AttributeRequiredLevel)">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Metadata.AttributeRequiredLevelManagedProperty"></see> class.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Metadata.AttributeRequiredLevelManagedProperty"></see> class.</summary>
 			<param name="value">Type:  <see cref="T:Microsoft.Xrm.Sdk.Metadata.AttributeRequiredLevel"></see>.</param>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Metadata.AttributeTypeCode">
-			<summary>Describes the type of an attribute.</summary>
+			<summary>Describes the type of an attribute.For the Web API use the AttributeTypeCode EnumType.</summary>
 		</member>
 		<member name="F:Microsoft.Xrm.Sdk.Metadata.AttributeTypeCode.BigInt">
 			<summary>A big integer attribute. Value = 0x12.</summary>
@@ -5139,7 +5216,7 @@ The schema name for the attribute.</returns>
 			<summary>An attribute that is created by the system at run time. Value = 0x11.</summary>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Metadata.AttributeTypeDisplayName">
-			<summary>Provides a list of types of attributes used by <see cref="T:Microsoft.Xrm.Sdk.Metadata.AttributeMetadata"></see>.<see cref="P:Microsoft.Xrm.Sdk.Metadata.AttributeMetadata.AttributeTypeName"></see></summary>
+			<summary>Provides a list of types of attributes used by <see cref="T:Microsoft.Xrm.Sdk.Metadata.AttributeMetadata"></see>.<see cref="P:Microsoft.Xrm.Sdk.Metadata.AttributeMetadata.AttributeTypeName"></see>For the Web API the corresponding type is AttributeTypeDisplayName ComplexType.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Metadata.AttributeTypeDisplayName.#ctor">
 			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Metadata.AttributeTypeDisplayName"></see> class.</summary>
@@ -5322,7 +5399,7 @@ The default value for a Boolean option set.</returns>
 			<returns>Type: <see cref="T:Microsoft.Xrm.Sdk.Metadata.OptionMetadata"></see>The option metadata for the true option..</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Metadata.CascadeConfiguration">
-			<summary>Contains properties representing actions that may be performed on the referenced entity in a one-to-many entity relationship.</summary>
+			<summary>Contains properties representing actions that may be performed on the referenced entity in a one-to-many entity relationship.For the Web API the corresponding type is CascadeConfiguration ComplexType.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Metadata.CascadeConfiguration.#ctor">
 			<summary>constructor_initializes<see cref="T:Microsoft.Xrm.Sdk.Metadata.CascadeConfiguration"></see> class</summary>
@@ -5362,7 +5439,7 @@ The referenced entity record is shared with another user.</returns>
 Sharing is removed for the referenced entity record.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Metadata.CascadeType">
-			<summary>Describes the type of behavior for a specific action applied to the referenced entity in a one-to-many entity relationship.</summary>
+			<summary>Describes the type of behavior for a specific action applied to the referenced entity in a one-to-many entity relationship.For the Web API use the CascadeType EnumType.</summary>
 		</member>
 		<member name="F:Microsoft.Xrm.Sdk.Metadata.CascadeType.Active">
 			<summary>Perform the action on all active referencing entity records associated with the referenced entity record. Value = 2.</summary>
@@ -5454,7 +5531,7 @@ The input method editor mode for the attribute.</returns>
 			<returns>Type: Returns_Nullable&lt;Returns_Int32&gt; The value that indicates the source of data for a calculated or rollup attribute.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Metadata.DateTimeBehavior">
-			<summary>Specifies the behavior of a <see cref="T:Microsoft.Xrm.Sdk.Metadata.DateTimeAttributeMetadata"></see> attribute using the <see cref="P:Microsoft.Xrm.Sdk.Metadata.DateTimeAttributeMetadata.DateTimeBehavior"></see> property.</summary>
+			<summary>Specifies the behavior of a <see cref="T:Microsoft.Xrm.Sdk.Metadata.DateTimeAttributeMetadata"></see> attribute using the <see cref="P:Microsoft.Xrm.Sdk.Metadata.DateTimeAttributeMetadata.DateTimeBehavior"></see> property.For the Web API the corresponding type is DateTimeBehavior ComplexType.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Metadata.DateTimeBehavior.#ctor">
 			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Metadata.DateTimeBehavior"></see> class.</summary>
@@ -5484,7 +5561,7 @@ The input method editor mode for the attribute.</returns>
 			<returns>Returns <see cref="T:System.Boolean"></see>.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Metadata.DateTimeFormat">
-			<summary>Describes the formatting of a <see cref="T:Microsoft.Xrm.Sdk.Metadata.DateTimeAttributeMetadata"></see> attribute.</summary>
+			<summary>Describes the formatting of a <see cref="T:Microsoft.Xrm.Sdk.Metadata.DateTimeAttributeMetadata"></see> attribute.For the Web API use the DateTimeFormat EnumType.</summary>
 		</member>
 		<member name="F:Microsoft.Xrm.Sdk.Metadata.DateTimeFormat.DateAndTime">
 			<summary>Display the date and time. Value = 1.</summary>
@@ -5754,6 +5831,10 @@ The URL of the resource to display help content for this entity</returns>
 			<summary>Gets or sets whether the entity supports custom help content.</summary>
 			<returns>Type: Returns_Nullable&lt;Returns_Boolean&gt;true if the entity supports custom help content.; otherwise, false.</returns>
 		</member>
+		<member name="P:Microsoft.Xrm.Sdk.Metadata.EntityMetadata.EntitySetName">
+			<summary>Gets or sets the entity set name.</summary>
+			<returns>Type: Returns_String The entity set name.</returns>
+		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Metadata.EntityMetadata.IconLargeName">
 			<summary>Gets or sets the name of the image web resource for the large icon for the entity.</summary>
 			<returns>Type: Returns_String
@@ -5862,6 +5943,10 @@ A string identifying the solution version that the solution component was added 
 			<summary>Gets whether optimistic concurrency is enabled for the entity</summary>
 			<returns>Type: Returns_Nullable&lt;Returns_Boolean&gt;true if the optimistic concurrency is enabled for the entity; otherwise, false.</returns>
 		</member>
+		<member name="P:Microsoft.Xrm.Sdk.Metadata.EntityMetadata.IsPrivate">
+			<summary>Gets whether the entity is public or private.</summary>
+			<returns>Type: Returns_Nullable&lt;Returns_Boolean&gt;true if the entity is private; otherwise, false.</returns>
+		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Metadata.EntityMetadata.IsQuickCreateEnabled">
 			<summary>Gets or sets the value indicating if the entity is enabled for quick create forms.</summary>
 			<returns>Type: Returns_Nullable&lt;Returns_Boolean&gt;true if the entity is enabled for quick create forms ; otherwise, false.</returns>
@@ -5903,7 +5988,7 @@ A string identifying the solution version that the solution component was added 
 			<returns>Type: <see cref="T:Microsoft.Xrm.Sdk.Metadata.EntityKeyMetadata"></see>[]An array of keys for an entity.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Metadata.EntityMetadata.LogicalCollectionName">
-			<summary>Gets or sets the logical collection name.</summary>
+			<summary>Gets the logical collection name.</summary>
 			<returns>Type: Returns_String The logical collection name.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Metadata.EntityMetadata.LogicalName">
@@ -6031,7 +6116,7 @@ The maximum height for the image.</returns>
 The maximum width for the image.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Metadata.ImeMode">
-			<summary>Describes the input method editor mode</summary>
+			<summary>Describes the input method editor modeFor the Web API use the ImeMode EnumType.</summary>
 		</member>
 		<member name="F:Microsoft.Xrm.Sdk.Metadata.ImeMode.Active">
 			<summary>Specifies that the IME mode is active. Value = 2.</summary>
@@ -6086,7 +6171,7 @@ The minimum value for the attribute.</returns>
 			<returns>Type: Returns_Nullable&lt;Returns_Int32&gt; The value that indicates the source of data for a calculated or rollup attribute.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Metadata.IntegerFormat">
-			<summary>Describes the formatting of an integer attribute.</summary>
+			<summary>Describes the formatting of an integer attribute.For the Web API use the IntegerFormat EnumType.</summary>
 		</member>
 		<member name="F:Microsoft.Xrm.Sdk.Metadata.IntegerFormat.Duration">
 			<summary>Specifies to display the integer as a drop down list of durations. Value = 1.</summary>
@@ -6144,7 +6229,7 @@ The array of target entity types for the lookup.</returns>
 			<returns>Type: <see cref="T:Microsoft.Xrm.Sdk.Metadata.AttributeTypeCode"></see>internal</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Metadata.ManagedPropertyEvaluationPriority">
-			<summary>internal</summary>
+			<summary>internalFor the Web API use the ManagedPropertyEvaluationPriority EnumType.</summary>
 		</member>
 		<member name="F:Microsoft.Xrm.Sdk.Metadata.ManagedPropertyEvaluationPriority.Essential">
 			<summary>internal</summary>
@@ -6217,7 +6302,7 @@ A string identifying the solution version that the solution component was added 
 			<returns>Type: Returns_Nullable&lt;<see cref="T:Microsoft.Xrm.Sdk.Metadata.ManagedPropertyOperation"></see>&gt;internal</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Metadata.ManagedPropertyOperation">
-			<summary>internal</summary>
+			<summary>internalFor the Web API use the ManagedPropertyOperation EnumType.</summary>
 		</member>
 		<member name="F:Microsoft.Xrm.Sdk.Metadata.ManagedPropertyOperation.All">
 			<summary>internal</summary>
@@ -6241,7 +6326,7 @@ A string identifying the solution version that the solution component was added 
 			<summary>internal</summary>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Metadata.ManagedPropertyType">
-			<summary>internal</summary>
+			<summary>internalFor the Web API use the ManagedPropertyType EnumType.</summary>
 		</member>
 		<member name="F:Microsoft.Xrm.Sdk.Metadata.ManagedPropertyType.Attribute">
 			<summary>internal</summary>
@@ -6275,6 +6360,11 @@ The attribute that defines the relationship in the first entity.</returns>
 			<returns>Type: Returns_String
 The logical name of the first entity in the relationship.</returns>
 		</member>
+		<member name="P:Microsoft.Xrm.Sdk.Metadata.ManyToManyRelationshipMetadata.Entity1NavigationPropertyName">
+			<summary>Gets or sets the navigation property name for the first entity in the relationship.</summary>
+			<returns>Type: Returns_String
+The navigation property name for the first entity in the relationship.</returns>
+		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Metadata.ManyToManyRelationshipMetadata.Entity2AssociatedMenuConfiguration">
 			<summary>Gets or sets the associated menu configuration for the second entity.</summary>
 			<returns>Type: <see cref="T:Microsoft.Xrm.Sdk.Metadata.AssociatedMenuConfiguration"></see>The associated menu configuration for the second entity.</returns>
@@ -6288,6 +6378,11 @@ The attribute that defines the relationship in the second entity..</returns>
 			<summary>Gets or sets the logical name of the second entity in the relationship.</summary>
 			<returns>Type: Returns_String
 The logical name of the second entity in the relationship..</returns>
+		</member>
+		<member name="P:Microsoft.Xrm.Sdk.Metadata.ManyToManyRelationshipMetadata.Entity2NavigationPropertyName">
+			<summary>Gets or sets the navigation property name for the second entity in the relationship.</summary>
+			<returns>Type: Returns_String
+The navigation property name for the second entity in the relationship.</returns>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Metadata.ManyToManyRelationshipMetadata.IntersectEntityName">
 			<summary>Gets or sets the name of the intersect entity for the relationship.</summary>
@@ -6441,6 +6536,11 @@ The name of primary attribute for the referenced entity..</returns>
 			<returns>Type: Returns_String
 The name of the referenced entity.</returns>
 		</member>
+		<member name="P:Microsoft.Xrm.Sdk.Metadata.OneToManyRelationshipMetadata.ReferencedEntityNavigationPropertyName">
+			<summary>Gets or sets the name of the collection-valued navigation property used by this relationship.</summary>
+			<returns>Type: Returns_String
+The name of the collection-valued navigation property used by this relationship..</returns>
+		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Metadata.OneToManyRelationshipMetadata.ReferencingAttribute">
 			<summary>Get or set the name of the referencing attribute.</summary>
 			<returns>Type: Returns_String
@@ -6451,20 +6551,25 @@ The name of the referencing attribute.</returns>
 			<returns>Type: Returns_String
 The name of the referencing entity.</returns>
 		</member>
+		<member name="P:Microsoft.Xrm.Sdk.Metadata.OneToManyRelationshipMetadata.ReferencingEntityNavigationPropertyName">
+			<summary>Gets or sets the name of the single-valued navigation property used by this relationship.</summary>
+			<returns>Type: Returns_String
+The name of the single -valued navigation property used by this relationship.</returns>
+		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Metadata.OptionMetadata">
-			<summary>Contains metadata representing an option within an Option set.</summary>
+			<summary>Contains metadata representing an option within an Option set.For the Web API the corresponding type is OptionMetadata ComplexType.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Metadata.OptionMetadata.#ctor">
 			<summary>constructor_initializes<see cref="T:Microsoft.Xrm.Sdk.Metadata.OptionMetadata"></see> class</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Metadata.OptionMetadata.#ctor(Microsoft.Xrm.Sdk.Label,System.Nullable{System.Int32})">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Metadata.OptionMetadata"></see> class</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Metadata.OptionMetadata"></see> class</summary>
 			<param name="value">Type: Returns_Nullable&lt;Returns_Int32&gt;
 The value of the option.</param>
 			<param name="label">Type: <see cref="T:Microsoft.Xrm.Sdk.Label"></see>The label containing the text for the option..</param>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Metadata.OptionMetadata.#ctor(System.Int32)">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Metadata.OptionMetadata"></see> class</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Metadata.OptionMetadata"></see> class</summary>
 			<param name="value">Type: Returns_Nullable&lt;Returns_Int32&gt;
 The value of the option.</param>
 		</member>
@@ -6555,7 +6660,7 @@ The name of a global option set.</returns>
 The type of option set.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Metadata.OptionSetType">
-			<summary>Indicates the type of option set.</summary>
+			<summary>Indicates the type of option set.For the Web API use the OptionSetType EnumType.</summary>
 		</member>
 		<member name="F:Microsoft.Xrm.Sdk.Metadata.OptionSetType.Boolean">
 			<summary>The option set provides two options for a <see cref="T:Microsoft.Xrm.Sdk.Metadata.BooleanAttributeMetadata"></see> attribute. Value = 3.</summary>
@@ -6570,7 +6675,7 @@ The type of option set.</returns>
 			<summary>The option set represents status options for a <see cref="T:Microsoft.Xrm.Sdk.Metadata.StatusAttributeMetadata"></see> attribute. Value = 2.</summary>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Metadata.OwnershipTypes">
-			<summary>Specifies the type of ownership for an entity.</summary>
+			<summary>Specifies the type of ownership for an entity.For the Web API use the OwnershipTypes EnumType.</summary>
 		</member>
 		<member name="F:Microsoft.Xrm.Sdk.Metadata.OwnershipTypes.BusinessOwned">
 			<summary>The entity is owned by a business unit. internal Value = 4. </summary>
@@ -6610,7 +6715,7 @@ The schema name of the attribute.</param>
 			<returns>Type: Returns_Nullable&lt;Returns_Int32&gt; The value that indicates the source of data for a calculated or rollup attribute.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Metadata.PrivilegeType">
-			<summary>Describes the type of operation for the privilege</summary>
+			<summary>Describes the type of operation for the privilegeFor the Web API use the PrivilegeType EnumType.</summary>
 		</member>
 		<member name="F:Microsoft.Xrm.Sdk.Metadata.PrivilegeType.Append">
 			<summary>The append privilege. Value = 7.</summary>
@@ -6686,7 +6791,7 @@ The schema name for the entity relationship.</returns>
 The security type for the relationship.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Metadata.RelationshipType">
-			<summary>Specifies the type of entity relationship.</summary>
+			<summary>Specifies the type of entity relationship.For the Web API use the RelationshipType EnumType.</summary>
 		</member>
 		<member name="F:Microsoft.Xrm.Sdk.Metadata.RelationshipType.Default">
 			<summary>The default value. Equivalent to OneToManyRelationship. Value = 0.</summary>
@@ -6698,7 +6803,7 @@ The security type for the relationship.</returns>
 			<summary>The entity relationship is a One-to-Many relationship. Value = 0.</summary>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Metadata.SecurityPrivilegeMetadata">
-			<summary>Contains the metadata that describes a security privilege for access to an entity.</summary>
+			<summary>Contains the metadata that describes a security privilege for access to an entity.For the Web API the corresponding type is SecurityPrivilegeMetadata ComplexType.</summary>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Metadata.SecurityPrivilegeMetadata.CanBeBasic">
 			<summary>Gets whether the privilege can be basic access level.</summary>
@@ -6734,7 +6839,7 @@ The name of the privilege.</returns>
 			<returns>Type: <see cref="T:Microsoft.Xrm.Sdk.Metadata.PrivilegeType"></see>The type of the privilege.</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Metadata.SecurityTypes">
-			<summary>Describes the security type for the relationship.</summary>
+			<summary>Describes the security type for the relationship.For the Web API use the SecurityTypes EnumType.</summary>
 		</member>
 		<member name="F:Microsoft.Xrm.Sdk.Metadata.SecurityTypes.Append">
 			<summary>The <see cref="F:Microsoft.Xrm.Sdk.Metadata.PrivilegeType.Append"></see> and <see cref="F:Microsoft.Xrm.Sdk.Metadata.PrivilegeType.AppendTo"></see> privileges are checked for create or update operations. Value = 1.</summary>
@@ -6758,10 +6863,10 @@ The name of the privilege.</returns>
 			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Metadata.StateAttributeMetadata"></see> class</summary>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Metadata.StateOptionMetadata">
-			<summary>Contains data to define an option for the options in a State attribute.</summary>
+			<summary>Contains data to define an option for the options in a State attribute.For the Web API the corresponding type is StateOptionMetadata ComplexType.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Metadata.StateOptionMetadata.#ctor">
-			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Metadata.StateOptionMetadata"></see> class</summary>
+			<summary>Initializes a new instance of the<see cref="T:Microsoft.Xrm.Sdk.Metadata.StateOptionMetadata"></see> class</summary>
 		</member>
 		<member name="P:Microsoft.Xrm.Sdk.Metadata.StateOptionMetadata.DefaultStatus">
 			<summary>Gets or sets the default status value associated with this state.</summary>
@@ -6780,7 +6885,7 @@ The name of the state that does not change.</returns>
 			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Metadata.StatusAttributeMetadata"></see> class</summary>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Metadata.StatusOptionMetadata">
-			<summary>Contains one of the possible values for an attribute of type Status.</summary>
+			<summary>Contains one of the possible values for an attribute of type Status.For the Web API the corresponding type is StatusOptionMetadata ComplexType.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Metadata.StatusOptionMetadata.#ctor">
 			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Metadata.StatusOptionMetadata"></see> class.</summary>
@@ -6855,7 +6960,7 @@ The maximum length.</returns>
 			<returns>Type: Returns_Stringinternal</returns>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Metadata.StringFormat">
-			<summary>deprecated Describes the formatting of a string attribute for the <see cref="T:Microsoft.Xrm.Sdk.Metadata.StringAttributeMetadata"></see>.<see cref="P:Microsoft.Xrm.Sdk.Metadata.StringAttributeMetadata.Format"></see> property.</summary>
+			<summary>deprecated Describes the formatting of a string attribute for the <see cref="T:Microsoft.Xrm.Sdk.Metadata.StringAttributeMetadata"></see>.<see cref="P:Microsoft.Xrm.Sdk.Metadata.StringAttributeMetadata.Format"></see> property.For the Web API use the StringFormat EnumType.</summary>
 		</member>
 		<member name="F:Microsoft.Xrm.Sdk.Metadata.StringFormat.Email">
 			<summary>Specifies to display the string as an e-mail. Value = 0.</summary>
@@ -6882,7 +6987,7 @@ The maximum length.</returns>
 			<summary>Specifies to display the string as a version number. Value = 6.</summary>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Metadata.StringFormatName">
-			<summary>Specifies the format of a <see cref="T:Microsoft.Xrm.Sdk.Metadata.StringAttributeMetadata"></see> attribute using the <see cref="P:Microsoft.Xrm.Sdk.Metadata.StringAttributeMetadata.FormatName"></see> property.</summary>
+			<summary>Specifies the format of a <see cref="T:Microsoft.Xrm.Sdk.Metadata.StringAttributeMetadata"></see> attribute using the <see cref="P:Microsoft.Xrm.Sdk.Metadata.StringAttributeMetadata.FormatName"></see> property.For the Web API the corresponding type is StringFormatName ComplexType.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Metadata.StringFormatName.#ctor">
 			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Metadata.StringFormatName"></see> class.</summary>
@@ -7180,7 +7285,7 @@ The name of the metadata property in the condition expression.</returns>
 			<summary>The web application service. Value = 2.</summary>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Organization.OrganizationDetail">
-			<summary>Provides detailed information on an organization.</summary>
+			<summary>Provides detailed information on an organization.For the Web API the corresponding type is OrganizationDetail ComplexType.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Organization.OrganizationDetail.#ctor">
 			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Organization.OrganizationDetail"></see> class.</summary>
@@ -7232,17 +7337,17 @@ The name of the metadata property in the condition expression.</returns>
 			<summary>The organization is enabled. Value = 0.</summary>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Query.ColumnSet">
-			<summary>Specifies the attributes for which non-null values are returned from a query.</summary>
+			<summary>Specifies the attributes for which non-null values are returned from a query.For the Web API the corresponding type is ColumnSet ComplexType.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Query.ColumnSet.#ctor">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Query.ColumnSet"></see> class.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Query.ColumnSet"></see> class.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Query.ColumnSet.#ctor(System.Boolean)">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Query.ColumnSet"></see> class setting the <see cref="P:Microsoft.Xrm.Sdk.Query.ColumnSet.AllColumns"></see> property.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Query.ColumnSet"></see> class setting the <see cref="P:Microsoft.Xrm.Sdk.Query.ColumnSet.AllColumns"></see> property.</summary>
 			<param name="allColumns">Type: Returns_Boolean. A Boolean that specifies whether to retrieve all attributes of a record.</param>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Query.ColumnSet.#ctor(System.String[])">
-			<summary>Initializes a new instance of the  <see cref="T:Microsoft.Xrm.Sdk.Query.ColumnSet"></see> class setting the <see cref="P:Microsoft.Xrm.Sdk.Query.ColumnSet.Columns"></see> property.</summary>
+			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Query.ColumnSet"></see> class setting the <see cref="P:Microsoft.Xrm.Sdk.Query.ColumnSet.Columns"></see> property.</summary>
 			<param name="columns">Type: Returns_String[]. Specifies an array of Strings containing the names of the attributes.</param>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Query.ColumnSet.AddColumn(System.String)">
@@ -7784,7 +7889,7 @@ The name of the attribute in the order expression.</returns>
 			<summary>The values of the specified attribute should be sorted in descending order, from highest to lowest. Value = 1.</summary>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.Query.PagingInfo">
-			<summary>Specifies a number of pages and a number of entity instances per page to return from the query.  </summary>
+			<summary>Specifies a number of pages and a number of entity instances per page to return from the query.  For the Web API the corresponding type is PagingInfo ComplexType.</summary>
 		</member>
 		<member name="M:Microsoft.Xrm.Sdk.Query.PagingInfo.#ctor">
 			<summary>Initializes a new instance of the <see cref="T:Microsoft.Xrm.Sdk.Query.PagingInfo"></see> class.</summary>
@@ -8071,6 +8176,15 @@ The logical name of the primary entity for the query.</returns>
 		<member name="P:Microsoft.Xrm.Sdk.WebServiceClient.OrganizationWebProxyClient.SyncOperationType">
 			<summary>Internal</summary>
 			<returns>Returns <see cref="T:System.String"></see>.</returns>
+		</member>
+		<member name="T:Microsoft.Xrm.Sdk.WebServiceClient.UserType">
+			<summary>The type of user that a message request executes for. </summary>
+		</member>
+		<member name="F:Microsoft.Xrm.Sdk.WebServiceClient.UserType.CrmUser">
+			<summary>A CRM system user.</summary>
+		</member>
+		<member name="F:Microsoft.Xrm.Sdk.WebServiceClient.UserType.ExternalPartyUser">
+			<summary>An external party user.</summary>
 		</member>
 		<member name="T:Microsoft.Xrm.Sdk.WebServiceClient.WebProxyClient`1">
 			<summary>A base class that creates an authenticated web service endpoint on a WCF channel.</summary>

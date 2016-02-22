@@ -219,17 +219,11 @@ namespace MattermostCrmService
                 Orders =
                 {
                     new OrderExpression("createdon", OrderType.Descending)
-                },
-                Criteria = {
-                        Conditions = {
-                            new ConditionExpression("title", ConditionOperator.Like, "%" + query + "%"),
-                            new ConditionExpression("eni_product", ConditionOperator.Equal, 859270000),
-                        },
-                        FilterOperator = LogicalOperator.And
-                    }
+                }
             };
 
             FilterExpression searchExpression = new FilterExpression(LogicalOperator.Or);
+            searchExpression.Conditions.Add(new ConditionExpression("ticketnumber", ConditionOperator.Like, "%" + query + "%"));
             searchExpression.Conditions.Add(new ConditionExpression("title", ConditionOperator.Like, "%" + query + "%"));
             searchExpression.Conditions.Add(new ConditionExpression("description", ConditionOperator.Like, "%" + query + "%"));
 

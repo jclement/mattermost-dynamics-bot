@@ -45,6 +45,11 @@ namespace MattermostCrmService
             return CrmWrapper.Instance.SearchIncidents(request.Query).ToArray();
         }
 
+        public object Get(Users request)
+        {
+            return CrmWrapper.Instance.RunQuery("systemuser", "fullname", new[] {request.Query});
+        }
+
         public object Get(Version request)
         {
             return CrmWrapper.Instance.Version;

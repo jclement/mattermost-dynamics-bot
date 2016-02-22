@@ -209,8 +209,18 @@ namespace MattermostCrmService
 
         public IEnumerable<SlimIncidentWrapper> SearchIncidents(string query)
         {
-            
+            return SearchIncidentsHelper(query, null);
+        }
 
+        public IEnumerable<SlimIncidentWrapper> SearchUserIncidents(Guid userid, string query)
+        {
+            FilterExpression userExpression = new FilterExpression(LogicalOperator.And);
+            userExpression.Conditions.Add(new ConditionExpression("owninguser", ConditionOperator.Equal, userid));
+            return SearchIncidentsHelper(query, userExpression);
+        }
+
+        public IEnumerable<SlimIncidentWrapper> SearchIncidentsHelper(string query, FilterExpression filterExpression)
+        {
             QueryExpression queryExpression = new QueryExpression()
             {
                 EntityName = "incident",
@@ -234,8 +244,14 @@ namespace MattermostCrmService
             queryExpression.Criteria.AddFilter(searchExpression);
             queryExpression.Criteria.AddFilter(productExpression);
 
+            if (filterExpression != null)
+            {
+                queryExpression.Criteria.AddFilter(filterExpression);
+            }
+
             return m_service.RetrieveMultiple(queryExpression).Entities.Select(x=>new SlimIncidentWrapper(x, this));
         } 
+
 
         public IEnumerable<NoteWrapper> GetNotes(Guid incidentId)
         {

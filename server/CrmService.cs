@@ -45,17 +45,20 @@ namespace MattermostCrmService
             return CrmWrapper.Instance.SearchIncidents(request.Query).ToArray();
         }
 
+        public SlimIncidentWrapper[] Get(UserIncidentQuery request)
+        {
+            return CrmWrapper.Instance.SearchUserIncidents(request.UserId, request.Query).ToArray();
+        }
+
         public object Get(Users request)
         {
             return CrmWrapper.Instance.RunQuery("systemuser", "fullname", new[] {request.Query});
         }
 
-        /*
         public object Get(Version request)
         {
             return CrmWrapper.Instance.Version;
         }
-        */
 
         public NoteWrapper Post(UpdateNote request)
         {

@@ -39,7 +39,13 @@
   </tr>
   <tr>
     <th class="nowrap">Owner:</th>
-    <td>{{incident.Owner}}</td>
+    <td>
+      {{incident.Owner}}
+      <span ng-hide="!isLoggedIn()"><button class="btn btn-primary btn-xs">Change Owner</button>
+      <select><option value="1">Test</option><option value="2">Test2</option></select>
+      <button class="btn btn-danger btn-xs">Save</button>
+      </span>
+    </td>
   </tr>
   <tr>
     <th class="nowrap">Attachments Folder:</th>

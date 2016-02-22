@@ -90,12 +90,14 @@
     <Compile Include="CrmWrapper.cs" />
     <Compile Include="Messages\AuthenticatedRequestBase.cs" />
     <Compile Include="Messages\DeleteNote.cs" />
+    <Compile Include="Messages\Entities.cs" />
     <Compile Include="Messages\Incident.cs" />
     <Compile Include="IncidentMarkdowner.cs" />
     <Compile Include="Messages\Login.cs" />
     <Compile Include="Messages\MatterMostMessage.cs" />
     <Compile Include="Messages\MatterMostResponse.cs" />
     <Compile Include="Messages\UpdateNote.cs" />
+    <Compile Include="Messages\Users.cs" />
     <Compile Include="Messages\VersionRequest.cs" />
     <Compile Include="Wrappers\AttachmentFileWrapper.cs" />
     <Compile Include="Wrappers\IncidentWrapper.cs" />

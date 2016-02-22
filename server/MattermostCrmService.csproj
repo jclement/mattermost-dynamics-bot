@@ -48,26 +48,6 @@
     <Reference Include="Microsoft.Xrm.Sdk">
       <HintPath>lib\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack, Version=4.0.52.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\binaries\ServiceStack.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Client, Version=4.0.52.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\binaries\ServiceStack.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Common, Version=4.0.52.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\binaries\ServiceStack.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Interfaces, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\binaries\ServiceStack.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Text, Version=4.0.52.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\binaries\ServiceStack.Text.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -89,17 +69,15 @@
     <Compile Include="CrmService.cs" />
     <Compile Include="CrmWrapper.cs" />
     <Compile Include="Messages\AuthenticatedRequestBase.cs" />
-    <Compile Include="Messages\BasicIncidentQuery.cs" />
+    <Compile Include="Messages\IncidentQuery.cs" />
     <Compile Include="Messages\ChangeOwner.cs" />
     <Compile Include="Messages\DeleteNote.cs" />
     <Compile Include="Messages\Incident.cs" />
     <Compile Include="IncidentMarkdowner.cs" />
-    <Compile Include="Messages\IncidentQueryBase.cs" />
     <Compile Include="Messages\Login.cs" />
     <Compile Include="Messages\MatterMostMessage.cs" />
     <Compile Include="Messages\MatterMostResponse.cs" />
     <Compile Include="Messages\UpdateNote.cs" />
-    <Compile Include="Messages\UserIncidentQuery.cs" />
     <Compile Include="Messages\Users.cs" />
     <Compile Include="Messages\VersionRequest.cs" />
     <Compile Include="Wrappers\AttachmentFileWrapper.cs" />

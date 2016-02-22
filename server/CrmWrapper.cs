@@ -30,10 +30,9 @@ namespace MattermostCrmService
             m_password = password;
             m_url = url;
             Connect();
-            RefreshUserCache();
         }
 
-        private void RefreshUserCache()
+        private static void RefreshUserCache()
         {
             var userEntities = m_instance.RunQuery("systemuser");
             foreach (Entity e in userEntities)
@@ -109,6 +108,7 @@ namespace MattermostCrmService
         public static void Init(string username, string password, string url)
         {
             m_instance = new CrmWrapper(username, password, url);
+            RefreshUserCache();
         }
 
         public void Reconnect()

@@ -27,6 +27,7 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http, localStor
       _.each(response.Notes, processNote);
       _.each(response.NetworkAttachments, processAttachment);
       $scope.incident = response;
+      $scope.incident.CreatedOn = new Date(parseInt($scope.incident.CreatedOn.substr(6)));
       $scope.loaded = true;
       $scope.commentPosting = false;
       $scope.downloadNoteAttachment = function(attachmentId, filename) {

@@ -195,10 +195,40 @@ namespace MattermostCrmService
                 Console.WriteLine("====================================");
                 foreach (var attribute in entity.Attributes)
                 {
-                    Console.WriteLine(attribute.Key + ": " + attribute.Value);
+                    if (attribute.Value is OptionSetValue)
+                    {
+                        Console.WriteLine(attribute.Key + ": " + ((OptionSetValue) attribute.Value).Value);
+                    }
+                    else
+                    {
+                        Console.WriteLine(attribute.Key + ": " + attribute.Value);
+                    }
                 }
             }
         }
+
+        public IEnumerable<SlimIncidentWrapper> SearchIncidents(string query)
+        {
+            QueryExpression queryExpression = new QueryExpression()
+            {
+                EntityName = "incident",
+                ColumnSet = new ColumnSet(true),
+                TopCount = 10,
+                Orders =
+                {
+                    new OrderExpression("createdon", OrderType.Descending)
+                },
+                Criteria = {
+                        Conditions = {
+                            new ConditionExpression("title", ConditionOperator.Like, "%" + query + "%"),
+                            new ConditionExpression("eni_product", ConditionOperator.Equal, 859270000)
+                        },
+                        FilterOperator = LogicalOperator.And
+                    }
+            };
+
+            return m_service.RetrieveMultiple(queryExpression).Entities.Select(x=>new SlimIncidentWrapper(x, this));
+        } 
 
         public IEnumerable<NoteWrapper> GetNotes(Guid incidentId)
         {

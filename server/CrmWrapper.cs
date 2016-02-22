@@ -250,6 +250,14 @@ namespace MattermostCrmService
             }
 
             return m_service.RetrieveMultiple(queryExpression).Entities.Select(x=>new SlimIncidentWrapper(x, this));
+        }
+
+        public SlimIncidentWrapper UpdateOwner(Guid newOwnerId, Guid incidentId)
+        {
+            var incidentEntity = m_service.Retrieve("incident", incidentId, new ColumnSet(true));
+            incidentEntity.Attributes["owninguser"] =  new EntityReference("systemuser", newOwnerId);
+            m_service.Update(incidentEntity);
+            return new SlimIncidentWrapper(incidentEntity, this);
         } 
 
 
@@ -316,6 +324,18 @@ namespace MattermostCrmService
             incidentEntity.Attributes["owninguser"] = new EntityReference("systemuser", userEntity.Id);
             // and update...
             m_service.Update(incidentEntity);
+        }
+
+        public SlimIncidentWrapper GetSlimIncident(string caseNum)
+        {
+            DataCollection<Entity> entityCollection = RunQuery("incident", "ticketnumber", new string[] { caseNum });
+
+            if (entityCollection.Count == 0)
+            {
+                return null;
+            }
+
+            return new SlimIncidentWrapper(entityCollection[0], this);
         }
 
         public IncidentWrapper GetIncident(string caseNum)

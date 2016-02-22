@@ -34,7 +34,7 @@ namespace MattermostCrmService
                 new CrmWrapper(request.Username, request.Password, Config.MergedConfig.CrmUrl);
                 return LoginHelper.Instance.GenerateToken(request.Username, request.Password);
             }
-            catch
+            catch (Exception e)
             {
                 throw new ApplicationException("Authentication Failure");
             }
@@ -53,6 +53,13 @@ namespace MattermostCrmService
         public object Get(Users request)
         {
             return CrmWrapper.Instance.MatchUsersByName(request.Query);
+        }
+
+        public object Post(ChangeOwner request)
+        {
+            var crm = GetAuthenticatedCrmWrapper(request);
+            var incident = crm.GetSlimIncident(request.CaseNum);
+            return crm.UpdateOwner(Guid.Parse(request.OwnerId), incident.Id);
         }
 
         public object Get(Version request)

@@ -30,6 +30,10 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http, localStor
       $scope.incident.CreatedOn = new Date(parseInt($scope.incident.CreatedOn.substr(6)));
       $scope.loaded = true;
       $scope.commentPosting = false;
+      $scope.isChangingOwner = false;
+      $scope.hasUserList = false;
+      $scope.savingNewOwner = false;
+      $scope.userList = [];
       $scope.downloadNoteAttachment = function(attachmentId, filename) {
         document.getElementById('download_iframe').src = "../attachment/getfile/"+attachmentId+"/" + filename;
       };
@@ -86,6 +90,55 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http, localStor
             type: "error"
           });
         });
+      };
+      $scope.startChangeOwner = function () {
+        $scope.isChangingOwner = true;
+        $scope.hasUserList = false;
+        $scope.userList = [];
+        // make http request to get user list
+        $http({
+          url: "../users/",
+          dataType: "json",
+          method: "GET"
+        }).success(function(response) {
+          $scope.userList = _.sortBy(response, "Item1");
+          $scope.hasUserList = true;
+        }).error(function(response) {
+          noty({
+            text: response.ResponseStatus.Message,
+            type: 'error'
+          });
+        });
+      };
+      $scope.saveNewOwner = function() {
+        if (!_.isUndefined($scope.newOwner)) {
+          $scope.isChangingOwner = true;
+          $scope.savingNewOwner = true;
+          $http({
+            url: "../incident/" + $routeParams.num + "/changeOwner",
+            dataType: "json",
+            method: "POST",
+            data: {
+              'authenticationToken': Auth.getToken(),
+              'OwnerId': $scope.newOwner.Item2
+            }
+          }).success(function(response) {
+            $scope.incident.Owner = response.Owner;
+            $scope.isChangingOwner = false;
+            $scope.savingNewOwner = false;
+          }).error(function(response) {
+            noty({
+              text: response.ResponseStatus.Message,
+              type: 'error'
+            });
+          });
+        }
+      };
+      $scope.cancelNewOwner = function() {
+        $scope.isChangingOwner = false;
+      };
+      $scope.changeOwnerDisabled = function() {
+        return _.isUndefined($scope.newOwner);
       };
   }).error(function(error){
       $scope.error = error;

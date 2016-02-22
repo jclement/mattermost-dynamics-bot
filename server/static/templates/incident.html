@@ -41,9 +41,17 @@
     <th class="nowrap">Owner:</th>
     <td>
       {{incident.Owner}}
-      <span ng-hide="!isLoggedIn()"><button class="btn btn-primary btn-xs">Change Owner</button>
-      <select><option value="1">Test</option><option value="2">Test2</option></select>
-      <button class="btn btn-danger btn-xs">Save</button>
+      <span ng-hide="!isLoggedIn()"><button class="btn btn-primary btn-xs" ng-click="startChangeOwner()" ng-disabled="isChangingOwner">Change Owner</button>
+        <span ng-show="isChangingOwner">
+          <span ng-hide="hasUserList">Loading...</span>
+          <span ng-show="hasUserList">
+            <select ng-model="newOwner" ng-options="item.Item1 for item in userList" ng-disabled="savingNewOwner">
+            </select>
+            <button class="btn btn-danger btn-xs" ng-click="saveNewOwner()" ng-disabled="changeOwnerDisabled() || savingNewOwner">Save</button>
+            <button class="btn btn-default btn-xs" ng-click="cancelNewOwner()" ng-disabled="savingNewOwner">Cancel</button>
+          </span>
+          <span ng-show="savingNewOwner">Saving...</span>
+        </span>
       </span>
     </td>
   </tr>

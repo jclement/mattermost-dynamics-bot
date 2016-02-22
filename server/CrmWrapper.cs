@@ -207,19 +207,7 @@ namespace MattermostCrmService
             }
         }
 
-        public IEnumerable<SlimIncidentWrapper> SearchIncidents(string query)
-        {
-            return SearchIncidentsHelper(query, null);
-        }
-
-        public IEnumerable<SlimIncidentWrapper> SearchUserIncidents(Guid userid, string query)
-        {
-            FilterExpression userExpression = new FilterExpression(LogicalOperator.And);
-            userExpression.Conditions.Add(new ConditionExpression("owninguser", ConditionOperator.Equal, userid));
-            return SearchIncidentsHelper(query, userExpression);
-        }
-
-        public IEnumerable<SlimIncidentWrapper> SearchIncidentsHelper(string query, FilterExpression filterExpression)
+        public IEnumerable<SlimIncidentWrapper> SearchIncidents(string query, Guid? ownerId, Int32? stateCode)
         {
             QueryExpression queryExpression = new QueryExpression()
             {
@@ -244,9 +232,18 @@ namespace MattermostCrmService
             queryExpression.Criteria.AddFilter(searchExpression);
             queryExpression.Criteria.AddFilter(productExpression);
 
-            if (filterExpression != null)
+            if (ownerId.HasValue)
             {
-                queryExpression.Criteria.AddFilter(filterExpression);
+                FilterExpression userExpression = new FilterExpression(LogicalOperator.And);
+                userExpression.Conditions.Add(new ConditionExpression("owninguser", ConditionOperator.Equal, ownerId));
+                queryExpression.Criteria.AddFilter(userExpression);
+            }
+
+            if (stateCode.HasValue)
+            {
+                FilterExpression stateExpression = new FilterExpression(LogicalOperator.And);
+                stateExpression.Conditions.Add(new ConditionExpression("statecode", ConditionOperator.Equal, stateCode));
+                queryExpression.Criteria.AddFilter(stateExpression);
             }
 
             return m_service.RetrieveMultiple(queryExpression).Entities.Select(x=>new SlimIncidentWrapper(x, this));

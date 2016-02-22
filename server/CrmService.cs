@@ -40,7 +40,7 @@ namespace MattermostCrmService
             }
         }
 
-        public IncidentWrapper[] Get(BasicIncidentQuery request)
+        public SlimIncidentWrapper[] Get(BasicIncidentQuery request)
         {
             return CrmWrapper.Instance.SearchIncidents(request.Query).ToArray();
         }

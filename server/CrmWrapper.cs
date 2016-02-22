@@ -164,6 +164,11 @@ namespace MattermostCrmService
             }
         }
 
+        public IEnumerable<IncidentWrapper> SearchIncidents(string query)
+        {
+            return null;
+        } 
+
         public IEnumerable<NoteWrapper> GetNotes(Guid incidentId)
         {
             var notes = new List<NoteWrapper>();

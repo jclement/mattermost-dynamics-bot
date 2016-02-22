@@ -40,6 +40,11 @@ namespace MattermostCrmService
             }
         }
 
+        public IncidentWrapper[] Get(BasicIncidentQuery request)
+        {
+            return CrmWrapper.Instance.SearchIncidents(request.Query).ToArray();
+        }
+
         public object Get(Version request)
         {
             return CrmWrapper.Instance.Version;

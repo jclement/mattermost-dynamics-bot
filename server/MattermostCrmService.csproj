@@ -89,9 +89,11 @@
     <Compile Include="CrmService.cs" />
     <Compile Include="CrmWrapper.cs" />
     <Compile Include="Messages\AuthenticatedRequestBase.cs" />
+    <Compile Include="Messages\BasicIncidentQuery.cs" />
     <Compile Include="Messages\DeleteNote.cs" />
     <Compile Include="Messages\Incident.cs" />
     <Compile Include="IncidentMarkdowner.cs" />
+    <Compile Include="Messages\IncidentQueryBase.cs" />
     <Compile Include="Messages\Login.cs" />
     <Compile Include="Messages\MatterMostMessage.cs" />
     <Compile Include="Messages\MatterMostResponse.cs" />

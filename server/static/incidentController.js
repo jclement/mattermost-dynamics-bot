@@ -123,7 +123,7 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http, localStor
               'OwnerId': $scope.newOwner.Item2
             }
           }).success(function(response) {
-            $scope.incident.Owner = response.Owner;
+            _.extend($scope.incident, response);
             $scope.isChangingOwner = false;
             $scope.savingNewOwner = false;
           }).error(function(response) {

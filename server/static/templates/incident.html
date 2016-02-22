@@ -41,7 +41,7 @@
     <th class="nowrap">Owner:</th>
     <td>
       {{incident.Owner}}
-      <span ng-hide="!isLoggedIn()"><button class="btn btn-primary btn-xs" ng-click="startChangeOwner()" ng-disabled="isChangingOwner">Change Owner</button>
+      <span ng-hide="!isLoggedIn()"><button class="btn btn-default btn-xs" ng-click="startChangeOwner()" ng-hide="isChangingOwner"><span class="glyphicon glyphicon-pencil"></span></button>
         <span ng-show="isChangingOwner">
           <span ng-hide="hasUserList">Loading...</span>
           <span ng-show="hasUserList">

@@ -252,7 +252,7 @@ namespace MattermostCrmService
         public SlimIncidentWrapper UpdateOwner(Guid newOwnerId, Guid incidentId)
         {
             var incidentEntity = m_service.Retrieve("incident", incidentId, new ColumnSet(true));
-            incidentEntity.Attributes["owninguser"] =  new EntityReference("systemuser", newOwnerId);
+            incidentEntity.Attributes["ownerid"] =  new EntityReference("systemuser", newOwnerId);
             m_service.Update(incidentEntity);
             return new SlimIncidentWrapper(incidentEntity, this);
         } 

@@ -17,7 +17,7 @@ namespace MattermostCrmService.Wrappers
             Url = "https://energynavigator.crm.dynamics.com/main.aspx?etc=112&id=" + incident.Id + "&histKey=1&newWindow=true&pagetype=entityrecord#392649339";
             Title = incident.GetAttributeValue<string>("title");
             Company = wrapper.LookupAccount(incident.GetAttributeValue<EntityReference>("customerid"));
-            Owner = wrapper.LookupUser(incident.GetAttributeValue<EntityReference>("owninguser"));
+            Owner = wrapper.LookupUser(incident.GetAttributeValue<EntityReference>("ownerid"));
             Creator = incident.GetAttributeValue<EntityReference>("createdby").Name;
             Description = incident.GetAttributeValue<string>("description");
             Version = incident.GetAttributeValue<string>("eni_version");

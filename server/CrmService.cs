@@ -52,7 +52,7 @@ namespace MattermostCrmService
 
         public object Get(Users request)
         {
-            return CrmWrapper.Instance.RunQuery("systemuser", "fullname", new[] {request.Query});
+            return CrmWrapper.Instance.MatchUsersByName(request.Query);
         }
 
         public object Get(Version request)

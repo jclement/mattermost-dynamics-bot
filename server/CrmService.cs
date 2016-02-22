@@ -19,6 +19,7 @@ namespace MattermostCrmService
             if (String.IsNullOrEmpty(request.AuthenticationToken))
                 throw new ApplicationException("No Auth Token");
             var authInfo = LoginHelper.Instance.ParseToken(request.AuthenticationToken);
+            int? test = null;
             return new CrmWrapper(authInfo.Username, authInfo.Password, Config.MergedConfig.CrmUrl); 
         }
 

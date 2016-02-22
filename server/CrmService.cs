@@ -50,10 +50,12 @@ namespace MattermostCrmService
             return CrmWrapper.Instance.RunQuery("systemuser", "fullname", new[] {request.Query});
         }
 
+        /*
         public object Get(Version request)
         {
             return CrmWrapper.Instance.Version;
         }
+        */
 
         public NoteWrapper Post(UpdateNote request)
         {

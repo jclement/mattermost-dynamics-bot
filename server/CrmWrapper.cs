@@ -181,7 +181,7 @@ namespace MattermostCrmService
                 TopCount = 10,
                 Orders =
                 {
-                    new OrderExpression("title", OrderType.Descending)
+                    new OrderExpression("createdon", OrderType.Descending)
                 },
                 Criteria = {
                         Conditions = {

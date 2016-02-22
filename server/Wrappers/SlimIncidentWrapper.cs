@@ -21,7 +21,9 @@ namespace MattermostCrmService.Wrappers
             Creator = incident.GetAttributeValue<EntityReference>("createdby").Name;
             Description = incident.GetAttributeValue<string>("description");
             Version = incident.GetAttributeValue<string>("eni_version");
+            CreatedOn = incident.GetAttributeValue<DateTime>("createdon");
             NetworkAttachmentsFolder = incident.GetAttributeValue<string>("eni_caseattachments");
+            TicketNumber = incident.GetAttributeValue<string>("ticketnumber");
 
             //TODO: Fill this in
             switch ((incident.GetAttributeValue<OptionSetValue>("statuscode").Value))
@@ -40,9 +42,11 @@ namespace MattermostCrmService.Wrappers
         public string Url { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
+        public string TicketNumber { get; set; }
         public string Creator { get; set; }
         public string Status { get; set; }
         public string Owner { get; set; }
+        public DateTime CreatedOn { get; set; }
         public string Company { get; set; }
         public string Version { get; set; }
         public string NetworkAttachmentsFolder { get; set; }

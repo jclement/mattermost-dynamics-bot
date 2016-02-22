@@ -31,6 +31,12 @@ namespace MattermostCrmService.Wrappers
                 case 1:
                     Status = "In-progress";
                     break;
+                case 5:
+                    Status = "Problem Solved";
+                    break;
+                case 1000:
+                    Status = "Information Provided";
+                    break;
                 default:
                     Status = "Unknown Status - " + (incident.Attributes["statuscode"] as OptionSetValue).Value;
                     break;

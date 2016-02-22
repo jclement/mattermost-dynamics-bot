@@ -174,11 +174,13 @@ namespace MattermostCrmService
 
         public IEnumerable<SlimIncidentWrapper> SearchIncidents(string query)
         {
+            
+
             QueryExpression queryExpression = new QueryExpression()
             {
                 EntityName = "incident",
                 ColumnSet = new ColumnSet(true),
-                TopCount = 10,
+                TopCount = 200,
                 Orders =
                 {
                     new OrderExpression("createdon", OrderType.Descending)
@@ -186,11 +188,22 @@ namespace MattermostCrmService
                 Criteria = {
                         Conditions = {
                             new ConditionExpression("title", ConditionOperator.Like, "%" + query + "%"),
-                            new ConditionExpression("eni_product", ConditionOperator.Equal, 859270000)
+                            new ConditionExpression("eni_product", ConditionOperator.Equal, 859270000),
                         },
                         FilterOperator = LogicalOperator.And
                     }
             };
+
+            FilterExpression searchExpression = new FilterExpression(LogicalOperator.Or);
+            searchExpression.Conditions.Add(new ConditionExpression("title", ConditionOperator.Like, "%" + query + "%"));
+            searchExpression.Conditions.Add(new ConditionExpression("description", ConditionOperator.Like, "%" + query + "%"));
+
+            FilterExpression productExpression = new FilterExpression(LogicalOperator.And);
+            productExpression.Conditions.Add(new ConditionExpression("eni_product", ConditionOperator.Equal, 859270000));
+
+            queryExpression.Criteria.FilterOperator = LogicalOperator.And;
+            queryExpression.Criteria.AddFilter(searchExpression);
+            queryExpression.Criteria.AddFilter(productExpression);
 
             return m_service.RetrieveMultiple(queryExpression).Entities.Select(x=>new SlimIncidentWrapper(x, this));
         } 

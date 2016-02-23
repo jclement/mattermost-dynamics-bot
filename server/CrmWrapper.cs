@@ -24,12 +24,19 @@ namespace MattermostCrmService
         private string m_password;
         private string m_url;
 
+        private readonly Dictionary<string, int> m_statuses;
+
         public CrmWrapper(string username, string password, string url)
         {
             m_user = username;
             m_password = password;
             m_url = url;
             Connect();
+
+            m_statuses = new Dictionary<string, int>();
+            m_statuses.Add("In-progress", 1);
+            m_statuses.Add("Problem Solved", 5);
+            m_statuses.Add("Information Provided", 1000);
         }
 
         private static void RefreshUserCache()
@@ -238,15 +245,19 @@ namespace MattermostCrmService
                 userExpression.Conditions.Add(new ConditionExpression("owninguser", ConditionOperator.Equal, ownerId));
                 queryExpression.Criteria.AddFilter(userExpression);
             }
+            
 
             if (stateCode.HasValue)
             {
-                FilterExpression stateExpression = new FilterExpression(LogicalOperator.And);
-                stateExpression.Conditions.Add(new ConditionExpression("statecode", ConditionOperator.Equal, stateCode));
-                queryExpression.Criteria.AddFilter(stateExpression);
+                return m_service.RetrieveMultiple(queryExpression)
+                    .Entities
+                    .Where(x => stateCode.Value.Equals( x.GetAttributeValue<OptionSetValue>("statuscode").Value ))
+                    .Select(x => new SlimIncidentWrapper(x, this));
             }
 
-            return m_service.RetrieveMultiple(queryExpression).Entities.Select(x=>new SlimIncidentWrapper(x, this));
+            return m_service.RetrieveMultiple(queryExpression)
+                .Entities
+                .Select(x => new SlimIncidentWrapper(x, this));
         }
 
         public SlimIncidentWrapper UpdateOwner(Guid newOwnerId, Guid incidentId)

@@ -112,6 +112,12 @@ namespace MattermostCrmService
                 var crm = GetAuthenticatedCrmWrapper(request);
 
                 var newDir = Path.Combine(Config.MergedConfig.NetworkAttachmentsBase, incident.TicketNumber);
+
+                if (Directory.Exists(newDir))
+                {
+                    throw new DirectoryNotFoundException($"Path '{newDir}' already exists but is not specified in the 'Case Attachments' field");
+                }
+
                 Directory.CreateDirectory(newDir);
                 
                 incident = crm.UpdateNetworkAttachmentsFolder(newDir, incident.Id);

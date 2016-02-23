@@ -13,7 +13,6 @@ uncrm.controller('searchCtrl', function ($scope, $routeParams, $http, localStora
     return queryData;
   };
 
-
   $http({
     url: '../search/incident',
     dataType: 'json',
@@ -21,9 +20,7 @@ uncrm.controller('searchCtrl', function ($scope, $routeParams, $http, localStora
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
     },
-    data: {
-      Query: extract(['Query', 'OwnerId', 'StateCode'])
-    }
+    data: extract(['Query', 'OwnerId', 'StateCode'])
   }).then(
     // success handler
     function (response) {
@@ -31,7 +28,7 @@ uncrm.controller('searchCtrl', function ($scope, $routeParams, $http, localStora
       $scope.loaded = true;
       return;
     },
-    
+
     //failure handler
     function (response) {
       noty({

@@ -191,7 +191,10 @@ marked.setOptions({
   pedantic: false,
   sanitize: true,
   smartLists: true,
-  smartypants: false
+  smartypants: false,
+  highlight: function (code) {
+    return hljs.highlightAuto(code).value;
+  }
 });
 
 uncrm.filter('comment', function ($sce) {

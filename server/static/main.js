@@ -158,7 +158,10 @@ marked.setOptions({
   pedantic: false,
   sanitize: true,
   smartLists: true,
-  smartypants: false
+  smartypants: false,
+  highlight: function (code) {
+    return hljs.highlightAuto(code).value;
+  }
 });
 
 uncrm.filter('comment', function ($sce) {
@@ -170,7 +173,7 @@ uncrm.filter('comment', function ($sce) {
 uncrm.filter('crmify', function ($sce) {
   return function (input) {
     return (input || '').replace(/\b(CAS-[0-9]{5}-[A-Z][0-9][A-Z][0-9][A-Z][0-9])\b/g, function(x) {
-      return '[' + x + '](' + x + ')';
+      return '[' + x + '](#/incident/' + x + ')';
     });
   };
 });

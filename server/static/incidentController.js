@@ -1,4 +1,4 @@
-uncrm.controller('incidentCtrl', function($scope, $routeParams, $http, localStorageService, Auth) {
+uncrm.controller('incidentCtrl', function($scope, $routeParams, $http, localStorageService, Auth, Upload, $timeout) {
   $scope.loaded = false;
   $scope.isLoggedIn = Auth.isLoggedIn;
   $http({
@@ -140,6 +140,39 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http, localStor
       $scope.changeOwnerDisabled = function() {
         return _.isUndefined($scope.newOwner);
       };
+
+    $scope.uploadFiles = function (files) {
+        $scope.files = files;
+        if (files && files.length) {
+            $scope.uploadInProgress = true;
+            $scope.uploadProgressPercent = 0.0;
+            Upload.upload({
+                url: "../incident/" + $routeParams.num + "/uploadFiles",
+                data: {
+                  authenticationToken: Auth.getToken(),
+                  files: files
+                }
+            }).then(function (response) {
+                $timeout(function () {
+                    $scope.uploadInProgress = false;
+                    _.each(response.data, processAttachment);
+                    $scope.incident.NetworkAttachments = response.data;
+                });
+            }, function (response) {
+                $scope.uploadInProgress = false;
+                if (response.status > 0) {
+                  noty({
+                    text: response.data.ResponseStatus.Message,
+                    type: 'error'
+                  });
+                }
+            }, function (evt) {
+                $scope.uploadProgressPercent = 
+                    Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+            });
+        }
+    };
+    
   }).error(function(error){
       $scope.error = error;
   });

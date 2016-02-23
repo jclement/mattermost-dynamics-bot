@@ -1,3 +1,17 @@
+<style>
+.drop-box {
+    background: #F8F8F8;
+    border: 5px dashed #DDD;
+    width: 200px;
+    height: 65px;
+    text-align: center;
+    padding-top: 25px;
+    margin: 10px;
+}
+.dragover {
+    border: 5px dashed blue;
+}
+</style>
 <div ng-show="loaded && !error">
 <div class="panel panel-default">
 <table class="table table-condensed">
@@ -62,8 +76,15 @@
 </table>
 </div>
 
-<div class="panel panel-default" ng-show="incident.NetworkAttachments">
-<table class="table table-condensed table-striped">
+<div class="panel panel-default" ngf-drop="uploadFiles($files)"
+  ngf-drag-over-class="'dragover'" ngf-multiple="true">
+<button class="btn btn-default" ngf-select="uploadFiles($files)" ngf-multiple="true">Add Files</button>
+<div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
+<div ng-hide="!uploadInProgress" class="progress">
+  <div class="progress-bar  progress-bar-striped active" ng-style="{width: uploadProgressPercent + '%'}">
+  </div>
+</div>
+<table class="table table-condensed table-striped" ng-show="incident.NetworkAttachments">
 <tr>
   <th>Filename</th>
   <th>Size (kb)</th>

@@ -1,4 +1,4 @@
-var uncrm = angular.module('uncrm', ['ngRoute', 'LocalStorageModule']);
+var uncrm = angular.module('uncrm', ['ngRoute', 'LocalStorageModule', 'ngFileUpload']);
 
 uncrm.config(function(localStorageServiceProvider) {
   localStorageServiceProvider

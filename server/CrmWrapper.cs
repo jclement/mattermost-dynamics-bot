@@ -255,7 +255,15 @@ namespace MattermostCrmService
             incidentEntity.Attributes["owninguser"] =  new EntityReference("systemuser", newOwnerId);
             m_service.Update(incidentEntity);
             return new SlimIncidentWrapper(incidentEntity, this);
-        } 
+        }
+
+        public SlimIncidentWrapper UpdateNetworkAttachmentsFolder(string newPath, Guid incidentId)
+        {
+            var incidentEntity = m_service.Retrieve("incident", incidentId, new ColumnSet(true));
+            incidentEntity.Attributes["eni_caseattachments"] = newPath?.Trim();
+            m_service.Update(incidentEntity);
+            return new SlimIncidentWrapper(incidentEntity, this);
+        }
 
 
         public IEnumerable<NoteWrapper> GetNotes(Guid incidentId)

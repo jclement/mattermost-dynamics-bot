@@ -104,6 +104,59 @@ namespace MattermostCrmService
             return null;
         }
 
+        public NetworkAttachmentWrapper[] Post(UploadRequest request)
+        {
+            var incident = CrmWrapper.Instance.GetSlimIncident(request.CaseNum);
+            if (string.IsNullOrEmpty(incident.NetworkAttachmentsFolder) ||
+                !Directory.Exists(incident.NetworkAttachmentsFolder))
+            {
+                var crm = GetAuthenticatedCrmWrapper(request);
+
+                var newDir = Path.Combine(Config.MergedConfig.NetworkAttachmentsBase, incident.TicketNumber);
+                Directory.CreateDirectory(newDir);
+                
+                incident = crm.UpdateNetworkAttachmentsFolder(newDir, incident.Id);
+            }
+
+            var timestamp = DateTime.UtcNow;
+            foreach (var uploadedFile in Request.Files.Where(uploadedFile => uploadedFile.ContentLength > 0))
+            {
+                string fileName = Path.GetFileName(uploadedFile.FileName); // removes any path info that naughty people may have stuck onto the file name.
+
+                if (string.IsNullOrEmpty(fileName))
+                {
+                    fileName = "unknown";
+                }
+
+                if (File.Exists(Path.Combine(incident.NetworkAttachmentsFolder, fileName)))
+                {
+                    string baseNewName = fileName + "_previous";
+                    string newName = baseNewName;
+                    int counter = 2;
+                    while (true)
+                    {
+                        if (!File.Exists(Path.Combine(incident.NetworkAttachmentsFolder, newName)))
+                        {
+                            break;
+                        }
+
+                        newName = baseNewName + $"({counter})";
+                        counter = counter + 1;
+                    }
+
+                    File.Move(Path.Combine(incident.NetworkAttachmentsFolder, fileName), Path.Combine(incident.NetworkAttachmentsFolder, newName));
+                }
+                using (var stream = File.Create(Path.Combine(incident.NetworkAttachmentsFolder, fileName)))
+                {
+                    uploadedFile.WriteTo(stream);
+                }
+                File.SetCreationTimeUtc(Path.Combine(incident.NetworkAttachmentsFolder, fileName), timestamp);
+                File.SetLastWriteTimeUtc(Path.Combine(incident.NetworkAttachmentsFolder, fileName), timestamp);
+            }
+
+            return NetworkAttachment.ListAttachments(incident.NetworkAttachmentsFolder);
+        }
+
         public MatterMostResponse Post(MatterMostMessage request)
         {
             List<string> cases = new List<string>();

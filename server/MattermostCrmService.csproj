@@ -93,8 +93,10 @@
     <Compile Include="Messages\MatterMostMessage.cs" />
     <Compile Include="Messages\MatterMostResponse.cs" />
     <Compile Include="Messages\UpdateNote.cs" />
+    <Compile Include="Messages\UploadRequest.cs" />
     <Compile Include="Messages\Users.cs" />
     <Compile Include="Messages\VersionRequest.cs" />
+    <Compile Include="NetworkAttachment.cs" />
     <Compile Include="Wrappers\AttachmentFileWrapper.cs" />
     <Compile Include="Wrappers\IncidentWrapper.cs" />
     <Compile Include="Wrappers\NetworkAttachmentWrapper.cs" />

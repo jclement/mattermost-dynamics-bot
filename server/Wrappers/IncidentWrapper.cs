@@ -14,27 +14,7 @@ namespace MattermostCrmService.Wrappers
         {
 
             Notes = wrapper.GetNotes(incident.Id).ToArray();
-
-            var attachments = new List<NetworkAttachmentWrapper>();
-            if (!string.IsNullOrEmpty(NetworkAttachmentsFolder) && Directory.Exists(NetworkAttachmentsFolder))
-            {
-                foreach (var path in Directory.GetFiles(NetworkAttachmentsFolder))
-                {
-                    var filename = Path.GetFileName(path);
-                    var info = new FileInfo(path);
-                    var sec = System.IO.File.GetAccessControl(path);
-                    attachments.Add(new NetworkAttachmentWrapper()
-                    {
-                        Filename = filename,
-                        Path = path,
-                        Created = info.CreationTime,
-                        Modified = info.LastWriteTime,
-                        SizeKB = info.Length / 1024,
-                        Owner = sec.GetOwner(typeof(SecurityIdentifier)).Translate(typeof(NTAccount)).Value
-                    });
-                }
-            }
-            NetworkAttachments = attachments.ToArray();
+            NetworkAttachments = NetworkAttachment.ListAttachments(NetworkAttachmentsFolder);
         }
 
         public NoteWrapper[] Notes { get; set; }

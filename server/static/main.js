@@ -180,7 +180,11 @@ uncrm.filter('crmify', function ($sce) {
 
 uncrm.filter('marked', function ($sce) {
   return function (input) {
-    return $sce.trustAsHtml(marked(input || ''));
+    try {
+      return $sce.trustAsHtml(marked(input || ''));
+    } catch (err) {
+      return $sce.trustAsHtml(_.escape(input || ''));
+    }
   };
 });
 

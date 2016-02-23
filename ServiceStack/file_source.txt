@@ -1,0 +1,4 @@
+These dll files are from ServiceStack-4.0.52/lib in ServiceStack-4.0.52.zip
+
+
+ServiceStack-4.0.52.zip is downloaded from https://github.com/ServiceStack/ServiceStack/releases/tag/v4.0.52

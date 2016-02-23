@@ -197,10 +197,6 @@ uncrm.controller('quickSearchCtrl', function($scope, $location, Auth) {
   $scope.isLoggedIn = Auth.isLoggedIn;
   $scope.go = function() {
     // TODO: An actual search by string implementation?
-
-    console.log('$scope:', $scope);
-    console.log('$location:', $location);
-
     if ($scope.incidentNumber) {
       $location.url('/search/incident?Query=' + $scope.incidentNumber);
     }

@@ -2,25 +2,31 @@ uncrm.controller('searchCtrl', function ($scope, $routeParams, $http, localStora
   $scope.loaded = false;
   $scope.isLoggedIn = Auth.isLoggedIn;
 
-  var extract = function(aStr) {
-    var str, queryData = {};
-    for(var i = 0, argCount = aStr.length; i < argCount; i++) {
-      str = aStr[i];
-      if ($routeParams[str]) {
-        queryData[str] = $routeParams[str];
-      }
+
+  var searchPath = '../search/incident';
+  var searchParams = [];
+
+  _.each($routeParams, function (param, paramName) {
+    if (paramName === 'Query') {
+      searchParams.unshift('Query=' + encodeURIComponent(param.trim()));
     }
-    return queryData;
-  };
+    else {
+      searchParams.push(paramName + '=' + encodeURIComponent(param.trim()));
+    }
+  });
+
+  if (searchParams.length) {
+    searchPath += '?' + searchParams.join('&');
+  }
+
 
   $http({
-    url: '../search/incident',
+    url: searchPath,
     dataType: 'json',
     method: 'GET',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
-    },
-    data: extract(['Query', 'OwnerId', 'StateCode'])
+    }
   }).then(
     // success handler
     function (response) {

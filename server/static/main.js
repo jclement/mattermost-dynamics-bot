@@ -7,14 +7,14 @@ uncrm.config(function(localStorageServiceProvider) {
 
 uncrm.config(function($routeProvider) {
 
-  $routeProvider.when('/incident/search?', {
-    templateUrl: 'templates/search.html',
-    controller: 'searchCtrl'
-  });
-
   $routeProvider.when('/', {
     templateUrl: 'templates/index.html',
     controller: 'mainCtrl'
+  });
+
+  $routeProvider.when('/search/incident:queryString', {
+    templateUrl: 'templates/search.html',
+    controller: 'searchCtrl'
   });
 
   $routeProvider.when('/incident/:num', {
@@ -166,8 +166,9 @@ uncrm.factory('Auth', function($http, $rootScope, localStorageService) {
         function (response) {
           console.log('failure response:', response);
 
+          var responseStatus = response.data.ResponseStatus && response.data.ResponseStatus.Message;
           noty({
-            text: (response.data.ResponseStatus && response.data.ResponseStatus.Message) ? response.data.ResponseStatus.Message : response.data.toString(),
+            text: responseStatus ? responseStatus.trim() : response.data.toString(),
             timeout: 5000,
             type: 'error'
           });

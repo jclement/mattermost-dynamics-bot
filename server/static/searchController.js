@@ -9,7 +9,7 @@ uncrm.controller('searchCtrl', function ($scope, $routeParams, $http, localStora
     $scope.owner = null;
   }
 
-  $scope.onlyInProgress = $routeParams.StateCode ? $routeParams.StateCode : null;
+  $scope.onlyInProgress = $routeParams.StateCode ? true : false;
 
   var evaluateSearchUrl = function(routeParams) {
     var searchPath = '/search/incident';
@@ -76,8 +76,7 @@ uncrm.controller('searchCtrl', function ($scope, $routeParams, $http, localStora
     refilter({OwnerId: $scope.owner.Item2});
   };
   $scope.toggleInProgress = function () {
-    console.log('toggleInProgress');
-    refilter({StateCode: $scope.onlyInProgress ? null : 1});
+    refilter({StateCode: $scope.onlyInProgress ? '1' : null});
   };
 
   $http({

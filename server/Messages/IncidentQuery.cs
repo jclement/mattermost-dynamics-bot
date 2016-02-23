@@ -1,13 +1,9 @@
-﻿using ServiceStack;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using ServiceStack;
 
 namespace MattermostCrmService.Messages
 {
-    [Route("/incident/search")]
+    [Route("/search/incident")]
     public class IncidentQuery 
     {
         public string Query { get; set; }

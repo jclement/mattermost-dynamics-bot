@@ -2,6 +2,9 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http, localStor
   $scope.loaded = false;
   $scope.isLoggedIn = Auth.isLoggedIn;
 
+  //loading
+  document.getElementById('spinnerPlaceholder').innerHTML = document.getElementById('spinner').innerHTML;
+
   $http({
     url: '../incident/' + $routeParams.num,
     dataType: 'json',
@@ -10,8 +13,6 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http, localStor
       'Content-Type': 'application/json; charset=utf-8'
     }
   }).success(function(response){
-      console.log('incident controller running');
-
       if (!response) {
         $scope.error = 'Incident Not Found';
         $scope.loaded = true;
@@ -200,12 +201,12 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http, localStor
                   });
                 }
             }, function (evt) {
-                $scope.uploadProgressPercent = 
+                $scope.uploadProgressPercent =
                     Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
             });
         }
     };
-    
+
   }).error(function(error){
       $scope.error = error;
   });

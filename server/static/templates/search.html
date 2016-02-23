@@ -19,10 +19,9 @@
       </div>
       <div class="col-md-6">
         <div class="form-inline">
-          <div class="form-group" ng-show="searchResults.length">
-            <label for="onlyInProgress">In-Progress Only</label>
+          <div class="form-group">
+            <label for="onlyInProgress">In-Progress:</label>
             <input
-              class="form-control"
               type="checkbox"
               name="onlyInProgress"
               ng-model="onlyInProgress"
@@ -33,6 +32,8 @@
     </div>
 
   </div>
+
+  <p ng-hide="loaded" id="spinnerPlaceholder"></p>
 
   <div class="alert alert-danger" ng-show="!searchResults.length && loaded">No Matching Tickets</div>
 

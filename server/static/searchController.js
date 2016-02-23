@@ -11,6 +11,9 @@ uncrm.controller('searchCtrl', function ($scope, $routeParams, $http, localStora
 
   $scope.onlyInProgress = $routeParams.StateCode ? true : false;
 
+  // loading
+  document.getElementById('spinnerPlaceholder').innerHTML = spinner.innerHTML;
+
   var evaluateSearchUrl = function(routeParams) {
     var searchPath = '/search/incident';
     var searchParams = [];

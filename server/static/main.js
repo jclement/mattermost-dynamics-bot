@@ -192,6 +192,14 @@ uncrm.filter('comment', function ($sce) {
   };
 });
 
+uncrm.filter('crmify', function ($sce) {
+  return function (input) {
+    return input.replace(/\b(CAS-[0-9]{5}-[A-Z][0-9][A-Z][0-9][A-Z][0-9])\b/g, function(x) {
+      return '[' + x + '](' + x + ')';
+    });
+  };
+});
+
 uncrm.filter('marked', function ($sce) {
   return function (input) {
     return $sce.trustAsHtml(marked(input || ''));

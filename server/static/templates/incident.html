@@ -23,7 +23,7 @@
   </tr>
   <tr>
     <th class="nowrap">Description:</th>
-    <td>{{incident.Description}}</td>
+    <td ng-bind-html="incident.Description | crmify | marked"></td>
   </tr>
   <tr>
     <th class="nowrap">Version:</th>
@@ -100,7 +100,7 @@
     </div>
     <textarea class="form-control" ng-show="note.isEditMode" ng-model=note.Body></textarea>
       <button class="btn btn-default" ng-show="note.isEditMode && !note.isUpdating" ng-click="updateNote(note)">Update Note</button>
-    <div ng-bind-html="note.Body | marked" ng-show="!note.isEditMode"></div>
+    <div ng-bind-html="note.Body | crmify | marked" ng-show="!note.isEditMode"></div>
     <div ng-show="note.Filename">Download attachment (new tab): {{note.Filename}} ({{note.Filesize}} Bytes) <a class="btn btn-default" href={{"../attachment/getfile/"+note.Id+"/"+note.Filename}} target="_blank"><span class="glyphicon glyphicon-download-alt"></span></a></div>
     <div ng-show="note.Filename">Download attachment (iframe): {{note.Filename}} ({{note.Filesize}} Bytes) <button class="btn btn-default" ng-click="downloadNoteAttachment(note.Id, note.Filename)"><span class="glyphicon glyphicon-download-alt"></span></button></div>
   </div>

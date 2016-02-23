@@ -2,10 +2,15 @@ var uncrm = angular.module('uncrm', ['ngRoute', 'LocalStorageModule']);
 
 uncrm.config(function(localStorageServiceProvider) {
   localStorageServiceProvider
-    .setPrefix("uncrm");
+    .setPrefix('uncrm');
 });
 
 uncrm.config(function($routeProvider) {
+
+  $routeProvider.when('/incident/search?', {
+    templateUrl: 'templates/search.html',
+    controller: 'searchCtrl'
+  });
 
   $routeProvider.when('/', {
     templateUrl: 'templates/index.html',
@@ -20,57 +25,57 @@ uncrm.config(function($routeProvider) {
 });
 
 uncrm.directive('textarea', function() {
-    return {
-        restrict: 'E',
-        link: function( scope , element , attributes ) {
-            var threshold    = 35,
-                minHeight    = element[0].offsetHeight,
-                paddingLeft  = element.css('paddingLeft'),
-                paddingRight = element.css('paddingRight');
+  return {
+    restrict: 'E',
+    link: function( scope , element , attributes ) {
+      var threshold    = 35,
+          minHeight    = element[0].offsetHeight,
+          paddingLeft  = element.css('paddingLeft'),
+          paddingRight = element.css('paddingRight');
 
-            var $shadow = angular.element('<div></div>').css({
-                position:   'absolute',
-                top:        -10000,
-                left:       -10000,
-                width:      element[0].offsetWidth - parseInt(paddingLeft || 0) - parseInt(paddingRight || 0),
-                fontSize:   element.css('fontSize'),
-                fontFamily: element.css('fontFamily'),
-                lineHeight: element.css('lineHeight'),
-                resize:     'none'
-            });
+      var $shadow = angular.element('<div></div>').css({
+          position:   'absolute',
+          top:        -10000,
+          left:       -10000,
+          width:      element[0].offsetWidth - parseInt(paddingLeft || 0) - parseInt(paddingRight || 0),
+          fontSize:   element.css('fontSize'),
+          fontFamily: element.css('fontFamily'),
+          lineHeight: element.css('lineHeight'),
+          resize:     'none'
+      });
 
-            angular.element( document.body ).append( $shadow );
+      angular.element( document.body ).append( $shadow );
 
-            var update = function() {
-                var times = function(string, number) {
-                    for (var i = 0, r = ''; i < number; i++) {
-                        r += string;
-                    }
-                    return r;
-                }
+      var update = function() {
+        var times = function(string, number) {
+          for (var i = 0, r = ''; i < number; i++) {
+            r += string;
+          }
+          return r;
+        };
 
-                var val = element.val().replace(/</g, '&lt;')
-                    .replace(/>/g, '&gt;')
-                    .replace(/&/g, '&amp;')
-                    .replace(/\n$/, '<br/>&nbsp;')
-                    .replace(/\n/g, '<br/>')
-                    .replace(/\s{2,}/g, function( space ) {
-                        return times('&nbsp;', space.length - 1) + ' ';
-                    });
+        var val = element.val().replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/&/g, '&amp;')
+          .replace(/\n$/, '<br/>&nbsp;')
+          .replace(/\n/g, '<br/>')
+          .replace(/\s{2,}/g, function( space ) {
+            return times('&nbsp;', space.length - 1) + ' ';
+          });
 
-                $shadow.html( val );
+        $shadow.html( val );
 
-                element.css( 'height' , Math.max( $shadow[0].offsetHeight + threshold , minHeight ) );
-            }
+        element.css( 'height' , Math.max( $shadow[0].offsetHeight + threshold , minHeight ) );
+      };
 
-            scope.$on('$destroy', function() {
-                $shadow.remove();
-            });
+      scope.$on('$destroy', function() {
+        $shadow.remove();
+      });
 
-            element.bind( 'keyup keydown keypress change' , update );
-            update();
-        }
+      element.bind( 'keyup keydown keypress change' , update );
+      update();
     }
+  };
 });
 
 uncrm.factory('Auth', function($http, $rootScope, localStorageService) {
@@ -102,19 +107,19 @@ uncrm.factory('Auth', function($http, $rootScope, localStorageService) {
     login: function(username, password, success, failure) {
       authBusy = true;
       $http({
-        url: "../login",
-        dataType: "json",
-        method: "POST",
+        url: '../login',
+        dataType: 'json',
+        method: 'POST',
         data: {
           Username: username,
           Password: password
         },
         headers: {
-            "Content-Type": "application/json; charset=utf-8"
+          'Content-Type': 'application/json; charset=utf-8'
         }
       }).success(function(response){
         authBusy = false;
-        console.log("Logged in");
+        console.log('Logged in');
         localStorageService.set('authenticationName', username);
         localStorageService.set('authenticationToken', response);
         if (success) {
@@ -123,14 +128,47 @@ uncrm.factory('Auth', function($http, $rootScope, localStorageService) {
       }).error(function(response) {
         authBusy = false;
         noty({
-          text: response.ResponseStatus.Message,
+          text: response.data.ResponseStatus.Message,
           timeout: 1000,
-          type: "error"
+          type: 'error'
         });
         if (failure) {
           failure();
         }
       });
+    },
+
+    search: function (query, success, failure) {
+      $http({
+        url: '../incident/search/' + encodeURIComponent(query.trim()),
+        dataType: 'json',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        data: {
+          Query: query.trim()
+        }
+      }).then(
+        //success handler
+        function (response) {
+          console.log('success response:', response);
+        },
+        //failure handler
+        function (response) {
+          console.log('failure response:', response);
+
+          noty({
+            text: (response.data.ResponseStatus && response.data.ResponseStatus.Message) ? response.data.ResponseStatus.Message : response.data.toString(),
+            timeout: 5000,
+            type: 'error'
+          });
+
+          if (typeof failure === 'function') {
+            failure(response);
+          }
+        }
+      );
     }
 
   };
@@ -150,7 +188,7 @@ marked.setOptions({
 
 uncrm.filter('comment', function ($sce) {
   return function (input) {
-    return $sce.trustAsHtml(_.escape(input).replace(/\n/g, "<br/>"));
+    return $sce.trustAsHtml(_.escape(input).replace(/\n/g, '<br/>'));
   };
 });
 
@@ -164,9 +202,9 @@ uncrm.controller('mainCtrl', function($scope, $location) {
   $scope.go = function() {
     // TODO: An actual search by string implementation?
     if ($scope.incidentNumber) {
-      $location.url("/incident/" + $scope.incidentNumber);
+      $location.url('/incident/' + $scope.incidentNumber);
     }
-  }
+  };
 });
 
 uncrm.controller('searchCtrl', function($scope, $location, Auth) {
@@ -174,10 +212,13 @@ uncrm.controller('searchCtrl', function($scope, $location, Auth) {
   $scope.go = function() {
     // TODO: An actual search by string implementation?
     if ($scope.incidentNumber) {
-      $location.url("/incident/" + $scope.incidentNumber);
+      // $location.url('/incident/search/' + $scope.incidentNumber);
+
+      Auth.search($scope.incidentNumber, function () {}, function () {});
+
       $scope.incidentNumber = '';
     }
-  }
+  };
 });
 
 
@@ -191,5 +232,5 @@ uncrm.controller('authCtrl', function($scope, $location, Auth) {
       $scope.username = '';
       $scope.password='';
     });
-  }
+  };
 });

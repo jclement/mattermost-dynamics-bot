@@ -7,11 +7,15 @@
   </tr>
  -->  <tr>
     <th class="nowrap">Number:</th>
-    <td>{{incidentNumber}} <a class="pull-right btn btn-default btn-xs" href="{{url}}">Open in Dynamics CRM</a> </td>
+    <td>{{incidentNumber}} <a class="pull-right" href="{{incident.Url}}">Open in Dynamics CRM</a> </td>
   </tr>
   <tr>
     <th class="nowrap">Title:</th>
     <td>{{incident.Title}}</td>
+  </tr>
+  <tr>
+    <th class="nowrap">Created On:</th>
+    <td>{{incident.CreatedOn | date: "medium"}}</td>
   </tr>
   <tr>
     <th class="nowrap">Status:</th>
@@ -35,7 +39,21 @@
   </tr>
   <tr>
     <th class="nowrap">Owner:</th>
-    <td>{{incident.Owner}}</td>
+    <td>
+      {{incident.Owner}}
+      <span ng-hide="!isLoggedIn()"><button class="btn btn-default btn-xs" ng-click="startChangeOwner()" ng-hide="isChangingOwner"><span class="glyphicon glyphicon-pencil"></span></button>
+        <span ng-show="isChangingOwner">
+          <span ng-hide="hasUserList">Loading...</span>
+          <span ng-show="hasUserList">
+            <select ng-model="newOwner" ng-options="item.Item1 for item in userList" ng-disabled="savingNewOwner">
+            </select>
+            <button class="btn btn-danger btn-xs" ng-click="saveNewOwner()" ng-disabled="changeOwnerDisabled() || savingNewOwner">Save</button>
+            <button class="btn btn-default btn-xs" ng-click="cancelNewOwner()" ng-disabled="savingNewOwner">Cancel</button>
+          </span>
+          <span ng-show="savingNewOwner">Saving...</span>
+        </span>
+      </span>
+    </td>
   </tr>
   <tr>
     <th class="nowrap">Attachments Folder:</th>

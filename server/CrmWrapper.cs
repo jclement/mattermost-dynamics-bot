@@ -7,6 +7,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ServiceModel.Description;
 using System.IO;
+using System.Linq;
 using MattermostCrmService.Wrappers;
 
 namespace MattermostCrmService
@@ -14,7 +15,8 @@ namespace MattermostCrmService
     public class CrmWrapper
     {
         private static CrmWrapper m_instance;
-        private static IDictionary<Guid, string> m_users = new ConcurrentDictionary<Guid, string>(); 
+        private static IDictionary<string, Guid> m_userLookup = new ConcurrentDictionary<string, Guid>(); 
+        private static IDictionary<Guid, string> m_userNameLookup = new ConcurrentDictionary<Guid, string>(); 
         private static IDictionary<Guid, string> m_accounts = new ConcurrentDictionary<Guid, string>(); 
         private IOrganizationService m_service;
 
@@ -28,6 +30,16 @@ namespace MattermostCrmService
             m_password = password;
             m_url = url;
             Connect();
+        }
+
+        private static void RefreshUserCache()
+        {
+            var userEntities = m_instance.RunQuery("systemuser");
+            foreach (Entity e in userEntities)
+            {
+                m_userNameLookup.Add(Guid.Parse(e.Attributes["systemuserid"].ToString()), e.Attributes["fullname"].ToString());
+                m_userLookup.Add(e.Attributes["fullname"].ToString(), Guid.Parse(e.Attributes["systemuserid"].ToString()));
+            }
         }
 
         public string LookupAccount(EntityReference user)
@@ -64,22 +76,17 @@ namespace MattermostCrmService
         public string LookupUser(Guid id)
         {
             string fullname;
-            if (m_users.TryGetValue(id, out fullname))
+            if (m_userNameLookup.TryGetValue(id, out fullname))
             {
                 return fullname;
             }
+            return "NOT FOUND";
+        }
 
-            DataCollection<Entity> userCollection = RunQuery("systemuser", new string[] { "fullname" }, "systemuserid", new string[] { id.ToString("d") });
-
-            if (userCollection.Count == 0)
-            {
-                m_users.Add(id, "NOT FOUND");
-            }
-            else
-            {
-                m_users.Add(id, userCollection[0].Attributes["fullname"] as String);
-            }
-            return m_users[id];
+        public IEnumerable<Tuple<string, Guid>> MatchUsersByName(string partialName)
+        {
+            return m_userLookup.Keys.Where(x => string.IsNullOrEmpty(partialName) || x.ToUpperInvariant().Contains(partialName.ToUpperInvariant()))
+            .Select(x => new Tuple<string, Guid>(x, m_userLookup[x]));
         }
 
         private void Connect()
@@ -101,6 +108,7 @@ namespace MattermostCrmService
         public static void Init(string username, string password, string url)
         {
             m_instance = new CrmWrapper(username, password, url);
+            RefreshUserCache();
         }
 
         public void Reconnect()
@@ -119,6 +127,34 @@ namespace MattermostCrmService
                 return versionResponse.Version;
             }
         }
+
+        public DataCollection<Entity> RunQuery(string entityName)
+        {
+            QueryExpression query = new QueryExpression
+            {
+                EntityName = entityName,
+                ColumnSet = new ColumnSet(true),
+                TopCount = 200
+            };
+            return m_service.RetrieveMultiple(query).Entities;
+        }
+
+        public DataCollection<Entity> RunQueryContains(string entityname, string conditionFieldName, string[] conditionValues)
+        {
+            QueryExpression query = new QueryExpression
+            {
+                EntityName = entityname,
+                ColumnSet = new ColumnSet(true),
+                Criteria =
+                {
+                    Conditions =
+                    {
+                        new ConditionExpression(conditionFieldName, ConditionOperator.Like, conditionValues)
+                    }
+                }
+            };
+            return m_service.RetrieveMultiple(query).Entities;
+        } 
 
         public DataCollection<Entity> RunQuery(string entityName, string conditionFieldName, string[] conditionValues)
         {
@@ -159,15 +195,68 @@ namespace MattermostCrmService
                 Console.WriteLine("====================================");
                 foreach (var attribute in entity.Attributes)
                 {
-                    Console.WriteLine(attribute.Key + ": " + attribute.Value);
+                    if (attribute.Value is OptionSetValue)
+                    {
+                        Console.WriteLine(attribute.Key + ": " + ((OptionSetValue) attribute.Value).Value);
+                    }
+                    else
+                    {
+                        Console.WriteLine(attribute.Key + ": " + attribute.Value);
+                    }
                 }
             }
         }
 
-        public IEnumerable<IncidentWrapper> SearchIncidents(string query)
+        public IEnumerable<SlimIncidentWrapper> SearchIncidents(string query, Guid? ownerId, Int32? stateCode)
         {
-            return null;
+            QueryExpression queryExpression = new QueryExpression()
+            {
+                EntityName = "incident",
+                ColumnSet = new ColumnSet(true),
+                TopCount = 200,
+                Orders =
+                {
+                    new OrderExpression("createdon", OrderType.Descending)
+                }
+            };
+
+            FilterExpression searchExpression = new FilterExpression(LogicalOperator.Or);
+            searchExpression.Conditions.Add(new ConditionExpression("ticketnumber", ConditionOperator.Like, "%" + query + "%"));
+            searchExpression.Conditions.Add(new ConditionExpression("title", ConditionOperator.Like, "%" + query + "%"));
+            searchExpression.Conditions.Add(new ConditionExpression("description", ConditionOperator.Like, "%" + query + "%"));
+
+            FilterExpression productExpression = new FilterExpression(LogicalOperator.And);
+            productExpression.Conditions.Add(new ConditionExpression("eni_product", ConditionOperator.Equal, 859270000));
+
+            queryExpression.Criteria.FilterOperator = LogicalOperator.And;
+            queryExpression.Criteria.AddFilter(searchExpression);
+            queryExpression.Criteria.AddFilter(productExpression);
+
+            if (ownerId.HasValue)
+            {
+                FilterExpression userExpression = new FilterExpression(LogicalOperator.And);
+                userExpression.Conditions.Add(new ConditionExpression("owninguser", ConditionOperator.Equal, ownerId));
+                queryExpression.Criteria.AddFilter(userExpression);
+            }
+
+            if (stateCode.HasValue)
+            {
+                FilterExpression stateExpression = new FilterExpression(LogicalOperator.And);
+                stateExpression.Conditions.Add(new ConditionExpression("statecode", ConditionOperator.Equal, stateCode));
+                queryExpression.Criteria.AddFilter(stateExpression);
+            }
+
+            return m_service.RetrieveMultiple(queryExpression).Entities.Select(x=>new SlimIncidentWrapper(x, this));
+        }
+
+        public SlimIncidentWrapper UpdateOwner(Guid newOwnerId, Guid incidentId)
+        {
+            var incidentEntity = m_service.Retrieve("incident", incidentId, new ColumnSet(true));
+            incidentEntity.Attributes["ownerid"] =  new EntityReference("systemuser", newOwnerId);
+            m_service.Update(incidentEntity);
+            return new SlimIncidentWrapper(incidentEntity, this);
         } 
+
 
         public IEnumerable<NoteWrapper> GetNotes(Guid incidentId)
         {
@@ -232,6 +321,18 @@ namespace MattermostCrmService
             incidentEntity.Attributes["owninguser"] = new EntityReference("systemuser", userEntity.Id);
             // and update...
             m_service.Update(incidentEntity);
+        }
+
+        public SlimIncidentWrapper GetSlimIncident(string caseNum)
+        {
+            DataCollection<Entity> entityCollection = RunQuery("incident", "ticketnumber", new string[] { caseNum });
+
+            if (entityCollection.Count == 0)
+            {
+                return null;
+            }
+
+            return new SlimIncidentWrapper(entityCollection[0], this);
         }
 
         public IncidentWrapper GetIncident(string caseNum)

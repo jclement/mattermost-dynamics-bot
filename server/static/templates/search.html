@@ -8,11 +8,12 @@
           <div class="form-group" ng-show="hasUserList">
             <label for="ownerFilter">Owned By:</label>
             <select
+              class="form-control"
               name="ownerFilter"
               ng-options="item as item.Item1 for item in userList track by item.Item2"
               ng-model="owner"
               ng-change="newOwnerFilter()"></select>
-            <button ng-show="owner !== null" ng-click="clearOwner()">Clear Owner</button>
+            <button ng-show="owner !== null" ng-click="clearOwner()">Clear</button>
           </div>
         </div>
       </div>
@@ -21,9 +22,10 @@
           <div class="form-group" ng-show="searchResults.length">
             <label for="onlyInProgress">In-Progress Only</label>
             <input
+              class="form-control"
               type="checkbox"
               name="onlyInProgress"
-              ng-checked="onlyInProgress"
+              ng-model="onlyInProgress"
               ng-change="toggleInProgress()">
           </div>
         </div>

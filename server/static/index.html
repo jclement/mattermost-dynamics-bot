@@ -10,6 +10,8 @@
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/styles/railscasts.min.css" >
+
 
     <style>
       a[ng-click]{
@@ -17,6 +19,9 @@
       }
       .nowrap {
         white-space: nowrap;
+      }
+      .chromesucks {
+        text-overflow: ellipsis;
       }
     </style>
 
@@ -34,7 +39,7 @@
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="#">unCRM</a>
-          <ul class="nav navbar-nav" ng-controller="searchCtrl">
+          <ul class="nav navbar-nav" ng-controller="quickSearchCtrl">
             <li>
               <form class="navbar-form navbar-right" ng-submit="go()">
                 <div class="form-group">
@@ -64,19 +69,14 @@
       </div>
     </nav>
 
-    <div class="container">
-
-      <div ng-view></div>
-    </div>
-
-
-
+    <div ng-view></div>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.3.8/packaged/jquery.noty.packaged.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
@@ -86,5 +86,6 @@
     <script src="ng-file-upload.js"></script>
     <script src="main.js"></script>
     <script src="incidentController.js"></script>
+    <script src="searchController.js"></script>
   </body>
 </html>

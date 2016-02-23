@@ -1,16 +1,16 @@
 <style>
-.drop-box {
-    background: #F8F8F8;
-    border: 5px dashed #DDD;
-    width: 200px;
-    height: 65px;
-    text-align: center;
-    padding-top: 25px;
-    margin: 10px;
-}
-.dragover {
-    border: 5px dashed blue;
-}
+    .drop-box {
+        background: #F8F8F8;
+        border: 5px dashed #DDD;
+        width: 200px;
+        height: 65px;
+        text-align: center;
+        padding-top: 25px;
+        margin: 10px;
+    }
+    .dragover {
+        border: 5px dashed blue;
+    }
 </style>
 <div ng-show="loaded && !error">
 <div class="panel panel-default">
@@ -21,7 +21,7 @@
   </tr>
  -->  <tr>
     <th class="nowrap">Number:</th>
-    <td>{{incidentNumber}} <a class="pull-right btn btn-default btn-xs" href="{{incident.Url}}">Open in Dynamics CRM</a> </td>
+    <td>{{incidentNumber}} <a class="pull-right" href="{{incident.Url}}">Open in Dynamics CRM</a> </td>
   </tr>
   <tr>
     <th class="nowrap">Title:</th>
@@ -37,7 +37,7 @@
   </tr>
   <tr>
     <th class="nowrap">Description:</th>
-    <td>{{incident.Description}}</td>
+    <td ng-bind-html="incident.Description | crmify | marked"></td>
   </tr>
   <tr>
     <th class="nowrap">Version:</th>
@@ -55,7 +55,7 @@
     <th class="nowrap">Owner:</th>
     <td>
       {{incident.Owner}}
-      <span ng-hide="!isLoggedIn()"><button class="btn btn-primary btn-xs" ng-click="startChangeOwner()" ng-disabled="isChangingOwner">Change Owner</button>
+      <span ng-hide="!isLoggedIn()"><button class="btn btn-default btn-xs" ng-click="startChangeOwner()" ng-hide="isChangingOwner"><span class="glyphicon glyphicon-pencil"></span></button>
         <span ng-show="isChangingOwner">
           <span ng-hide="hasUserList">Loading...</span>
           <span ng-show="hasUserList">
@@ -104,7 +104,7 @@
 
 <div class="well well-sm" ng-hide="commentPosting || !isLoggedIn()">
   <input type="text" class="form-control" ng-model="newCommentTitle" placeholder="Note Title">
-  <textarea class="form-control" ng-model="newCommentBody" placeholder="Note Body">
+  <textarea autogrow class="form-control" ng-model="newCommentBody" placeholder="Note Body">
   </textarea>
   <button class="btn btn-default" ng-click="addNote()">Add Note</button>
 </div>
@@ -117,8 +117,11 @@
   <div class="well well-sm" ng-hide="note.doomed">
     <div style="border-bottom: 1px solid #aaa;"><b>{{note.Title}}</b> by <i>{{note.Owner}}</i> on {{note.Modified | date : "medium"}}
     <a class="pull-right" ng-show="isLoggedIn()" ng-click="deleteNote(note)"><i class="glyphicon glyphicon-trash"></i></a>
+        <a class="pull-right" ng-show="isLoggedIn()" ng-click="toggleEditMode(note)"><i class="glyphicon glyphicon-edit"></i></a>
     </div>
-    <div ng-bind-html="note.Body | marked"></div>
+    <textarea autogrow class="form-control" ng-show="note.isEditMode" ng-model=note.Body></textarea>
+      <button class="btn btn-default" ng-show="note.isEditMode && !note.isUpdating" ng-click="updateNote(note)">Update Note</button>
+    <div ng-bind-html="note.Body | crmify | marked" ng-show="!note.isEditMode"></div>
     <div ng-show="note.Filename">Download attachment (new tab): {{note.Filename}} ({{note.Filesize}} Bytes) <a class="btn btn-default" href={{"../attachment/getfile/"+note.Id+"/"+note.Filename}} target="_blank"><span class="glyphicon glyphicon-download-alt"></span></a></div>
     <div ng-show="note.Filename">Download attachment (iframe): {{note.Filename}} ({{note.Filesize}} Bytes) <button class="btn btn-default" ng-click="downloadNoteAttachment(note.Id, note.Filename)"><span class="glyphicon glyphicon-download-alt"></span></button></div>
   </div>

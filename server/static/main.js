@@ -2,7 +2,7 @@ var uncrm = angular.module('uncrm', ['ngRoute', 'LocalStorageModule', 'ngFileUpl
 
 uncrm.config(function(localStorageServiceProvider) {
   localStorageServiceProvider
-    .setPrefix("uncrm");
+    .setPrefix('uncrm');
 });
 
 uncrm.config(function($routeProvider) {
@@ -17,60 +17,73 @@ uncrm.config(function($routeProvider) {
     controller: 'incidentCtrl'
   });
 
+  $routeProvider.when('/search/incident', {
+    templateUrl: 'templates/search.html',
+    controller: 'searchCtrl'
+  });
+
 });
 
-uncrm.directive('textarea', function() {
-    return {
-        restrict: 'E',
-        link: function( scope , element , attributes ) {
-            var threshold    = 35,
-                minHeight    = element[0].offsetHeight,
-                paddingLeft  = element.css('paddingLeft'),
-                paddingRight = element.css('paddingRight');
+// Autosize: https://gist.github.com/jclement/076a95c94bb52e61c407
 
-            var $shadow = angular.element('<div></div>').css({
-                position:   'absolute',
-                top:        -10000,
-                left:       -10000,
-                width:      element[0].offsetWidth - parseInt(paddingLeft || 0) - parseInt(paddingRight || 0),
-                fontSize:   element.css('fontSize'),
-                fontFamily: element.css('fontFamily'),
-                lineHeight: element.css('lineHeight'),
-                resize:     'none'
-            });
+  $.fn.getHiddenOffsetWidth = function () {
+    // save a reference to a cloned element that can be measured
+    var $hiddenElement = $(this).clone().appendTo($(this).parents(':visible').first());
 
-            angular.element( document.body ).append( $shadow );
+    // calculate the width of the clone
+    var width = $hiddenElement.outerWidth();
 
-            var update = function() {
-                var times = function(string, number) {
-                    for (var i = 0, r = ''; i < number; i++) {
-                        r += string;
-                    }
-                    return r;
-                }
+    // remove the clone from the DOM
+    $hiddenElement.remove();
 
-                var val = element.val().replace(/</g, '&lt;')
-                    .replace(/>/g, '&gt;')
-                    .replace(/&/g, '&amp;')
-                    .replace(/\n$/, '<br/>&nbsp;')
-                    .replace(/\n/g, '<br/>')
-                    .replace(/\s{2,}/g, function( space ) {
-                        return times('&nbsp;', space.length - 1) + ' ';
-                    });
+    return width;
+  };
 
-                $shadow.html( val );
+uncrm.directive('autogrow', function() {
+  return function(scope, element, attr){
+    var minHeight = element[0].offsetHeight,
+      paddingLeft = element.css('paddingLeft'),
+      paddingRight = element.css('paddingRight');
 
-                element.css( 'height' , Math.max( $shadow[0].offsetHeight + threshold , minHeight ) );
-            }
+    var $shadow = angular.element('<div></div>').css({
+      position: 'absolute',
+      top: -10000,
+      left: -10000,
+      width: element.getHiddenOffsetWidth(),
+      fontSize: element.css('fontSize'),
+      fontFamily: element.css('fontFamily'),
+      lineHeight: element.css('lineHeight'),
+      resize:     'none'
+    });
+    angular.element(document.body).append($shadow);
 
-            scope.$on('$destroy', function() {
-                $shadow.remove();
-            });
-
-            element.bind( 'keyup keydown keypress change' , update );
-            update();
+    var update = function() {
+      var times = function(string, number) {
+        for (var i = 0, r = ''; i < number; i++) {
+          r += string;
         }
+        return r;
+      }
+
+      var val = element.val().replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/&/g, '&amp;')
+        .replace(/\n$/, '<br/>&nbsp;')
+        .replace(/\n/g, '<br/>')
+        .replace(/\s{2,}/g, function(space) { return times('&nbsp;', space.length - 1) + ' ' });
+      $shadow.html(val);
+
+      element.css('height', Math.max($shadow[0].offsetHeight + 10 /* the "threshold" */, minHeight) + 'px');
     }
+
+    if (attr.ngModel) {
+        // update when the model changes
+        scope.$watch(attr.ngModel, update);
+    }
+
+    element.bind('keyup keydown keypress change', update);
+    update();
+  }
 });
 
 uncrm.factory('Auth', function($http, $rootScope, localStorageService) {
@@ -102,19 +115,19 @@ uncrm.factory('Auth', function($http, $rootScope, localStorageService) {
     login: function(username, password, success, failure) {
       authBusy = true;
       $http({
-        url: "../login",
-        dataType: "json",
-        method: "POST",
+        url: '../login',
+        dataType: 'json',
+        method: 'POST',
         data: {
           Username: username,
           Password: password
         },
         headers: {
-            "Content-Type": "application/json; charset=utf-8"
+          'Content-Type': 'application/json; charset=utf-8'
         }
       }).success(function(response){
         authBusy = false;
-        console.log("Logged in");
+        console.log('Logged in');
         localStorageService.set('authenticationName', username);
         localStorageService.set('authenticationToken', response);
         if (success) {
@@ -123,9 +136,9 @@ uncrm.factory('Auth', function($http, $rootScope, localStorageService) {
       }).error(function(response) {
         authBusy = false;
         noty({
-          text: response.ResponseStatus.Message,
+          text: response.data.ResponseStatus.Message,
           timeout: 1000,
-          type: "error"
+          type: 'error'
         });
         if (failure) {
           failure();
@@ -145,12 +158,23 @@ marked.setOptions({
   pedantic: false,
   sanitize: true,
   smartLists: true,
-  smartypants: false
+  smartypants: false,
+  highlight: function (code) {
+    return hljs.highlightAuto(code).value;
+  }
 });
 
 uncrm.filter('comment', function ($sce) {
   return function (input) {
-    return $sce.trustAsHtml(_.escape(input).replace(/\n/g, "<br/>"));
+    return $sce.trustAsHtml(_.escape(input).replace(/\n/g, '<br/>'));
+  };
+});
+
+uncrm.filter('crmify', function ($sce) {
+  return function (input) {
+    return (input || '').replace(/\b(CAS-[0-9]{5}-[A-Z][0-9][A-Z][0-9][A-Z][0-9])\b/g, function(x) {
+      return '[' + x + '](#/incident/' + x + ')';
+    });
   };
 });
 
@@ -164,20 +188,19 @@ uncrm.controller('mainCtrl', function($scope, $location) {
   $scope.go = function() {
     // TODO: An actual search by string implementation?
     if ($scope.incidentNumber) {
-      $location.url("/incident/" + $scope.incidentNumber);
+      $location.url('/incident/' + $scope.incidentNumber);
     }
-  }
+  };
 });
 
-uncrm.controller('searchCtrl', function($scope, $location, Auth) {
+uncrm.controller('quickSearchCtrl', function($scope, $location, Auth) {
   $scope.isLoggedIn = Auth.isLoggedIn;
   $scope.go = function() {
     // TODO: An actual search by string implementation?
     if ($scope.incidentNumber) {
-      $location.url("/incident/" + $scope.incidentNumber);
-      $scope.incidentNumber = '';
+      $location.url('/search/incident?Query=' + $scope.incidentNumber);
     }
-  }
+  };
 });
 
 
@@ -189,7 +212,7 @@ uncrm.controller('authCtrl', function($scope, $location, Auth) {
   $scope.login = function() {
     Auth.login($scope.username, $scope.password, function() {
       $scope.username = '';
-      $scope.password='';
+      $scope.password = '';
     });
-  }
+  };
 });

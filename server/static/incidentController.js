@@ -17,6 +17,7 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http, localStor
       var processNote = function(note) {
         note.Created = new Date(parseInt(note.Created.substr(6)));
         note.Modified = new Date(parseInt(note.Modified.substr(6)));
+        note.isEditMode = false;
         return note;
       };
       var processAttachment = function(attachment) {
@@ -31,6 +32,9 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http, localStor
       $scope.commentPosting = false;
       $scope.downloadNoteAttachment = function(attachmentId, filename) {
         document.getElementById('download_iframe').src = "../attachment/getfile/"+attachmentId+"/" + filename;
+      };
+      $scope.toggleEditMode = function(note) {
+        note.isEditMode = !note.isEditMode;
       };
       $scope.deleteNote = function(note) {
         note.doomed = true;

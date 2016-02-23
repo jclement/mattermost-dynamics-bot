@@ -78,8 +78,11 @@
   <div class="well well-sm" ng-hide="note.doomed">
     <div style="border-bottom: 1px solid #aaa;"><b>{{note.Title}}</b> by <i>{{note.Owner}}</i> on {{note.Modified | date : "medium"}}
     <a class="pull-right" ng-show="isLoggedIn()" ng-click="deleteNote(note)"><i class="glyphicon glyphicon-trash"></i></a>
+        <a class="pull-right" ng-show="isLoggedIn()" ng-click="toggleEditMode(note)"><i class="glyphicon glyphicon-edit"></i></a>
     </div>
-    <div ng-bind-html="note.Body | marked"></div>
+    <textarea class="form-control" ng-show="note.isEditMode" ng-model=note.Body></textarea>
+      <button class="btn btn-default" ng-show="note.isEditMode" ng-click="updateNote()">Update Note</button>
+    <div ng-bind-html="note.Body | marked" ng-show="!note.isEditMode"></div>
     <div ng-show="note.Filename">Download attachment (new tab): {{note.Filename}} ({{note.Filesize}} Bytes) <a class="btn btn-default" href={{"../attachment/getfile/"+note.Id+"/"+note.Filename}} target="_blank"><span class="glyphicon glyphicon-download-alt"></span></a></div>
     <div ng-show="note.Filename">Download attachment (iframe): {{note.Filename}} ({{note.Filesize}} Bytes) <button class="btn btn-default" ng-click="downloadNoteAttachment(note.Id, note.Filename)"><span class="glyphicon glyphicon-download-alt"></span></button></div>
   </div>

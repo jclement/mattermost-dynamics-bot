@@ -23,6 +23,9 @@
       .chromesucks {
         text-overflow: ellipsis;
       }
+      [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+        display: none !important;
+      }
     </style>
 
   </head>
@@ -50,8 +53,8 @@
             <li ng-show="isLoggedIn()"><a href="#" class="nav-bar-item">My Incidents</a></li>
           </ul>
         </div>
-        <div id="navbar" class="navbar-collapse collapse" ng-cloak>
-          <div ng-controller="authCtrl" class="pull-right">
+        <div id="navbar" class="navbar-collapse collapse">
+          <div ng-controller="authCtrl" class="pull-right" ng-cloak>
             <div ng-hide="isLoggedIn()">
               <form class="navbar-form" ng-submit="login()">
                 <input class="form-control" type="text" ng-model="username" placeholder="Username" />

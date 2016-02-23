@@ -20,7 +20,7 @@
         <td>{{ticket.Company}}</td>
         <td>{{ticket.Version}}</td>
         <td>{{ticket.Owner}}</td>
-        <td>{{ticket.Description}}</td>
+        <td ng-bind-html="ticket.Description | crmify | marked"></td>
       </tr>
     </table>
   </div>

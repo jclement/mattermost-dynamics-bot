@@ -1,5 +1,27 @@
 <div>
-<div class="panel panel-default">
-  <h1>Search Page</h1>
-</div>
+<h1>Search Results</h1>
+  <div class="panel panel-default">
+    <table class="table table-condensed search-results">
+      <tr>
+        <th>Number</th>
+        <th>Title</th>
+        <th>Status</th>
+        <th>Company</th>
+        <th>Version</th>
+        <th>Assigned To</th>
+        <th>Description</th>
+      </tr>
+      <tr ng-repeat="ticket in searchResults">
+        <td>
+          <a href="{{'#/incident/' + ticket.TicketNumber}}">{{ticket.TicketNumber}}</a>
+        </td>
+        <td>{{ticket.Title}}</td>
+        <td>{{ticket.Status}}</td>
+        <td>{{ticket.Company}}</td>
+        <td>{{ticket.Version}}</td>
+        <td>{{ticket.Owner}}</td>
+        <td>{{ticket.Description}}</td>
+      </tr>
+    </table>
+  </div>
 </div>

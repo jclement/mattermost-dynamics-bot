@@ -1,6 +1,7 @@
 uncrm.controller('incidentCtrl', function($scope, $routeParams, $http, localStorageService, Auth) {
   $scope.loaded = false;
   $scope.isLoggedIn = Auth.isLoggedIn;
+
   $http({
     url: '../incident/' + $routeParams.num,
     dataType: 'json',
@@ -9,11 +10,14 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http, localStor
       'Content-Type': 'application/json; charset=utf-8'
     }
   }).success(function(response){
+      console.log('incident controller running');
+
       if (!response) {
         $scope.error = 'Incident Not Found';
         $scope.loaded = true;
         return;
       }
+
       var processNote = function(note) {
         note.Created = new Date(parseInt(note.Created.substr(6)));
         note.Modified = new Date(parseInt(note.Modified.substr(6)));

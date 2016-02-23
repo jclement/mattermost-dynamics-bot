@@ -11,6 +11,7 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
+
     <style>
       a[ng-click]{
           cursor: pointer;
@@ -34,7 +35,7 @@
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="#">unCRM</a>
-          <ul class="nav navbar-nav" ng-controller="searchCtrl">
+          <ul class="nav navbar-nav" ng-controller="quickSearchCtrl">
             <li>
               <form class="navbar-form navbar-right" ng-submit="go()">
                 <div class="form-group">
@@ -86,5 +87,6 @@
 
     <script src="main.js"></script>
     <script src="incidentController.js"></script>
+    <script src="searchController.js"></script>
   </body>
 </html>

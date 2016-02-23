@@ -12,14 +12,14 @@ uncrm.config(function($routeProvider) {
     controller: 'mainCtrl'
   });
 
-  $routeProvider.when('/search/incident:queryString', {
-    templateUrl: 'templates/search.html',
-    controller: 'searchCtrl'
-  });
-
   $routeProvider.when('/incident/:num', {
     templateUrl: 'templates/incident.html',
     controller: 'incidentCtrl'
+  });
+
+  $routeProvider.when('/search/incident', {
+    templateUrl: 'templates/search.html',
+    controller: 'searchCtrl'
   });
 
 });
@@ -144,40 +144,6 @@ uncrm.factory('Auth', function($http, $rootScope, localStorageService) {
           failure();
         }
       });
-    },
-
-    search: function (query, success, failure) {
-      $http({
-        url: '../incident/search/' + encodeURIComponent(query.trim()),
-        dataType: 'json',
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json; charset=utf-8'
-        },
-        data: {
-          Query: query.trim()
-        }
-      }).then(
-        //success handler
-        function (response) {
-          console.log('success response:', response);
-        },
-        //failure handler
-        function (response) {
-          console.log('failure response:', response);
-
-          var responseStatus = response.data.ResponseStatus && response.data.ResponseStatus.Message;
-          noty({
-            text: responseStatus ? responseStatus.trim() : response.data.toString(),
-            timeout: 5000,
-            type: 'error'
-          });
-
-          if (typeof failure === 'function') {
-            failure(response);
-          }
-        }
-      );
     }
 
   };
@@ -224,16 +190,16 @@ uncrm.controller('mainCtrl', function($scope, $location) {
   };
 });
 
-uncrm.controller('searchCtrl', function($scope, $location, Auth) {
+uncrm.controller('quickSearchCtrl', function($scope, $location, Auth) {
   $scope.isLoggedIn = Auth.isLoggedIn;
   $scope.go = function() {
     // TODO: An actual search by string implementation?
+
+    console.log('$scope:', $scope);
+    console.log('$location:', $location);
+
     if ($scope.incidentNumber) {
-      // $location.url('/incident/search/' + $scope.incidentNumber);
-
-      Auth.search($scope.incidentNumber, function () {}, function () {});
-
-      $scope.incidentNumber = '';
+      $location.url('/search/incident?Query=' + $scope.incidentNumber);
     }
   };
 });
@@ -247,7 +213,7 @@ uncrm.controller('authCtrl', function($scope, $location, Auth) {
   $scope.login = function() {
     Auth.login($scope.username, $scope.password, function() {
       $scope.username = '';
-      $scope.password='';
+      $scope.password = '';
     });
   };
 });

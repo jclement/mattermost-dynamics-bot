@@ -107,8 +107,7 @@ namespace MattermostCrmService
         public NetworkAttachmentWrapper[] Post(UploadRequest request)
         {
             var incident = CrmWrapper.Instance.GetSlimIncident(request.CaseNum);
-            if (string.IsNullOrEmpty(incident.NetworkAttachmentsFolder) ||
-                !Directory.Exists(incident.NetworkAttachmentsFolder))
+            if (string.IsNullOrEmpty(incident.NetworkAttachmentsFolder))
             {
                 var crm = GetAuthenticatedCrmWrapper(request);
 
@@ -116,6 +115,12 @@ namespace MattermostCrmService
                 Directory.CreateDirectory(newDir);
                 
                 incident = crm.UpdateNetworkAttachmentsFolder(newDir, incident.Id);
+            }
+
+
+            if (!Directory.Exists(incident.NetworkAttachmentsFolder))
+            {
+                throw new DirectoryNotFoundException($"Path '{incident.NetworkAttachmentsFolder}' does not exist or is not a directory");
             }
 
             var timestamp = DateTime.UtcNow;

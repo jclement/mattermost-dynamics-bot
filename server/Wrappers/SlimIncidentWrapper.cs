@@ -24,7 +24,7 @@ namespace MattermostCrmService.Wrappers
             Description = incident.GetAttributeValue<string>("description");
             Version = incident.GetAttributeValue<string>("eni_version");
             CreatedOn = incident.GetAttributeValue<DateTime>("createdon");
-            NetworkAttachmentsFolder = incident.GetAttributeValue<string>("eni_caseattachments").Trim();
+            NetworkAttachmentsFolder = incident.GetAttributeValue<string>("eni_caseattachments")?.Trim();
             TicketNumber = incident.GetAttributeValue<string>("ticketnumber");
 
             //TODO: Fill this in

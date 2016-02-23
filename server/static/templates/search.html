@@ -1,25 +1,59 @@
 <div>
-<h1>Search Results</h1>
-<table class="table table-condensed table-striped search-results">
-  <tr>
-    <th>Number</th>
-    <th>Title</th>
-    <th>Status</th>
-    <th>Company</th>
-    <th>Version</th>
-    <th>Assigned To</th>
-    <th>Description</th>
-  </tr>
-  <tr ng-repeat="ticket in searchResults">
-    <td>
-      <a href="{{'#/incident/' + ticket.TicketNumber}}">{{ticket.TicketNumber}}</a>
-    </td>
-    <td>{{ticket.Title}}</td>
-    <td>{{ticket.Status}}</td>
-    <td>{{ticket.Company}}</td>
-    <td>{{ticket.Version}}</td>
-    <td>{{ticket.Owner}}</td>
-    <td class="chromesucks" ng-bind-html="ticket.Description | crmify | marked"></td>
-  </tr>
-</table>
+  <h1>Search Results</h1>
+
+  <div class="panel panel-default" ng-show="loaded">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-inline">
+          <div class="form-group" ng-show="hasUserList">
+            <label for="ownerFilter">Owned By:</label>
+            <select
+              name="ownerFilter"
+              ng-options="item as item.Item1 for item in userList track by item.Item2"
+              ng-model="owner"
+              ng-change="newOwnerFilter()"></select>
+            <button ng-show="owner !== null" ng-click="clearOwner()">Clear Owner</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-inline">
+          <div class="form-group" ng-show="searchResults.length">
+            <label for="onlyInProgress">In-Progress Only</label>
+            <input
+              type="checkbox"
+              name="onlyInProgress"
+              ng-checked="onlyInProgress"
+              ng-change="toggleInProgress()">
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="alert alert-danger" ng-show="!searchResults.length && loaded">No Matching Tickets</div>
+
+  <table class="table table-condensed table-striped search-results" ng-show="searchResults.length">
+    <tr>
+      <th>Number</th>
+      <th>Title</th>
+      <th>Status</th>
+      <th>Company</th>
+      <th>Version</th>
+      <th>Assigned To</th>
+      <th>Description</th>
+    </tr>
+    <tr ng-repeat="ticket in searchResults">
+      <td>
+        <a href="{{'#/incident/' + ticket.TicketNumber}}">{{ticket.TicketNumber}}</a>
+      </td>
+      <td>{{ticket.Title}}</td>
+      <td>{{ticket.Status}}</td>
+      <td>{{ticket.Company}}</td>
+      <td>{{ticket.Version}}</td>
+      <td>{{ticket.Owner}}</td>
+      <td ng-bind-html="ticket.Description | crmify | marked"></td>
+    </tr>
+  </table>
 </div>

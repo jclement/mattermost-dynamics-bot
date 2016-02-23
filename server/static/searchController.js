@@ -1,27 +1,87 @@
-uncrm.controller('searchCtrl', function ($scope, $routeParams, $http, localStorageService, Auth) {
+uncrm.controller('searchCtrl', function ($scope, $routeParams, $http, localStorageService, Auth, $location) {
   $scope.loaded = false;
   $scope.isLoggedIn = Auth.isLoggedIn;
 
+  $scope.hasUserList = false;
+  $scope.userList = [];
 
-  var searchPath = '../search/incident';
-  var searchParams = [];
-
-  _.each($routeParams, function (param, paramName) {
-    if (paramName === 'Query') {
-      searchParams.unshift('Query=' + encodeURIComponent(param.trim()));
-    }
-    else {
-      searchParams.push(paramName + '=' + encodeURIComponent(param.trim()));
-    }
-  });
-
-  if (searchParams.length) {
-    searchPath += '?' + searchParams.join('&');
+  if (!$routeParams.OwnerId) {
+    $scope.owner = null;
   }
 
+  $scope.onlyInProgress = $routeParams.StateCode ? $routeParams.StateCode : null;
+
+  var evaluateSearchUrl = function(routeParams) {
+    var searchPath = '/search/incident';
+    var searchParams = [];
+
+    var safeEncodeParam = function(param, paramName) {
+      if (typeof param === 'string') {
+        searchParams.push(paramName + '=' + encodeURIComponent(param.trim()));
+      }
+    };
+
+    _.each(routeParams, function (param, paramName) {
+      if (paramName === 'Query' && param) {
+        searchParams.unshift('Query=' + encodeURIComponent(param.trim()));
+      }
+      else {
+        safeEncodeParam(param, paramName);
+      }
+    });
+
+    if (searchParams.length) {
+      searchPath += '?' + searchParams.join('&');
+    }
+
+    return searchPath;
+  };
+
+
+  var getUserList = function() {
+    $http({
+      url: '../users/',
+      dataType: 'json',
+      method: 'GET'
+    }).then(
+      function (response) {
+        $scope.userList = _.sortBy(response.data, 'Item1');
+        $scope.hasUserList = true;
+
+        if ($routeParams.OwnerId) {
+          $scope.owner = _.find($scope.userList, function (listedUser) {
+            return listedUser.Item2 === $routeParams.OwnerId;
+          });
+        }
+      },
+
+      function (response) {
+        noty({
+          text: response.ResponseStatus.Message,
+          type: 'error'
+        });
+      }
+    );
+  };
+
+  var refilter = function(filterArg) {
+    var newFilter = _.extend({}, $routeParams, filterArg || {});
+    $location.url(evaluateSearchUrl(newFilter));
+  };
+
+  $scope.clearOwner = function() {
+    refilter({OwnerId: null});
+  };
+  $scope.newOwnerFilter = function() {
+    refilter({OwnerId: $scope.owner.Item2});
+  };
+  $scope.toggleInProgress = function () {
+    console.log('toggleInProgress');
+    refilter({StateCode: $scope.onlyInProgress ? null : 1});
+  };
 
   $http({
-    url: searchPath,
+    url: '..' + evaluateSearchUrl($routeParams),
     dataType: 'json',
     method: 'GET',
     headers: {
@@ -32,6 +92,8 @@ uncrm.controller('searchCtrl', function ($scope, $routeParams, $http, localStora
     function (response) {
       $scope.searchResults = response.data;
       $scope.loaded = true;
+
+      getUserList();
       return;
     },
 

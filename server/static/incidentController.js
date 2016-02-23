@@ -95,6 +95,31 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http, localStor
           });
         });
       };
+      $scope.updateNote = function(note) {
+          note.isUpdating = true;
+          $http({
+              url: '../notes/' + note.Id + '/',
+              dataType: "json",
+              data: {
+                  'body': note.Body,
+                  'title': note.Title,
+                  'authenticationToken': Auth.getToken()
+              },
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json; charset=utf-8"
+              }
+          }).success(function(response) {
+              $scope.toggleEditMode(note);
+              note.isUpdating = false;
+          }).error(function(response) {
+              note.isUpdating = false;
+              noty({
+                  text: response.ResponseStatus.Message,
+                  type: "error"
+              });
+          });
+      };
       $scope.startChangeOwner = function () {
         $scope.isChangingOwner = true;
         $scope.hasUserList = false;

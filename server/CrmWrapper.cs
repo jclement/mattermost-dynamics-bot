@@ -70,7 +70,13 @@ namespace MattermostCrmService
             }
             else
             {
-                m_accounts.Add(id, collection[0].Attributes["name"] as String);
+                try
+                {
+                    m_accounts.Add(id, collection[0].Attributes["name"] as String);
+                }
+                catch 
+                {
+                }
             }
             return m_accounts[id];
         }
@@ -227,17 +233,29 @@ namespace MattermostCrmService
                 }
             };
 
-            FilterExpression searchExpression = new FilterExpression(LogicalOperator.Or);
-            searchExpression.Conditions.Add(new ConditionExpression("ticketnumber", ConditionOperator.Like, "%" + query + "%"));
-            searchExpression.Conditions.Add(new ConditionExpression("title", ConditionOperator.Like, "%" + query + "%"));
-            searchExpression.Conditions.Add(new ConditionExpression("description", ConditionOperator.Like, "%" + query + "%"));
+            var le = queryExpression.AddLink("account", "customerid", "accountid");
+            le.EntityAlias = "customer";
+            le.Columns.AddColumn("name");
+            le.JoinOperator = JoinOperator.Inner;
 
             FilterExpression productExpression = new FilterExpression(LogicalOperator.And);
             productExpression.Conditions.Add(new ConditionExpression("eni_product", ConditionOperator.Equal, 859270000));
 
             queryExpression.Criteria.FilterOperator = LogicalOperator.And;
-            queryExpression.Criteria.AddFilter(searchExpression);
             queryExpression.Criteria.AddFilter(productExpression);
+
+            foreach (var token in query.tokens())
+            {
+                FilterExpression searchExpression = new FilterExpression(LogicalOperator.Or);
+                searchExpression.Conditions.Add(new ConditionExpression("ticketnumber", ConditionOperator.Like,
+                    "%" + token + "%"));
+                searchExpression.Conditions.Add(new ConditionExpression("title", ConditionOperator.Like,
+                    "%" + token + "%"));
+                searchExpression.Conditions.Add(new ConditionExpression("description", ConditionOperator.Like,
+                    "%" + token + "%"));
+                searchExpression.Conditions.Add(new ConditionExpression("customer","name",ConditionOperator.Like, "%" + token + "%"));
+                queryExpression.Criteria.AddFilter(searchExpression);
+            }
 
             if (ownerId.HasValue)
             {
@@ -255,7 +273,8 @@ namespace MattermostCrmService
                     .Select(x => new SlimIncidentWrapper(x, this));
             }
 
-            return m_service.RetrieveMultiple(queryExpression)
+            var res = m_service.RetrieveMultiple(queryExpression);
+            return res
                 .Entities
                 .Select(x => new SlimIncidentWrapper(x, this));
         }

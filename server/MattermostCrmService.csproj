@@ -102,6 +102,7 @@
     <Compile Include="Messages\Users.cs" />
     <Compile Include="Messages\VersionRequest.cs" />
     <Compile Include="NetworkAttachment.cs" />
+    <Compile Include="StringHelper.cs" />
     <Compile Include="Wrappers\AttachmentFileWrapper.cs" />
     <Compile Include="Wrappers\IncidentWrapper.cs" />
     <Compile Include="Wrappers\NetworkAttachmentWrapper.cs" />

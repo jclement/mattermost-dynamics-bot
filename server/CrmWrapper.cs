@@ -320,7 +320,7 @@ namespace MattermostCrmService
             note.ObjectId = new EntityReference(Incident.EntityLogicalName, incidentId);
             note.Subject = title;
             note.NoteText = body;
-            note.Attributes["objecttypecode"] = 112;
+            note.Attributes["objecttypecode"] = Incident.EntityTypeCode;
             //note.ObjectTypeCode = Incident.EntityTypeCode.ToString();
             var id = m_service.Create(note);
             var newEntity = m_service.Retrieve(Annotation.EntityLogicalName, id, new ColumnSet(true));

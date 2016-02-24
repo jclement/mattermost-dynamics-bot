@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.ServiceModel.Channels;
+using System.Text;
 using System.Text.RegularExpressions;
 using JsonConfig;
 using ServiceStack;
@@ -48,6 +50,49 @@ namespace MattermostCrmService
         public object Get(Users request)
         {
             return CrmWrapper.Instance.MatchUsersByName(request.Query);
+        }
+
+        public MatterMostMyIncidentsResponse Post(MatterMostMyIncidents request)
+        {
+
+            Dictionary<string, Guid> map = new Dictionary<string, Guid>();
+            foreach (dynamic userMap in Config.MergedConfig.UserMap)
+            {
+                map.Add(userMap.name, Guid.Parse(userMap.crmid));
+            }
+
+            Guid ownerId;
+
+            if (!map.TryGetValue(request.user_name, out ownerId))
+            {
+                return new MatterMostMyIncidentsResponse()
+                {
+                    response_type = "ephemeral",
+                    text = "I can't map " + request.user_name + " to a user in CRM"
+                };
+            }
+
+            var incidents = CrmWrapper.Instance.SearchIncidents(request.text, ownerId, 1);
+
+            StringBuilder output = new StringBuilder();
+
+            output.AppendLine("Case | Title | Company ");
+            output.AppendLine("---|---|---");
+            foreach (var incident in incidents)
+            {
+                output.Append($"[{incident.TicketNumber}]({Config.MergedConfig.WebRoot}/static/#/incident/{incident.TicketNumber})");
+                output.Append("|");
+                output.Append(incident.Title);
+                output.Append("|");
+                output.Append(incident.Company);
+                output.AppendLine("");
+            }
+
+            return new MatterMostMyIncidentsResponse()
+            {
+                response_type = "ephemeral",
+                text = output.ToString()
+            };
         }
 
         public object Post(ChangeOwner request)
@@ -178,7 +223,11 @@ namespace MattermostCrmService
                 {
                     visitedCases.Add(match.Value);
                     IncidentWrapper result = CrmWrapper.Instance.GetIncident(match.Value);
-                    cases.Add(IncidentMarkdowner.ConvertToMarkdown(result, match.Value));
+                    var tmp = IncidentMarkdowner.ConvertToMarkdown(result);
+                    if (!string.IsNullOrEmpty(tmp))
+                    {
+                        cases.Add(tmp);
+                    }
                 }
             }
             if (cases.Count > 0)

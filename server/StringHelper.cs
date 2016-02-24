@@ -14,7 +14,7 @@ namespace MattermostCrmService
         {
             Regex tokenSplit = new Regex("(?:^|\\s)(\"(?:[^\"]+|\"\")*\"|[^\\s]*)", RegexOptions.Compiled);
 
-            foreach (Match match in tokenSplit.Matches(input))
+            foreach (Match match in tokenSplit.Matches(input ?? ""))
             {
                 var val = match.Value.Trim();
                 if (val.StartsWith("\""))

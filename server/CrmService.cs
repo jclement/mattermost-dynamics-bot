@@ -33,7 +33,7 @@ namespace MattermostCrmService
         {
             try
             {
-                new CrmWrapper(request.Username, request.Password, Config.MergedConfig.CrmUrl);
+                new CrmWrapper(request.Username, request.Password, "https://" + Config.MergedConfig.CrmOrg + ".crm.dynamics.com/XRMServices/2011/Organization.svc");
                 return LoginHelper.Instance.GenerateToken(request.Username, request.Password);
             }
             catch (Exception e)

@@ -307,13 +307,11 @@ namespace MattermostCrmService
 
         public NoteWrapper UpdateNote(Guid noteId, string title, string body)
         {
-            var entity = m_service.Retrieve(Annotation.EntityLogicalName, noteId, new ColumnSet(true));
-            entity.Attributes.Remove("subject");
-            entity.Attributes.Remove("notetext");
-            entity.Attributes.Add("subject", title);
-            entity.Attributes.Add("notetext", body);
-            m_service.Update(entity);
-            return new NoteWrapper(entity, this);
+            Annotation note = (Annotation)m_service.Retrieve(Annotation.EntityLogicalName, noteId, new ColumnSet(true));
+            note.Subject = title;
+            note.NoteText = body;
+            m_service.Update(note);
+            return new NoteWrapper(note, this);
         }
 
         public NoteWrapper AddNote(Guid incidentId, string title, string body)

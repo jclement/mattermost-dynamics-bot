@@ -8,15 +8,16 @@ namespace MattermostCrmService.Wrappers
     {
         public NoteWrapper(Entity annotation, CrmWrapper wrapper)
         {
-            Body = annotation.GetAttributeValue<string>("notetext");
-            Filename = annotation.GetAttributeValue<string>("filename");
-            Filesize = annotation.GetAttributeValue<Int32>("filesize");
-            Mimetype = annotation.GetAttributeValue<string>("mimetype");
-            Title = annotation.GetAttributeValue<string>("subject") ?? "Mysterious Untitled Note";
-            Owner = wrapper.LookupUser(annotation.GetAttributeValue<EntityReference>("owninguser"));
-            Created = annotation.GetAttributeValue<DateTime>("createdon");
-            Modified = annotation.GetAttributeValue<DateTime>("modifiedon");
-            Id = annotation.Id.ToString("d");
+            Annotation note = (Annotation) annotation;
+            Body = note.NoteText;;
+            Filename = note.FileName;
+            Filesize = note.FileSize;
+            Mimetype = note.MimeType;
+            Title = note.Subject ?? "Mysterious Untitled Note";
+            Owner = wrapper.LookupUser(note.OwningUser);
+            Created = note.CreatedOn.Value;
+            Modified = note.ModifiedOn.Value;
+            Id = note.Id.ToString("d");
         }
         public string Title { get; set; }
         public string Body { get; set; }

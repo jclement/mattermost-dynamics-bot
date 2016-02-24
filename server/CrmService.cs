@@ -10,7 +10,7 @@ using MattermostCrmService.Messages;
 
 namespace MattermostCrmService
 {
-    public class CRMService : Service
+    public class CRMService : ServiceStack.Service
     {
         private static Regex CASRegex = new Regex("\\b(CAS-[0-9]{5}-[A-Z][0-9][A-Z][0-9][A-Z][0-9])\\b");
 
@@ -22,7 +22,7 @@ namespace MattermostCrmService
             return new CrmWrapper(authInfo.Username, authInfo.Password, Config.MergedConfig.CrmUrl); 
         }
 
-        public IncidentWrapper Any(Incident request)
+        public IncidentWrapper Any(IncidentMessage request)
         {
             return CrmWrapper.Instance.GetIncident(request.CaseNum);
         }

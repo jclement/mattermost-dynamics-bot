@@ -81,6 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AESThenHMAC.cs" />
+    <Compile Include="Entities.cs" />
     <Compile Include="LoginHelper.cs" />
     <Compile Include="Messages\AddNote.cs" />
     <Compile Include="AppHost.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Messages\Users.cs" />
     <Compile Include="Messages\VersionRequest.cs" />
     <Compile Include="NetworkAttachment.cs" />
+    <Compile Include="OptionSets.cs" />
     <Compile Include="StringHelper.cs" />
     <Compile Include="Wrappers\AttachmentFileWrapper.cs" />
     <Compile Include="Wrappers\IncidentWrapper.cs" />

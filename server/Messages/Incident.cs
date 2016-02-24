@@ -3,7 +3,7 @@
 namespace MattermostCrmService.Messages
 {
     [Route("/incident/{CaseNum}")]
-    public class Incident
+    public class IncidentMessage
     {
         public string CaseNum { get; set; }
     }

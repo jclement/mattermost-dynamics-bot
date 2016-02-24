@@ -24,28 +24,21 @@ namespace MattermostCrmService
         private string m_password;
         private string m_url;
 
-        private readonly Dictionary<string, int> m_statuses;
-
         public CrmWrapper(string username, string password, string url)
         {
             m_user = username;
             m_password = password;
             m_url = url;
             Connect();
-
-            m_statuses = new Dictionary<string, int>();
-            m_statuses.Add("In-progress", 1);
-            m_statuses.Add("Problem Solved", 5);
-            m_statuses.Add("Information Provided", 1000);
         }
 
         private static void RefreshUserCache()
         {
-            var userEntities = m_instance.RunQuery("systemuser");
-            foreach (Entity e in userEntities)
+            var userEntities = m_instance.RunQuery(SystemUser.EntityLogicalName);
+            foreach (SystemUser e in userEntities)
             {
-                m_userNameLookup.Add(Guid.Parse(e.Attributes["systemuserid"].ToString()), e.Attributes["fullname"].ToString());
-                m_userLookup.Add(e.Attributes["fullname"].ToString(), Guid.Parse(e.Attributes["systemuserid"].ToString()));
+                m_userNameLookup.Add(Guid.Parse(e.SystemUserId.ToString()), e.FullName);
+                m_userLookup.Add(e.FullName, Guid.Parse(e.SystemUserId.ToString()));
             }
         }
 
@@ -62,7 +55,7 @@ namespace MattermostCrmService
                 return fullname;
             }
 
-            DataCollection<Entity> collection = RunQuery("account", new string[] { "name" }, "accountid", new string[] { id.ToString("d") });
+            DataCollection<Entity> collection = RunQuery(Account.EntityLogicalName, new string[] { "name" }, "accountid", new string[] { id.ToString("d") });
 
             if (collection.Count == 0)
             {
@@ -72,7 +65,7 @@ namespace MattermostCrmService
             {
                 try
                 {
-                    m_accounts.Add(id, collection[0].Attributes["name"] as String);
+                    m_accounts.Add(id, ((Account)collection[0]).Name);
                 }
                 catch 
                 {
@@ -224,7 +217,7 @@ namespace MattermostCrmService
         {
             QueryExpression queryExpression = new QueryExpression()
             {
-                EntityName = "incident",
+                EntityName = Incident.EntityLogicalName,
                 ColumnSet = new ColumnSet(true),
                 TopCount = 200,
                 Orders =
@@ -233,7 +226,7 @@ namespace MattermostCrmService
                 }
             };
 
-            var le = queryExpression.AddLink("account", "customerid", "accountid");
+            var le = queryExpression.AddLink(Account.EntityLogicalName, "customerid", "accountid");
             le.EntityAlias = "customer";
             le.Columns.AddColumn("name");
             le.JoinOperator = JoinOperator.Inner;
@@ -269,7 +262,7 @@ namespace MattermostCrmService
             {
                 return m_service.RetrieveMultiple(queryExpression)
                     .Entities
-                    .Where(x => stateCode.Value.Equals( x.GetAttributeValue<OptionSetValue>("statuscode").Value ))
+                    .Where(x => stateCode.Value.Equals( ((Incident)x).StatusCode.Value ))
                     .Select(x => new SlimIncidentWrapper(x, this));
             }
 
@@ -281,16 +274,16 @@ namespace MattermostCrmService
 
         public SlimIncidentWrapper UpdateOwner(Guid newOwnerId, Guid incidentId)
         {
-            var incidentEntity = m_service.Retrieve("incident", incidentId, new ColumnSet(true));
-            incidentEntity.Attributes["ownerid"] =  new EntityReference("systemuser", newOwnerId);
+            Incident incidentEntity = (Incident) m_service.Retrieve(Incident.EntityLogicalName, incidentId, new ColumnSet(true));
+            incidentEntity.OwnerId = new EntityReference(SystemUser.EntityLogicalName, newOwnerId);
             m_service.Update(incidentEntity);
             return new SlimIncidentWrapper(incidentEntity, this);
         }
 
         public SlimIncidentWrapper UpdateNetworkAttachmentsFolder(string newPath, Guid incidentId)
         {
-            var incidentEntity = m_service.Retrieve("incident", incidentId, new ColumnSet(true));
-            incidentEntity.Attributes["eni_caseattachments"] = newPath?.Trim();
+            Incident incidentEntity = (Incident) m_service.Retrieve(Incident.EntityLogicalName, incidentId, new ColumnSet(true));
+            incidentEntity.eni_CaseAttachments = newPath?.Trim();
             m_service.Update(incidentEntity);
             return new SlimIncidentWrapper(incidentEntity, this);
         }
@@ -299,7 +292,7 @@ namespace MattermostCrmService
         public IEnumerable<NoteWrapper> GetNotes(Guid incidentId)
         {
             var notes = new List<NoteWrapper>();
-            DataCollection<Entity>  annotations = RunQuery("annotation", "objectid", new string[] {incidentId.ToString()});
+            DataCollection<Entity>  annotations = RunQuery(Annotation.EntityLogicalName, "objectid", new string[] {incidentId.ToString()});
             foreach (var annotation in annotations)
             {
                 notes.Add(new NoteWrapper(annotation, this));
@@ -309,12 +302,12 @@ namespace MattermostCrmService
 
         public void DeleteNote(Guid noteId)
         {
-            m_service.Delete("annotation", noteId);
+            m_service.Delete(Annotation.EntityLogicalName, noteId);
         }
 
         public NoteWrapper UpdateNote(Guid noteId, string title, string body)
         {
-            var entity = m_service.Retrieve("annotation", noteId, new ColumnSet(true));
+            var entity = m_service.Retrieve(Annotation.EntityLogicalName, noteId, new ColumnSet(true));
             entity.Attributes.Remove("subject");
             entity.Attributes.Remove("notetext");
             entity.Attributes.Add("subject", title);
@@ -325,34 +318,33 @@ namespace MattermostCrmService
 
         public NoteWrapper AddNote(Guid incidentId, string title, string body)
         {
-            // test code.  doesn't work!  Well it works but the note goes missing.  That's probably bad!
-            Entity entity = new Entity("annotation");
-            entity.Attributes.Add("objectid", new EntityReference("incident", incidentId));
-            entity.Attributes.Add("subject", title);
-            entity.Attributes.Add("notetext", body);
-            entity.Attributes.Add("objecttypecode", 112);
-            var id = m_service.Create(entity);
-            var newEntity = m_service.Retrieve("annotation", id, new ColumnSet(true));
+            Annotation note = new Annotation();
+            note.ObjectId = new EntityReference(Incident.EntityLogicalName, incidentId);
+            note.Subject = title;
+            note.NoteText = body;
+            note.ObjectTypeCode = Incident.EntityTypeCode.ToString();
+            var id = m_service.Create(note);
+            var newEntity = m_service.Retrieve(Annotation.EntityLogicalName, id, new ColumnSet(true));
 
             return new NoteWrapper(newEntity, this);
         }
 
         public AttachmentFileWrapper GetAttachmentFile(Guid attachmentId)
         {
-            DataCollection<Entity> attachmentEntities = RunQuery("annotation", new string[] { "mimetype", "documentbody" }, "annotationid", new string[] { attachmentId.ToString("d") });
+            DataCollection<Entity> attachmentEntities = RunQuery(Annotation.EntityLogicalName, new string[] { "mimetype", "documentbody" }, "annotationid", new string[] { attachmentId.ToString("d") });
             
             if (attachmentEntities.Count == 0)
             {
                 return null;
             }
-            byte[] fileData = Convert.FromBase64String(attachmentEntities[0].Attributes["documentbody"].ToString());
-            return new AttachmentFileWrapper { FileData = new MemoryStream(fileData), MimeType = attachmentEntities[0].Attributes["mimetype"] as string};
+            byte[] fileData = Convert.FromBase64String(((Annotation) attachmentEntities[0]).DocumentBody);
+            return new AttachmentFileWrapper { FileData = new MemoryStream(fileData), MimeType = ((Annotation) attachmentEntities[0]).MimeType};
         }
 
 
         public SlimIncidentWrapper GetSlimIncident(string caseNum)
         {
-            DataCollection<Entity> entityCollection = RunQuery("incident", "ticketnumber", new string[] { caseNum });
+            DataCollection<Entity> entityCollection = RunQuery(Incident.EntityLogicalName, "ticketnumber", new string[] { caseNum });
 
             if (entityCollection.Count == 0)
             {
@@ -364,13 +356,12 @@ namespace MattermostCrmService
 
         public IncidentWrapper GetIncident(string caseNum)
         {
-            DataCollection<Entity> entityCollection = RunQuery("incident", "ticketnumber", new string[] { caseNum });
+            DataCollection<Entity> entityCollection = RunQuery(Incident.EntityLogicalName, "ticketnumber", new string[] { caseNum });
 
             DumpCollection(entityCollection);
 
             if (entityCollection.Count == 0)
             {
-                //throw new ApplicationException("Not found");
                 return null;
             }
 

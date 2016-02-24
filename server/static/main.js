@@ -199,10 +199,10 @@ uncrm.controller('mainCtrl', function($scope, $location) {
 
 uncrm.controller('quickSearchCtrl', function($scope, $location, Auth) {
   $scope.isLoggedIn = Auth.isLoggedIn;
+  $scope.searchQuery = $location.search()['query'];
   $scope.go = function() {
-    // TODO: An actual search by string implementation?
-    if ($scope.incidentNumber) {
-      $location.url('/search/incident?Query=' + $scope.incidentNumber);
+    if ($scope.searchQuery) {
+      $location.url('/search/incident?query=' + $scope.searchQuery);
     }
   };
 });

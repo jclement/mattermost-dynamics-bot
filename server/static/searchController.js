@@ -5,11 +5,11 @@ uncrm.controller('searchCtrl', function ($scope, $routeParams, $http, localStora
   $scope.hasUserList = false;
   $scope.userList = [];
 
-  if (!$routeParams.OwnerId) {
+  if (!$routeParams.ownerId) {
     $scope.owner = null;
   }
 
-  $scope.onlyInProgress = $routeParams.StateCode ? true : false;
+  $scope.onlyInProgress = $routeParams.stateCode ? true : false;
 
   // loading
   document.getElementById('spinnerPlaceholder').innerHTML = spinner.innerHTML;
@@ -25,8 +25,8 @@ uncrm.controller('searchCtrl', function ($scope, $routeParams, $http, localStora
     };
 
     _.each(routeParams, function (param, paramName) {
-      if (paramName === 'Query' && param) {
-        searchParams.unshift('Query=' + encodeURIComponent(param.trim()));
+      if (paramName === 'query' && param) {
+        searchParams.unshift('query=' + encodeURIComponent(param.trim()));
       }
       else {
         safeEncodeParam(param, paramName);
@@ -51,9 +51,9 @@ uncrm.controller('searchCtrl', function ($scope, $routeParams, $http, localStora
         $scope.userList = _.sortBy(response.data, 'Item1');
         $scope.hasUserList = true;
 
-        if ($routeParams.OwnerId) {
+        if ($routeParams.ownerId) {
           $scope.owner = _.find($scope.userList, function (listedUser) {
-            return listedUser.Item2 === $routeParams.OwnerId;
+            return listedUser.Item2 === $routeParams.ownerId;
           });
         }
       },
@@ -73,13 +73,13 @@ uncrm.controller('searchCtrl', function ($scope, $routeParams, $http, localStora
   };
 
   $scope.clearOwner = function() {
-    refilter({OwnerId: null});
+    refilter({ownerId: null});
   };
   $scope.newOwnerFilter = function() {
-    refilter({OwnerId: $scope.owner.Item2});
+    refilter({ownerId: $scope.owner.Item2});
   };
   $scope.toggleInProgress = function () {
-    refilter({StateCode: $scope.onlyInProgress ? '1' : null});
+    refilter({stateCode: $scope.onlyInProgress ? '1' : null});
   };
 
   $http({

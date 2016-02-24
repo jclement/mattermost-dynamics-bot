@@ -195,9 +195,7 @@ uncrm.controller('quickSearchCtrl', function($scope, $location, Auth) {
   $scope.isLoggedIn = Auth.isLoggedIn;
   $scope.searchQuery = $location.search()['query'];
   $scope.go = function() {
-    if ($scope.searchQuery) {
-      $location.url('/search/incident?query=' + $scope.searchQuery);
-    }
+    $location.url('/search/incident?query=' + $scope.searchQuery);
   };
 });
 

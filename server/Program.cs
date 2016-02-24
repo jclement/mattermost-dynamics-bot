@@ -32,7 +32,7 @@ namespace MattermostCrmService
             }
 
             LoginHelper.Init(Config.MergedConfig.CrmKey);
-            CrmWrapper.Init(Config.MergedConfig.CrmUser, password != null ? password : Config.MergedConfig.CrmPassword, Config.MergedConfig.CrmUrl);
+            CrmWrapper.Init(Config.MergedConfig.CrmUser, password ?? Config.MergedConfig.CrmPassword, "https://"+ Config.MergedConfig.CrmOrg +".crm.dynamics.com/XRMServices/2011/Organization.svc");
 
             var listeningOn = Config.MergedConfig.Listen;
             var appHost = new AppHost()

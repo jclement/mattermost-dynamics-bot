@@ -1,4 +1,5 @@
 ﻿using System;
+using JsonConfig;
 using Microsoft.Xrm.Sdk;
 
 namespace MattermostCrmService.Wrappers
@@ -12,7 +13,7 @@ namespace MattermostCrmService.Wrappers
         {
             Incident incidentObject = (Incident)incident;
             Id = incidentObject.Id;
-            Url = "https://energynavigator.crm.dynamics.com/main.aspx?etc=112&id=" + incidentObject.Id + "&histKey=1&newWindow=true&pagetype=entityrecord#392649339";
+            Url = "https://" + Config.MergedConfig.CrmOrg + ".crm.dynamics.com/main.aspx?etc=" + Incident.EntityTypeCode + "&id=" + incidentObject.Id + "&histKey=1&newWindow=true&pagetype=entityrecord#392649339";
             Title = incidentObject.Title;
             Company = wrapper.LookupAccount(incidentObject.CustomerId);
             Owner = wrapper.LookupUser(incidentObject.OwnerId);

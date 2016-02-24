@@ -232,7 +232,7 @@ namespace MattermostCrmService
             le.JoinOperator = JoinOperator.Inner;
 
             FilterExpression productExpression = new FilterExpression(LogicalOperator.And);
-            productExpression.Conditions.Add(new ConditionExpression("eni_product", ConditionOperator.Equal, 859270000));
+            productExpression.Conditions.Add(new ConditionExpression("eni_product", ConditionOperator.Equal, esi_product.AFENav));
 
             queryExpression.Criteria.FilterOperator = LogicalOperator.And;
             queryExpression.Criteria.AddFilter(productExpression);

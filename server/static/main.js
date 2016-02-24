@@ -189,12 +189,6 @@ uncrm.filter('marked', function ($sce) {
 });
 
 uncrm.controller('mainCtrl', function($scope, $location) {
-  $scope.go = function() {
-    // TODO: An actual search by string implementation?
-    if ($scope.incidentNumber) {
-      $location.url('/incident/' + $scope.incidentNumber);
-    }
-  };
 });
 
 uncrm.controller('quickSearchCtrl', function($scope, $location, Auth) {

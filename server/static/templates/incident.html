@@ -23,7 +23,11 @@
   </tr>
  -->  <tr>
     <th class="nowrap">Number:</th>
-    <td>{{incidentNumber}} <a class="pull-right" href="{{incident.Url}}" target="_blank">Open in Dynamics CRM</a> </td>
+    <td>
+      {{incidentNumber}}
+      <button class="btn btn-default btn-xs" ngclipboard data-clipboard-text="{{incidentNumber}}"><span class="glyphicon glyphicon-copy"></span></button>
+      <a class="pull-right" href="{{incident.Url}}" target="_blank">Open in Dynamics CRM</a>
+    </td>
   </tr>
   <tr>
     <th class="nowrap">Title:</th>
@@ -73,7 +77,10 @@
   </tr>
   <tr>
     <th class="nowrap">Attachments Folder:</th>
-    <td>{{incident.NetworkAttachmentsFolder}}</td>
+    <td>
+      {{incident.NetworkAttachmentsFolder}}
+      <button class="btn btn-default btn-xs" ngclipboard data-clipboard-text="{{incident.NetworkAttachmentsFolder}}"><span class="glyphicon glyphicon-copy"></span></button>
+    </td>
   </tr>
 </table>
 </div>

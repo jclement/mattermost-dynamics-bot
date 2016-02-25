@@ -193,9 +193,10 @@ uncrm.controller('mainCtrl', function($scope, $location) {
 
 uncrm.controller('quickSearchCtrl', function($scope, $location, Auth) {
   $scope.isLoggedIn = Auth.isLoggedIn;
-  $scope.searchQuery = $location.search()['query'];
+  $scope.searchQuery = $location.search().query;
   $scope.go = function() {
-    $location.url('/search/incident?query=' + $scope.searchQuery);
+    var queryInvalid = typeof $scope.searchQuery !== 'string' || !$scope.searchQuery;
+    $location.url( queryInvalid ? '/search/incident' : '/search/incident?query=' + $scope.searchQuery);
   };
 });
 

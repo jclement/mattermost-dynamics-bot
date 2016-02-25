@@ -178,6 +178,10 @@ uncrm.filter('crmify', function ($sce) {
   };
 });
 
+uncrm.filter('escape', function() {
+  return window.encodeURIComponent;
+});
+
 uncrm.filter('marked', function ($sce) {
   return function (input) {
     try {

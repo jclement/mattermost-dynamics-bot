@@ -100,7 +100,7 @@
   <th>Created</th>
 </tr>
 <tr ng-repeat="attachment in incident.NetworkAttachments | orderBy: '-ModifiedDate'">
-  <td><a href="../incident/{{incidentNumber}}/attachments/{{attachment.Filename}}">{{attachment.Filename}}</a></td>
+  <td><a href="../incident/{{incidentNumber}}/attachments/{{attachment.Filename | escape}}">{{attachment.Filename}}</a></td>
   <td>{{attachment.SizeKB}}</td>
   <td>{{attachment.Owner}}</td>
   <td>{{attachment.Modified | date: "medium"}}</td>

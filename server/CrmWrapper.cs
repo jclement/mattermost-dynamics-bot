@@ -295,9 +295,15 @@ namespace MattermostCrmService
             DataCollection<Entity>  annotations = RunQuery(Annotation.EntityLogicalName, "objectid", new string[] {incidentId.ToString()});
             foreach (var annotation in annotations)
             {
-                notes.Add(new NoteWrapper(annotation, this));
+                notes.Add(new NoteWrapper((Annotation) annotation, this));
             }
-            return notes;
+            DataCollection<Entity>  posts = RunQuery(Post.EntityLogicalName, "regardingobjectid", new string[] {incidentId.ToString()});
+            DumpCollection(posts);
+            foreach (var post in posts)
+            {
+                notes.Add(new NoteWrapper((Post) post, this));
+            }
+            return notes.OrderByDescending(x=>x.Modified);
         }
 
         public void DeleteNote(Guid noteId)
@@ -325,7 +331,7 @@ namespace MattermostCrmService
             var id = m_service.Create(note);
             var newEntity = m_service.Retrieve(Annotation.EntityLogicalName, id, new ColumnSet(true));
 
-            return new NoteWrapper(newEntity, this);
+            return new NoteWrapper((Annotation) newEntity, this);
         }
 
         public AttachmentFileWrapper GetAttachmentFile(Guid attachmentId)
@@ -356,8 +362,6 @@ namespace MattermostCrmService
         public IncidentWrapper GetIncident(string caseNum)
         {
             DataCollection<Entity> entityCollection = RunQuery(Incident.EntityLogicalName, "ticketnumber", new string[] { caseNum });
-
-            DumpCollection(entityCollection);
 
             if (entityCollection.Count == 0)
             {

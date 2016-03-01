@@ -66,6 +66,8 @@ namespace MattermostCrmService
             lock (m_lock)
             {
                 var authInfo = LoginHelper.Instance.ParseToken(authenticationToken);
+                if (authInfo == null) 
+                    throw new ApplicationException("No Valid Auth Token");
 
                 if (m_cache.ContainsKey(authInfo.Username))
                     return m_cache[authInfo.Username];

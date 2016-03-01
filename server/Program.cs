@@ -25,7 +25,7 @@ namespace MattermostCrmService
                 Console.Clear();
             }
 
-            LoginHelper.Init(Config.MergedConfig.CrmKey);
+            LoginHelper.Init(Config.MergedConfig.CrmKey ?? SecureRandomString.Generate(50));
             CrmConnectionManager.Init(Config.MergedConfig.CrmUser, password ?? Config.MergedConfig.CrmPassword, "https://"+ Config.MergedConfig.CrmOrg +".crm.dynamics.com/XRMServices/2011/Organization.svc");
 
             var listeningOn = Config.MergedConfig.Listen;
@@ -41,7 +41,7 @@ namespace MattermostCrmService
                     if (String.IsNullOrEmpty(request.AuthenticationToken))
                         throw new ApplicationException("No Auth Token");
                     var authInfo = LoginHelper.Instance.ParseToken(request.AuthenticationToken);
-                    if (string.IsNullOrEmpty(authInfo.Username))
+                    if (authInfo == null) 
                         throw new ApplicationException("No Valid Auth Token");
                 }
                 if (req.Dto is MattermostRequestBase)

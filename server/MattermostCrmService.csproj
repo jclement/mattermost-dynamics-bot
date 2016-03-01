@@ -109,6 +109,7 @@
     <Compile Include="Messages\VersionRequest.cs" />
     <Compile Include="NetworkAttachment.cs" />
     <Compile Include="OptionSets.cs" />
+    <Compile Include="SecureRandomString.cs" />
     <Compile Include="StringHelper.cs" />
     <Compile Include="Wrappers\AttachmentFileWrapper.cs" />
     <Compile Include="Wrappers\IncidentWrapper.cs" />

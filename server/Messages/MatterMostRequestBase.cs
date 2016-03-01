@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MattermostCrmService.Messages
 {
-    public class MatterMostRequestBase
+    public class MattermostRequestBase
     {
         public string token { get; set; }
     }

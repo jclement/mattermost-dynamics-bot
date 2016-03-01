@@ -26,7 +26,7 @@ namespace MattermostCrmService
             }
 
             LoginHelper.Init(Config.MergedConfig.CrmKey);
-            CrmWrapper.Init(Config.MergedConfig.CrmUser, password ?? Config.MergedConfig.CrmPassword, "https://"+ Config.MergedConfig.CrmOrg +".crm.dynamics.com/XRMServices/2011/Organization.svc");
+            CrmConnectionManager.Init(Config.MergedConfig.CrmUser, password ?? Config.MergedConfig.CrmPassword, "https://"+ Config.MergedConfig.CrmOrg +".crm.dynamics.com/XRMServices/2011/Organization.svc");
 
             var listeningOn = Config.MergedConfig.Listen;
             var appHost = new AppHost();
@@ -44,9 +44,9 @@ namespace MattermostCrmService
                     if (string.IsNullOrEmpty(authInfo.Username))
                         throw new ApplicationException("No Valid Auth Token");
                 }
-                if (req.Dto is MatterMostRequestBase)
+                if (req.Dto is MattermostRequestBase)
                 {
-                    var request = (MatterMostRequestBase) req.Dto;
+                    var request = (MattermostRequestBase) req.Dto;
                     if (String.IsNullOrEmpty(request.token))
                         throw new ApplicationException("No Token");
                     foreach (var token in Config.MergedConfig.WebhookTokens)
@@ -68,7 +68,7 @@ namespace MattermostCrmService
         private static void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             Console.WriteLine("Reconnect");
-            CrmWrapper.Instance.Reconnect();
+            CrmConnectionManager.Instance.ReconnectAll();
         }
     }
 }

@@ -1,6 +1,6 @@
 namespace MattermostCrmService.Messages
 {
-    public class MatterMostResponse
+    public class MattermostResponse
     {
         public string text { get; set; }
         public string username { get; set; }

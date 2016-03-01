@@ -9,6 +9,7 @@ using JsonConfig;
 using ServiceStack;
 using MattermostCrmService.Wrappers;
 using MattermostCrmService.Messages;
+using System.Collections.Concurrent;
 
 namespace MattermostCrmService
 {
@@ -16,27 +17,20 @@ namespace MattermostCrmService
     {
         private static Regex CASRegex = new Regex("\\b(CAS-[0-9]{5}-[A-Z][0-9][A-Z][0-9][A-Z][0-9])\\b");
 
-        private CrmWrapper GetAuthenticatedCrmWrapper(AuthenticatedRequestBase request)
-        {
-            if (String.IsNullOrEmpty(request.AuthenticationToken))
-                throw new ApplicationException("No Auth Token");
-            var authInfo = LoginHelper.Instance.ParseToken(request.AuthenticationToken);
-            return new CrmWrapper(authInfo.Username, authInfo.Password, "https://" + Config.MergedConfig.CrmOrg + ".crm.dynamics.com/XRMServices/2011/Organization.svc"); 
-        }
-
         public IncidentWrapper Any(IncidentMessage request)
         {
-            return CrmWrapper.Instance.GetIncident(request.CaseNum);
+            return CrmConnectionManager.Instance.Get(request).GetIncident(request.CaseNum);
         }
 
         public LoginResponse Post(Login request)
         {
             try
             {
-                new CrmWrapper(request.Username, request.Password, "https://" + Config.MergedConfig.CrmOrg + ".crm.dynamics.com/XRMServices/2011/Organization.svc");
+                var token = LoginHelper.Instance.GenerateToken(request.Username, request.Password);
+                CrmConnectionManager.Instance.Get(token);
                 return new LoginResponse()
                 {
-                    AuthenticationToken = LoginHelper.Instance.GenerateToken(request.Username, request.Password)
+                    AuthenticationToken = token
                 };
             }
             catch (Exception e)
@@ -47,15 +41,15 @@ namespace MattermostCrmService
 
         public SlimIncidentWrapper[] Get(IncidentQuery request)
         {
-            return CrmWrapper.Instance.SearchIncidents(request.Query, request.OwnerId, request.StateCode).ToArray();
+            return CrmConnectionManager.Instance.Get(request).SearchIncidents(request.Query, request.OwnerId, request.StateCode).ToArray();
         }
 
         public object Get(Users request)
         {
-            return CrmWrapper.Instance.MatchUsersByName(request.Query);
+            return CrmConnectionManager.Instance.Get(request).MatchUsersByName(request.Query);
         }
 
-        public MatterMostMyIncidentsResponse Post(MatterMostMyIncidents request)
+        public MattermostMyIncidentsResponse Post(MattermostMyIncidents request)
         {
             Dictionary<string, Guid> map = new Dictionary<string, Guid>();
             foreach (dynamic userMap in Config.MergedConfig.UserMap)
@@ -67,14 +61,14 @@ namespace MattermostCrmService
 
             if (!map.TryGetValue(request.user_name, out ownerId))
             {
-                return new MatterMostMyIncidentsResponse()
+                return new MattermostMyIncidentsResponse()
                 {
                     response_type = "ephemeral",
                     text = "I can't map " + request.user_name + " to a user in CRM"
                 };
             }
 
-            var incidents = CrmWrapper.Instance.SearchIncidents(request.text, ownerId, 1);
+            var incidents = CrmConnectionManager.Instance.MattermostInstance.SearchIncidents(request.text, ownerId, 1);
 
             StringBuilder output = new StringBuilder();
 
@@ -90,7 +84,7 @@ namespace MattermostCrmService
                 output.AppendLine("");
             }
 
-            return new MatterMostMyIncidentsResponse()
+            return new MattermostMyIncidentsResponse()
             {
                 response_type = "ephemeral",
                 text = output.ToString()
@@ -99,33 +93,33 @@ namespace MattermostCrmService
 
         public SlimIncidentWrapper Post(ChangeOwner request)
         {
-            var crm = GetAuthenticatedCrmWrapper(request);
+            var crm = CrmConnectionManager.Instance.Get(request);
             var incident = crm.GetSlimIncident(request.CaseNum);
             return crm.UpdateOwner(Guid.Parse(request.OwnerId), incident.Id);
         }
 
         public NoteWrapper Post(UpdateNote request)
         {
-            var crm = GetAuthenticatedCrmWrapper(request);
+            var crm = CrmConnectionManager.Instance.Get(request);
             return crm.UpdateNote(request.NoteId, request.Title, request.Body);
         }
 
         public void Post(DeleteNote request)
         {
-            var crm = GetAuthenticatedCrmWrapper(request);
+            var crm = CrmConnectionManager.Instance.Get(request);
             crm.DeleteNote(request.NoteId);
         }
 
         public NoteWrapper Post(AddNote request)
         {
-            var crm = GetAuthenticatedCrmWrapper(request);
+            var crm = CrmConnectionManager.Instance.Get(request);
             var incident = crm.GetIncident(request.CaseNum);
             return crm.AddNote(incident.Id, request.Title, request.Body);
         }
 
         public object Get(AttachmentRequest request)
         {
-            var incident = CrmWrapper.Instance.GetIncident(request.CaseNum);
+            var incident = CrmConnectionManager.Instance.Get(request).GetIncident(request.CaseNum);
             var file = incident.NetworkAttachments.First(x => x.Filename.Equals(request.Filename));
             base.Response.AddHeader("Content-Disposition", "attachment");
             return new HttpResult(File.OpenRead(file.Path), "application/octet-steam");
@@ -136,7 +130,7 @@ namespace MattermostCrmService
             Guid attachmentId;
             if (Guid.TryParse(request.AttachmentId, out attachmentId))
             {
-                AttachmentFileWrapper result = CrmWrapper.Instance.GetAttachmentFile(attachmentId);
+                AttachmentFileWrapper result = CrmConnectionManager.Instance.Get(request).GetAttachmentFile(attachmentId);
                 if (result != null)
                 {
                     base.Response.AddHeader("Content-Disposition", "attachment");
@@ -148,10 +142,10 @@ namespace MattermostCrmService
 
         public NetworkAttachmentWrapper[] Post(UploadRequest request)
         {
-            var incident = CrmWrapper.Instance.GetSlimIncident(request.CaseNum);
+            var incident = CrmConnectionManager.Instance.Get(request).GetSlimIncident(request.CaseNum);
             if (string.IsNullOrEmpty(incident.NetworkAttachmentsFolder))
             {
-                var crm = GetAuthenticatedCrmWrapper(request);
+                var crm = CrmConnectionManager.Instance.Get(request);
 
                 var newDir = Path.Combine(Config.MergedConfig.NetworkAttachmentsBase, incident.TicketNumber);
 
@@ -210,7 +204,7 @@ namespace MattermostCrmService
             return NetworkAttachment.ListAttachments(incident.NetworkAttachmentsFolder);
         }
 
-        public MatterMostResponse Post(MatterMostMessage request)
+        public MattermostResponse Post(MattermostMessage request)
         {
             List<string> cases = new List<string>();
             HashSet<string> visitedCases = new HashSet<string>();
@@ -219,7 +213,7 @@ namespace MattermostCrmService
                 if (!visitedCases.Contains(match.Value))
                 {
                     visitedCases.Add(match.Value);
-                    IncidentWrapper result = CrmWrapper.Instance.GetIncident(match.Value);
+                    IncidentWrapper result = CrmConnectionManager.Instance.MattermostInstance.GetIncident(match.Value);
                     var tmp = IncidentMarkdowner.ConvertToMarkdown(result);
                     if (!string.IsNullOrEmpty(tmp))
                     {
@@ -229,7 +223,7 @@ namespace MattermostCrmService
             }
             if (cases.Count > 0)
             {
-                return new MatterMostResponse { text = string.Join(Environment.NewLine, cases), username = "CRM-Bot", icon_url = Config.MergedConfig.WebRoot + "/static/reaper.png" };
+                return new MattermostResponse { text = string.Join(Environment.NewLine, cases), username = "CRM-Bot", icon_url = Config.MergedConfig.WebRoot + "/static/reaper.png" };
             }
             return null;
         }

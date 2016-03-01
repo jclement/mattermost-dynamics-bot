@@ -14,10 +14,12 @@ namespace MattermostCrmService
 {
     public class CrmWrapper
     {
-        private static CrmWrapper m_instance;
         private static IDictionary<string, Guid> m_userLookup = new ConcurrentDictionary<string, Guid>(); 
         private static IDictionary<Guid, string> m_userNameLookup = new ConcurrentDictionary<Guid, string>(); 
-        private static IDictionary<Guid, string> m_accounts = new ConcurrentDictionary<Guid, string>(); 
+        private static IDictionary<Guid, string> m_accounts = new ConcurrentDictionary<Guid, string>();
+        private static object m_lock = new object();
+        private static bool m_initialized = false;
+
         private IOrganizationService m_service;
 
         private string m_user;
@@ -30,11 +32,20 @@ namespace MattermostCrmService
             m_password = password;
             m_url = url;
             Connect();
+
+            lock (m_lock)
+            {
+                if (!CrmWrapper.m_initialized)
+                {
+                    RefreshUserCache();
+                    m_initialized = true;
+                }
+            }
         }
 
-        private static void RefreshUserCache()
+        private void RefreshUserCache()
         {
-            var userEntities = m_instance.RunQuery(SystemUser.EntityLogicalName);
+            var userEntities = RunQuery(SystemUser.EntityLogicalName);
             foreach (SystemUser e in userEntities)
             {
                 m_userNameLookup.Add(Guid.Parse(e.SystemUserId.ToString()), e.FullName);
@@ -107,22 +118,14 @@ namespace MattermostCrmService
             Guid userid = ((WhoAmIResponse)m_service.Execute(new WhoAmIRequest())).UserId;
             if (userid != Guid.Empty)
             {
-                Console.WriteLine(userid);
+                Console.WriteLine($"Login: {m_user} - {userid}");
             }
-        }
-
-        public static void Init(string username, string password, string url)
-        {
-            m_instance = new CrmWrapper(username, password, url);
-            RefreshUserCache();
         }
 
         public void Reconnect()
         {
             Connect();
         }
-
-        public static CrmWrapper Instance { get { return m_instance; } }
 
         public string Version
         {

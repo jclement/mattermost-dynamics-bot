@@ -3,7 +3,7 @@
 namespace MattermostCrmService.Messages
 {
     [Route("/mattermost/myTickets")]
-    public class MatterMostMyIncidents : MatterMostRequestBase
+    public class MattermostMyIncidents : MattermostRequestBase
     {
         public string text { get; set; }
         public string user_name { get; set; }

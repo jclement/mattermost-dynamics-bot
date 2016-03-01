@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AESThenHMAC.cs" />
+    <Compile Include="CrmConnectionManager.cs" />
     <Compile Include="Entities.cs" />
     <Compile Include="LoginHelper.cs" />
     <Compile Include="Messages\AddNote.cs" />

@@ -49,6 +49,14 @@ namespace MattermostCrmService.Wrappers
                 return $"Case created by {user}";
             }
 
+            if (id == "CASE.CASEREACTIVATE.POST")
+            {
+                var user = doc.Root.Elements("ps").Elements("p")
+                    .Where(node => (string) node.Attribute("type") == "1" && (string) node.Attribute("otc") == "8")
+                    .First().Value;
+                return $"Case ressurected by {user}";
+            }
+
             return post;
 
         }

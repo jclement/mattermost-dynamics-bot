@@ -106,7 +106,7 @@ uncrm.config(function($routeProvider, $httpProvider) {
 
 // Autosize: https://gist.github.com/jclement/076a95c94bb52e61c407
 
-  $.fn.getHiddenOffuncrm = function () {
+  $.fn.getHiddenOffsetWidth = function () {
     // save a reference to a cloned element that can be measured
     var $hiddenElement = $(this).clone().appendTo($(this).parents(':visible').first());
 

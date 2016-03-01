@@ -4,7 +4,7 @@ using ServiceStack;
 namespace MattermostCrmService.Messages
 {
     [Route("/search/incident")]
-    public class IncidentQuery 
+    public class IncidentQuery : AuthenticatedRequestBase
     {
         public string Query { get; set; }
         public Guid? OwnerId { get; set; }

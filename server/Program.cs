@@ -1,15 +1,9 @@
 ﻿using JsonConfig;
-using Microsoft.Crm.Sdk.Messages;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Client;
 using System;
-using System.Collections.Generic;
-using System.ServiceModel.Description;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Linq;
+using System.Net;
 using System.Timers;
-using System.IO;
+using ServiceStack;
+using MattermostCrmService.Messages;
 
 namespace MattermostCrmService
 {
@@ -35,9 +29,36 @@ namespace MattermostCrmService
             CrmWrapper.Init(Config.MergedConfig.CrmUser, password ?? Config.MergedConfig.CrmPassword, "https://"+ Config.MergedConfig.CrmOrg +".crm.dynamics.com/XRMServices/2011/Organization.svc");
 
             var listeningOn = Config.MergedConfig.Listen;
-            var appHost = new AppHost()
-                .Init()
-                .Start(listeningOn);
+            var appHost = new AppHost();
+            appHost.Init();
+            appHost.GlobalRequestFilters.Add((req, res, obj) =>
+            {
+                if (req.Dto is AuthenticatedRequestBase)
+                {
+                    var request = (AuthenticatedRequestBase) req.Dto;
+                    if (string.IsNullOrEmpty(request.AuthenticationToken) && !string.IsNullOrEmpty(req.GetHeader("X-AUTH-TOKEN")))
+                        request.AuthenticationToken = req.GetHeader("X-AUTH-TOKEN");
+                    if (String.IsNullOrEmpty(request.AuthenticationToken))
+                        throw new ApplicationException("No Auth Token");
+                    var authInfo = LoginHelper.Instance.ParseToken(request.AuthenticationToken);
+                    if (string.IsNullOrEmpty(authInfo.Username))
+                        throw new ApplicationException("No Valid Auth Token");
+                }
+                if (req.Dto is MatterMostRequestBase)
+                {
+                    var request = (MatterMostRequestBase) req.Dto;
+                    if (String.IsNullOrEmpty(request.token))
+                        throw new ApplicationException("No Token");
+                    foreach (var token in Config.MergedConfig.WebhookTokens)
+                    {
+                        if (request.token.Equals(token))
+                            return;
+                    }
+                    throw new ApplicationException("Not a valid token");
+                }
+            });
+            appHost.Start(listeningOn);
+
 
             Console.WriteLine("AppHost Created at {0}, listening on {1}", DateTime.Now, listeningOn);
 

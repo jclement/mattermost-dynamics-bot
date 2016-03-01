@@ -29,12 +29,15 @@ namespace MattermostCrmService
             return CrmWrapper.Instance.GetIncident(request.CaseNum);
         }
 
-        public string Post(Login request)
+        public LoginResponse Post(Login request)
         {
             try
             {
                 new CrmWrapper(request.Username, request.Password, "https://" + Config.MergedConfig.CrmOrg + ".crm.dynamics.com/XRMServices/2011/Organization.svc");
-                return LoginHelper.Instance.GenerateToken(request.Username, request.Password);
+                return new LoginResponse()
+                {
+                    AuthenticationToken = LoginHelper.Instance.GenerateToken(request.Username, request.Password)
+                };
             }
             catch (Exception e)
             {
@@ -54,7 +57,6 @@ namespace MattermostCrmService
 
         public MatterMostMyIncidentsResponse Post(MatterMostMyIncidents request)
         {
-
             Dictionary<string, Guid> map = new Dictionary<string, Guid>();
             foreach (dynamic userMap in Config.MergedConfig.UserMap)
             {
@@ -95,16 +97,11 @@ namespace MattermostCrmService
             };
         }
 
-        public object Post(ChangeOwner request)
+        public SlimIncidentWrapper Post(ChangeOwner request)
         {
             var crm = GetAuthenticatedCrmWrapper(request);
             var incident = crm.GetSlimIncident(request.CaseNum);
             return crm.UpdateOwner(Guid.Parse(request.OwnerId), incident.Id);
-        }
-
-        public object Get(Version request)
-        {
-            return CrmWrapper.Instance.Version;
         }
 
         public NoteWrapper Post(UpdateNote request)

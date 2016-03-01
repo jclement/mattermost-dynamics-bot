@@ -70,6 +70,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
@@ -99,6 +100,7 @@
     <Compile Include="Messages\MatterMostMessage.cs" />
     <Compile Include="Messages\MatterMostMyIncidents.cs" />
     <Compile Include="Messages\MatterMostMyIncidentsResponse.cs" />
+    <Compile Include="Messages\MatterMostRequestBase.cs" />
     <Compile Include="Messages\MatterMostResponse.cs" />
     <Compile Include="Messages\UpdateNote.cs" />
     <Compile Include="Messages\UploadRequest.cs" />

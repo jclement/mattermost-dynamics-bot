@@ -1,11 +1,91 @@
 var uncrm = angular.module('uncrm', ['ngRoute', 'LocalStorageModule', 'ngFileUpload', 'ngclipboard']);
 
+uncrm.factory('Auth', function($http, $rootScope, localStorageService, $window) {
+
+  var authBusy = false;
+
+  return {
+    isLoggedIn: function() {
+      return !!localStorageService.get('authenticationToken');
+    },
+
+    getToken: function() {
+      return localStorageService.get('authenticationToken');
+    },
+
+    logout: function() {
+      localStorageService.remove('authenticationToken');
+      $window.location.reload();
+    },
+
+    isBusy: function() {
+      return authBusy;
+    },
+
+    login: function(username, password, success, failure) {
+      authBusy = true;
+      $http({
+        url: '../login',
+        dataType: 'json',
+        method: 'POST',
+        data: {
+          Username: username,
+          Password: password
+        },
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8'
+        }
+      }).success(function(response){
+        authBusy = false;
+        localStorageService.set('authenticationToken', response.AuthenticationToken);
+        if (success) {
+          success();
+          $window.location.reload();
+        }
+      }).error(function(response) {
+        authBusy = false;
+        noty({
+          text: response.data.ResponseStatus.Message,
+          timeout: 1000,
+          type: 'error'
+        });
+        if (failure) {
+          failure();
+        }
+      });
+    }
+
+  };
+
+});
+
 uncrm.config(function(localStorageServiceProvider) {
   localStorageServiceProvider
     .setPrefix('uncrm');
 });
 
-uncrm.config(function($routeProvider) {
+uncrm.factory('httpRequestInterceptor', function (localStorageService) {
+  return {
+    request: function (config) {
+      config.headers['X-AUTH-TOKEN'] = localStorageService.get('authenticationToken');
+      return config;
+    }
+  };
+});
+
+/*
+uncrm.run(function($rootScope, $location, Auth) {
+  $rootScope.$on('$routeChangeSuccess', function() {
+    if (!Auth.isLoggedIn()) {
+      $location.url("/");
+    }
+  });
+});
+*/
+
+uncrm.config(function($routeProvider, $httpProvider) {
+
+  $httpProvider.interceptors.push('httpRequestInterceptor');
 
   $routeProvider.when('/', {
     templateUrl: 'templates/index.html',
@@ -26,7 +106,7 @@ uncrm.config(function($routeProvider) {
 
 // Autosize: https://gist.github.com/jclement/076a95c94bb52e61c407
 
-  $.fn.getHiddenOffsetWidth = function () {
+  $.fn.getHiddenOffuncrm = function () {
     // save a reference to a cloned element that can be measured
     var $hiddenElement = $(this).clone().appendTo($(this).parents(':visible').first());
 
@@ -86,69 +166,6 @@ uncrm.directive('autogrow', function() {
   }
 });
 
-uncrm.factory('Auth', function($http, $rootScope, localStorageService) {
-
-  var authBusy = false;
-
-  return {
-    isLoggedIn: function() {
-      return !!localStorageService.get('authenticationToken');
-    },
-
-    getLoggedInName: function() {
-      return localStorageService.get('authenticationName');
-    },
-
-    getToken: function() {
-      return localStorageService.get('authenticationToken');
-    },
-
-    logout: function() {
-      localStorageService.remove('authenticationToken');
-      localStorageService.remove('authenticationName');
-    },
-
-    isBusy: function() {
-      return authBusy;
-    },
-
-    login: function(username, password, success, failure) {
-      authBusy = true;
-      $http({
-        url: '../login',
-        dataType: 'json',
-        method: 'POST',
-        data: {
-          Username: username,
-          Password: password
-        },
-        headers: {
-          'Content-Type': 'application/json; charset=utf-8'
-        }
-      }).success(function(response){
-        authBusy = false;
-        console.log('Logged in');
-        localStorageService.set('authenticationName', username);
-        localStorageService.set('authenticationToken', response);
-        if (success) {
-          success();
-        }
-      }).error(function(response) {
-        authBusy = false;
-        noty({
-          text: response.data.ResponseStatus.Message,
-          timeout: 1000,
-          type: 'error'
-        });
-        if (failure) {
-          failure();
-        }
-      });
-    }
-
-  };
-
-});
 
 marked.setOptions({
   renderer: new marked.Renderer(),

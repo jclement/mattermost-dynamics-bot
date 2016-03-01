@@ -13,4 +13,9 @@ namespace MattermostCrmService.Messages
         public string Username { get; set; }
         public string Password { get; set; }
     }
+
+    public class LoginResponse
+    {
+        public string AuthenticationToken { get; set; }
+    }
 }

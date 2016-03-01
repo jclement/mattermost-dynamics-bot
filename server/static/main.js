@@ -3,10 +3,11 @@ var uncrm = angular.module('uncrm', ['ngRoute', 'LocalStorageModule', 'ngFileUpl
 uncrm.factory('Auth', function($http, $rootScope, localStorageService, $window) {
 
   var authBusy = false;
+  var isAuthenticated = true;
 
   return {
     isLoggedIn: function() {
-      return !!localStorageService.get('authenticationToken');
+      return !!localStorageService.get('authenticationToken') && isAuthenticated;
     },
 
     getToken: function() {
@@ -15,6 +16,7 @@ uncrm.factory('Auth', function($http, $rootScope, localStorageService, $window) 
 
     logout: function() {
       localStorageService.remove('authenticationToken');
+      isAuthenticated = false;
       $window.location.reload();
     },
 
@@ -40,6 +42,7 @@ uncrm.factory('Auth', function($http, $rootScope, localStorageService, $window) 
         localStorageService.set('authenticationToken', response.AuthenticationToken);
         if (success) {
           success();
+          isAuthenticated = true;
           $window.location.reload();
         }
       }).error(function(response) {
@@ -191,6 +194,14 @@ uncrm.filter('crmify', function ($sce) {
   return function (input) {
     return (input || '').replace(/\b(CAS-[0-9]{5}-[A-Z][0-9][A-Z][0-9][A-Z][0-9])\b/g, function(x) {
       return '[' + x + '](#/incident/' + x + ')';
+    });
+  };
+});
+
+uncrm.filter('tfsify', function ($sce) {
+  return function (input) {
+    return (input || '').replace(/\bT([0-9]{4,6})\b/g, function(x) {
+      return '[' + x + '](http://tfs.eni.local:8080/tfs/EnergyNavigator/AFENavigator/_workitems#id=' + x.substr(1) + '&triage=true&_a=edit)';
     });
   };
 });

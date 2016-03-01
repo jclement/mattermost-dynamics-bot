@@ -9,12 +9,13 @@ namespace MattermostCrmService.Wrappers
     public enum NoteType
     {
         Note = 1,
-        Post = 2
+        AutomaticPost = 2,
+        ManualPost = 3
     }
 
     public class NoteWrapper
     {
-        private string ConvertAutomaticToText(string post)
+        private void ProcessAutomaticPost(string post)
         {
             /// <?xml version="1.0" encoding="utf-16"?><pi id="CaseAssign.Post" icon="0"><ps><p type="1" otc="112" id="dfaa408a-c88e-e511-80e5-3863bb2eb148">Upgrade from 8.0 to 8.1</p><p type="1" otc="8" id="dedbc981-a413-e511-80ff-c4346bad87a4">Chris Rowat</p><p type="1" otc="8" id="f2dbc981-a413-e511-80ff-c4346bad87a4">Mark Dryden</p></ps></pi>
             /// 
@@ -30,7 +31,9 @@ namespace MattermostCrmService.Wrappers
                 var fromUser = doc.Root.Elements("ps").Elements("p")
                     .Where(node => (string) node.Attribute("type") == "1" && (string) node.Attribute("otc") == "8")
                     .Skip(1).First().Value;
-                return $"Ownership changed from {fromUser} to {toUser}";
+                Title = $"Ownership changed to {toUser}";
+                Body = null;
+                Owner = fromUser;
             }
 
             if (id == "ACCOUNT.CASECLOSE.POST")
@@ -38,7 +41,9 @@ namespace MattermostCrmService.Wrappers
                 var user = doc.Root.Elements("ps").Elements("p")
                     .Where(node => (string) node.Attribute("type") == "1" && (string) node.Attribute("otc") == "8")
                     .First().Value;
-                return $"Case closed by {user}";
+                Title = "Case closed";
+                Body = null;
+                Owner = user;
             }
 
             if (id == "ACCOUNT.CASECREATE.POST")
@@ -46,7 +51,9 @@ namespace MattermostCrmService.Wrappers
                 var user = doc.Root.Elements("ps").Elements("p")
                     .Where(node => (string) node.Attribute("type") == "1" && (string) node.Attribute("otc") == "8")
                     .First().Value;
-                return $"Case created by {user}";
+                Title = "Case created";
+                Body = null;
+                Owner = user;
             }
 
             if (id == "CASE.CASEREACTIVATE.POST")
@@ -54,10 +61,10 @@ namespace MattermostCrmService.Wrappers
                 var user = doc.Root.Elements("ps").Elements("p")
                     .Where(node => (string) node.Attribute("type") == "1" && (string) node.Attribute("otc") == "8")
                     .First().Value;
-                return $"Case ressurected by {user}";
+                Title = "Case ressurected";
+                Body = null;
+                Owner = user;
             }
-
-            return post;
 
         }
         private string StripTags(string HTML)
@@ -69,13 +76,17 @@ namespace MattermostCrmService.Wrappers
         public NoteWrapper(Post post, CrmWrapper wrapper)
         {
             Title = post.SourceEnum == Post_Source.AutoPost ? "Automatic Post" : "User Post";
-            Body = post.SourceEnum == Post_Source.AutoPost ? ConvertAutomaticToText(post.Text): post.Text;
+            Body = post.Text;
             Owner = wrapper.LookupUser(post.CreatedBy);
             Created = post.CreatedOn.Value;
             Modified = post.ModifiedOn.Value;
             Id = post.Id.ToString("d");
-            NoteType = NoteType.Post;
+            NoteType = post.SourceEnum == Post_Source.AutoPost ? NoteType.AutomaticPost : NoteType.ManualPost;
             Editable = false;
+            if (post.SourceEnum == Post_Source.AutoPost)
+            {
+                ProcessAutomaticPost(post.Text);
+            }
         }
         public NoteWrapper(Annotation note, CrmWrapper wrapper)
         {

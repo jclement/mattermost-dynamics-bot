@@ -124,11 +124,8 @@
 
 <div ng-repeat="note in incident.Notes | orderBy: '-Modified'">
 
-  <div class="well well-sm noteType-{{note.NoteType}}" ng-hide="note.doomed || note.NoteType != 'AutomaticPost'">
-    <div ><b>{{note.Body}}</b> on {{note.Modified | date : "medium"}}</div>
-  </div>
-  <div class="well well-sm noteType-{{note.NoteType}}" ng-hide="note.doomed || note.NoteType == 'AutomaticPost'">
-    <div style="border-bottom: 1px solid #aaa;"><b>{{note.Title}}</b> by <i>{{note.Owner}}</i> on {{note.Modified | date : "medium"}}
+  <div class="well well-sm noteType-{{note.NoteType}}" ng-hide="note.doomed">
+    <div ng-class="{'noteTitleWithBody': !!note.Body}"><b>{{note.Title}}</b> by <i>{{note.Owner}}</i> on {{note.Modified | date : "medium"}}
     <a class="pull-right" ng-show="isLoggedIn() && note.Editable" ng-click="deleteNote(note)"><i class="glyphicon glyphicon-trash"></i></a>
         <a class="pull-right" ng-show="isLoggedIn() && note.Editable" ng-click="toggleEditMode(note)"><i class="glyphicon glyphicon-edit"></i></a>
     </div>

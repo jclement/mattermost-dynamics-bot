@@ -149,6 +149,12 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http, localStor
           method: 'GET'
         }).success(function(response) {
           $scope.userList = _.sortBy(response, 'Item1');
+          var recent = localStorageService.get('recentOwnerGuids');
+          if (_.isArray(recent)) {
+            var topList = [];
+            _.each(recent, function (id) {var x = _.findWhere($scope.userList, {Item2: id}); if (x) {topList.push(x)}});
+            $scope.userList = topList.concat($scope.userList);
+          }
           $scope.hasUserList = true;
         }).error(function(response) {
           noty({
@@ -170,6 +176,15 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http, localStor
               'OwnerId': $scope.newOwner.Item2
             }
           }).success(function(response) {
+            var recent = localStorageService.get('recentOwnerGuids');
+            if (!_.isArray(recent)) {
+              recent = [];
+            }
+            recent = _.reject(recent, function (id) { return id === $scope.newOwner.Item2; });
+            recent.unshift($scope.newOwner.Item2);
+            recent = _.first(recent, 7);
+            localStorageService.set('recentOwnerGuids', recent);
+            
             _.extend($scope.incident, response);
             $scope.isChangingOwner = false;
             $scope.savingNewOwner = false;

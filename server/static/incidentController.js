@@ -40,6 +40,19 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http, localStor
       $scope.hasUserList = false;
       $scope.savingNewOwner = false;
       $scope.userList = [];
+      $scope.downloadFile = function(incident, attachment) {
+        $http({
+          url: "../incident/" + incident.TicketNumber + "/attachments/" + encodeURIComponent(attachment.Filename),
+          dataType: 'json',
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json; charset=utf-8'
+          }
+        }).success(function(response){
+          var file = new Blob([response], {type: "application/octet-stream"});
+          saveAs(file, attachment.Filename);
+        });
+      }
       $scope.downloadNoteAttachment = function(attachmentId, filename) {
         document.getElementById('download_iframe').src = '../attachment/getfile/'+attachmentId+'/' + filename;
       };

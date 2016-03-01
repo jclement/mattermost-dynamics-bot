@@ -298,7 +298,6 @@ namespace MattermostCrmService
                 notes.Add(new NoteWrapper((Annotation) annotation, this));
             }
             DataCollection<Entity>  posts = RunQuery(Post.EntityLogicalName, "regardingobjectid", new string[] {incidentId.ToString()});
-            DumpCollection(posts);
             foreach (var post in posts)
             {
                 notes.Add(new NoteWrapper((Post) post, this));

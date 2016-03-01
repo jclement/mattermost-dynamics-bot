@@ -9,7 +9,8 @@ namespace MattermostCrmService.Wrappers
     public enum NoteType
     {
         Note = 1,
-        Post = 2
+        AutomaticPost = 2,
+        ManualPost = 3
     }
 
     public class NoteWrapper
@@ -74,7 +75,7 @@ namespace MattermostCrmService.Wrappers
             Created = post.CreatedOn.Value;
             Modified = post.ModifiedOn.Value;
             Id = post.Id.ToString("d");
-            NoteType = NoteType.Post;
+            NoteType = post.SourceEnum == Post_Source.AutoPost ? NoteType.AutomaticPost : NoteType.ManualPost;
             Editable = false;
         }
         public NoteWrapper(Annotation note, CrmWrapper wrapper)

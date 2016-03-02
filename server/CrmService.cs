@@ -117,7 +117,7 @@ namespace MattermostCrmService
             return crm.AddNote(incident.Id, request.Title, request.Body);
         }
 
-        public object Get(AttachmentRequest request)
+        public HttpResult Get(AttachmentRequest request)
         {
             var incident = CrmConnectionManager.Instance.Get(request).GetIncident(request.CaseNum);
             var file = incident.NetworkAttachments.First(x => x.Filename.Equals(request.Filename));

@@ -43,12 +43,13 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http, localStor
       $scope.downloadFile = function(incident, attachment) {
         $http({
           url: "../incident/" + incident.TicketNumber + "/attachments/" + encodeURIComponent(attachment.Filename),
-          dataType: 'json',
           method: 'GET',
+          responseType: 'arraybuffer',
           headers: {
-            'Content-Type': 'application/json; charset=utf-8'
+            'Accept': 'application/octet-stream'
           }
         }).success(function(response){
+          console.log("File Downloaded : " + response.length);
           var file = new Blob([response], {type: "application/octet-stream"});
           saveAs(file, attachment.Filename);
         });
@@ -184,7 +185,7 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http, localStor
             recent.unshift($scope.newOwner.Item2);
             recent = _.first(recent, 7);
             localStorageService.set('recentOwnerGuids', recent);
-            
+
             _.extend($scope.incident, response);
             $scope.isChangingOwner = false;
             $scope.savingNewOwner = false;

@@ -31,9 +31,8 @@ namespace MattermostCrmService.Wrappers
                 var fromUser = doc.Root.Elements("ps").Elements("p")
                     .Where(node => (string) node.Attribute("type") == "1" && (string) node.Attribute("otc") == "8")
                     .Skip(1).First().Value;
-                Title = $"Ownership changed to {toUser}";
+                Title = $"Ownership changed from {fromUser} to {toUser}";
                 Body = null;
-                Owner = fromUser;
             }
 
             if (id == "ACCOUNT.CASECLOSE.POST")
@@ -77,7 +76,7 @@ namespace MattermostCrmService.Wrappers
         {
             Title = post.SourceEnum == Post_Source.AutoPost ? "Automatic Post" : "User Post";
             Body = post.Text;
-            Owner = wrapper.LookupUser(post.CreatedBy);
+            Owner = post.CreatedOnBehalfBy.Name;// wrapper.LookupUser(post.CreatedBy);
             Created = post.CreatedOn.Value;
             Modified = post.ModifiedOn.Value;
             Id = post.Id.ToString("d");

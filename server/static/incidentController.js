@@ -214,7 +214,8 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http, localStor
             recent = _.first(recent, 7);
             localStorageService.set('recentOwnerGuids', recent);
 
-            _.extend($scope.incident, response);
+            //_.extend($scope.incident, response);
+            $scope.incident.Owner = response.Owner;
             $scope.isChangingOwner = false;
             $scope.savingNewOwner = false;
           }).error(function(response) {

@@ -41,6 +41,7 @@ namespace MattermostCrmService.Wrappers
         public string Owner { get; set; }
         public DateTime CreatedOn { get; set; }
         public string Company { get; set; }
+        public string CompanyUser { get; set; }
         public string Version { get; set; }
 
         public string NetworkAttachmentsFolder

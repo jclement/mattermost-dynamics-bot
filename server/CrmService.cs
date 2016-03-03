@@ -98,6 +98,13 @@ namespace MattermostCrmService
             return crm.UpdateOwner(Guid.Parse(request.OwnerId), incident.Id);
         }
 
+        public SlimIncidentWrapper Post(ChangeTFSNumber request)
+        {
+            var crm = CrmConnectionManager.Instance.Get(request);
+            var incident = crm.GetSlimIncident(request.CaseNum);
+            return crm.UpdateTFSNumber(request.TFSNumber, incident.Id);
+        }
+
         public NoteWrapper Post(UpdateNote request)
         {
             var crm = CrmConnectionManager.Instance.Get(request);

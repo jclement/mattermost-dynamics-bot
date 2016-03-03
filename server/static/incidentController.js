@@ -49,7 +49,6 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http, localStor
             'Accept': 'application/octet-stream'
           }
         }).success(function(response){
-          console.log("File Downloaded : " + response.length);
           var file = new Blob([response], {type: "application/octet-stream"});
           saveAs(file, attachment.Filename);
         });
@@ -138,6 +137,35 @@ uncrm.controller('incidentCtrl', function($scope, $routeParams, $http, localStor
                   type: "error"
               });
           });
+      };
+      $scope.startChangeTFSNumber = function () {
+        $scope.isChangingTFSNumber = true;
+        $scope.newTFSNumber = $scope.incident.TFSNumber;
+      };
+      $scope.cancelNewTFSNumber = function () {
+        $scope.isChangingTFSNumber = false;
+      };
+      $scope.saveNewTFSNumber = function () {
+        $scope.savingNewTFSNumber = true;
+        $http({
+          url: '../incident/' + $routeParams.num + '/changetfsnumber',
+          dataType: 'json',
+          method: 'POST',
+          data: {
+            'authenticationToken': Auth.getToken(),
+            'TFSNumber': $scope.newTFSNumber
+          }
+        }).success(function(response) {
+          $scope.incident.TFSNumber = $scope.newTFSNumber;
+          $scope.isChangingTFSNumber = false;
+          $scope.savingNewTFSNumber = false;
+        }).error(function(response) {
+          $scope.savingNewTFSNumber = false;
+          noty({
+            text: response.ResponseStatus.Message,
+            type: 'error'
+          });
+        });
       };
       $scope.startChangeOwner = function () {
         $scope.isChangingOwner = true;

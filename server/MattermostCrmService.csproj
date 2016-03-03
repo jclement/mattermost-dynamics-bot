@@ -92,6 +92,7 @@
     <Compile Include="CrmService.cs" />
     <Compile Include="CrmWrapper.cs" />
     <Compile Include="Messages\AuthenticatedRequestBase.cs" />
+    <Compile Include="Messages\ChangeTFSNumber.cs" />
     <Compile Include="Messages\IncidentQuery.cs" />
     <Compile Include="Messages\ChangeOwner.cs" />
     <Compile Include="Messages\DeleteNote.cs" />

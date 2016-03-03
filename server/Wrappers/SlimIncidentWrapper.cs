@@ -23,6 +23,7 @@ namespace MattermostCrmService.Wrappers
             CreatedOn = incidentObject.CreatedOn.Value;
             NetworkAttachmentsFolder = incidentObject.eni_CaseAttachments?.Trim();
             TicketNumber = incidentObject.TicketNumber;
+            TFSNumber = incidentObject.eni_TFSWorkItemNumber;
 
             Status = MapStatusCodeToString(incidentObject.StatusCode);
             State = MapStateToString(incidentObject.StateCode);
@@ -30,6 +31,7 @@ namespace MattermostCrmService.Wrappers
 
         public Guid Id { get; set; }
         public string Url { get; set; }
+        public string TFSNumber { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string TicketNumber { get; set; }

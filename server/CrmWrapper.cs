@@ -275,6 +275,14 @@ namespace MattermostCrmService
                 .Select(x => new SlimIncidentWrapper(x, this));
         }
 
+        public SlimIncidentWrapper UpdateTFSNumber(string tfsNumber, Guid incidentId)
+        {
+            Incident incidentEntity = (Incident) m_service.Retrieve(Incident.EntityLogicalName, incidentId, new ColumnSet(true));
+            incidentEntity.eni_TFSWorkItemNumber = tfsNumber;
+            m_service.Update(incidentEntity);
+            return new SlimIncidentWrapper(incidentEntity, this);
+        }
+
         public SlimIncidentWrapper UpdateOwner(Guid newOwnerId, Guid incidentId)
         {
             Incident incidentEntity = (Incident) m_service.Retrieve(Incident.EntityLogicalName, incidentId, new ColumnSet(true));

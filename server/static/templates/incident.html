@@ -42,6 +42,20 @@
     <td>{{incident.Status}}</td>
   </tr>
   <tr>
+    <th class="nowrap">TFS #:</th>
+    <td>
+      <span ng-show="!isChangingTFSNumber">
+        <a ng-show="incident.TFSNumber" href="http://tfs.eni.local:8080/tfs/EnergyNavigator/AFENavigator/_workitems#id={{incident.TFSNumber}}&triage=true&_a=edit">{{incident.TFSNumber}}</a>
+        <button class="btn btn-default btn-xs" ng-click="startChangeTFSNumber()"><span class="glyphicon glyphicon-pencil"></span></button>
+      </span>
+      <span ng-show="isChangingTFSNumber">
+        <input type="text" ng-model="newTFSNumber" ng-disabled="savingNewTFSNumber">
+        <button class="btn btn-danger btn-xs" ng-click="saveNewTFSNumber()" ng-disabled="savingNewTFSNumber">Save</button>
+        <button class="btn btn-default btn-xs" ng-click="cancelNewTFSNumber()" ng-disabled="savingNewTFSNumber">Cancel</button>
+      </span>
+    </td>
+  </tr>
+  <tr>
     <th class="nowrap">Description:</th>
     <td ng-bind-html="incident.Description | crmify | tfsify | marked"></td>
   </tr>

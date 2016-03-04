@@ -1,6 +1,7 @@
 ﻿using JsonConfig;
 using System;
 using System.Net;
+using System.Text;
 using System.Timers;
 using ServiceStack;
 using MattermostCrmService.Messages;
@@ -18,10 +19,8 @@ namespace MattermostCrmService
             string password = null;
             if (string.IsNullOrEmpty(Config.MergedConfig.CrmPassword))
             {
-                Console.Write($"Password for {Config.MergedConfig.CrmUser}:");
-                Console.ForegroundColor = ConsoleColor.Black;
-                password = Console.ReadLine().Trim();
-                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write($"Password for {Config.MergedConfig.CrmUser}: ");
+                password = GetPasswordFromConsole();
                 Console.Clear();
             }
 
@@ -69,6 +68,43 @@ namespace MattermostCrmService
         {
             Console.WriteLine("Reconnect");
             CrmConnectionManager.Instance.ReconnectAll();
+        }
+
+        private static string GetPasswordFromConsole()
+        {
+            StringBuilder password = new StringBuilder();
+            bool readingPassword = true;
+
+            while (readingPassword)
+            {
+                ConsoleKeyInfo userInput = Console.ReadKey(true);
+
+                switch (userInput.Key)
+                {
+                    case (ConsoleKey.Enter):
+                        readingPassword = false;
+                        break;
+                    case (ConsoleKey.Backspace):
+                        if (password.Length > 0)
+                        {
+                            password.Remove(password.Length - 1, 1);
+                            Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
+                            Console.Write(" ");
+                            Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
+                        }
+                        break;
+                    default:
+                        if (userInput.KeyChar != 0)
+                        {
+                            password.Append(userInput.KeyChar);
+                            Console.Write("*");
+                        }
+                        break;
+                }
+            }
+            Console.WriteLine();
+
+            return password.ToString();
         }
     }
 }

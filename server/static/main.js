@@ -206,6 +206,21 @@ uncrm.filter('tfsify', function ($sce) {
   };
 });
 
+uncrm.filter('escapeAndLink', function($sce) {
+  return function(input) {
+    return $sce.trustAsHtml(
+      _.escape(input || '')
+        .replace(/\b(CAS-[0-9]{5}-[A-Z][0-9][A-Z][0-9][A-Z][0-9])\b/g, function(x) {
+          return '<a href="#/incident/' + encodeURIComponent(x) + '">' + _.escape(x) + '</a>';
+        })
+        .replace(/\bT([0-9]{4,6})\b/g, function(x) {
+          return '<a href="http://tfs.eni.local:8080/tfs/EnergyNavigator/AFENavigator/_workitems#id=' + encodeURIComponent(x.substr(1)) + '&triage=true&_a=edit">' + _.escape(x) + '</a>';
+        })
+        .replace(/\n/g, '<br/>')
+    );
+  };
+});
+
 uncrm.filter('escape', function() {
   return window.encodeURIComponent;
 });

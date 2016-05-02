@@ -277,26 +277,26 @@ namespace MattermostCrmService
 
         public SlimIncidentWrapper UpdateTFSNumber(string tfsNumber, Guid incidentId)
         {
-            Incident incidentEntity = (Incident) m_service.Retrieve(Incident.EntityLogicalName, incidentId, new ColumnSet(true));
+            Incident incidentEntity = (Incident) m_service.Retrieve(Incident.EntityLogicalName, incidentId, new ColumnSet(new string[] { "eni_tfsworkitem" }));
             incidentEntity.eni_TFSWorkItemNumber = tfsNumber;
             m_service.Update(incidentEntity);
-            return new SlimIncidentWrapper(incidentEntity, this);
+            return new SlimIncidentWrapper((Incident)m_service.Retrieve(Incident.EntityLogicalName, incidentId, new ColumnSet(true)), this);
         }
 
         public SlimIncidentWrapper UpdateOwner(Guid newOwnerId, Guid incidentId)
         {
-            Incident incidentEntity = (Incident) m_service.Retrieve(Incident.EntityLogicalName, incidentId, new ColumnSet(true));
+            Incident incidentEntity = (Incident) m_service.Retrieve(Incident.EntityLogicalName, incidentId, new ColumnSet(new string[] {"ownerid"}));
             incidentEntity.OwnerId = new EntityReference(SystemUser.EntityLogicalName, newOwnerId);
             m_service.Update(incidentEntity);
-            return new SlimIncidentWrapper(incidentEntity, this);
+            return new SlimIncidentWrapper((Incident)m_service.Retrieve(Incident.EntityLogicalName, incidentId, new ColumnSet(true)), this);
         }
 
         public SlimIncidentWrapper UpdateNetworkAttachmentsFolder(string newPath, Guid incidentId)
         {
-            Incident incidentEntity = (Incident) m_service.Retrieve(Incident.EntityLogicalName, incidentId, new ColumnSet(true));
+            Incident incidentEntity = (Incident) m_service.Retrieve(Incident.EntityLogicalName, incidentId, new ColumnSet(new string[] {"eni_caseattachments"}));
             incidentEntity.eni_CaseAttachments = newPath?.Trim();
             m_service.Update(incidentEntity);
-            return new SlimIncidentWrapper(incidentEntity, this);
+            return new SlimIncidentWrapper((Incident)m_service.Retrieve(Incident.EntityLogicalName, incidentId, new ColumnSet(true)), this);
         }
 
 

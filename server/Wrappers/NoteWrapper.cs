@@ -29,10 +29,7 @@ namespace MattermostCrmService.Wrappers
                 var toUser = doc.Root.Elements("ps").Elements("p")
                     .Where(node => (string) node.Attribute("type") == "1" && (string) node.Attribute("otc") == "8")
                     .First().Value;
-                var fromUser = doc.Root.Elements("ps").Elements("p")
-                    .Where(node => (string) node.Attribute("type") == "1" && (string) node.Attribute("otc") == "8")
-                    .Skip(1).First().Value;
-                Title = $"Ownership to {toUser} by {fromUser}";
+                Title = $"Assigned to {toUser}";
                 Body = null;
             }
 

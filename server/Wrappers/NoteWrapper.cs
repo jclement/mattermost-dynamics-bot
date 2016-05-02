@@ -22,6 +22,7 @@ namespace MattermostCrmService.Wrappers
 
             var doc = XDocument.Parse(post);
             var id = doc.Root.Attribute("id").Value.ToUpperInvariant();
+            Console.WriteLine(post);
 
             if (id == "CASEASSIGN.POST")
             {
@@ -31,7 +32,7 @@ namespace MattermostCrmService.Wrappers
                 var fromUser = doc.Root.Elements("ps").Elements("p")
                     .Where(node => (string) node.Attribute("type") == "1" && (string) node.Attribute("otc") == "8")
                     .Skip(1).First().Value;
-                Title = $"Ownership changed from {fromUser} to {toUser}";
+                Title = $"Ownership to {toUser} by {fromUser}";
                 Body = null;
             }
 

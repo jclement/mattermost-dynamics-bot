@@ -35,6 +35,12 @@ namespace MattermostCrmService.Wrappers
                 Body = null;
             }
 
+            if (id == "CASE.CASEPARENTCHILD.POST")
+            {
+                Title = $"Something mysterious!";
+                Body = null;
+            }
+
             if (id == "ACCOUNT.CASECLOSE.POST")
             {
                 var user = doc.Root.Elements("ps").Elements("p")
@@ -76,7 +82,7 @@ namespace MattermostCrmService.Wrappers
         {
             Title = post.SourceEnum == Post_Source.AutoPost ? "Automatic Post" : "User Post";
             Body = post.Text;
-            Owner = post.CreatedOnBehalfBy.Name;// wrapper.LookupUser(post.CreatedBy);
+            Owner = post.CreatedOnBehalfBy?.Name;// wrapper.LookupUser(post.CreatedBy);
             Created = post.CreatedOn.Value;
             Modified = post.ModifiedOn.Value;
             Id = post.Id.ToString("d");

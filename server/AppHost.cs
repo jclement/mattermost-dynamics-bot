@@ -17,6 +17,7 @@ namespace MattermostCrmService
         {
             SetConfig(new HostConfig
             {
+                AllowRouteContentTypeExtensions = false,
 #if DEBUG
                 DebugMode = true,
                 WebHostPhysicalPath = "~/../..".MapServerPath(),
